@@ -13,12 +13,12 @@
   <h2>{{ this.clickedTile }}</h2>
 </template>
 <script>
-import { BLANK_BATTLESHIP_BOARD } from '../assets/Constants.js';
+import { BLANK_BATTLESHIP_ATTACK_BOARD } from '../assets/Constants.js';
 export default {
   props: ['enemyBoard'],
   data() {
     return {
-      boardAttack: BLANK_BATTLESHIP_BOARD,
+      boardAttack: BLANK_BATTLESHIP_ATTACK_BOARD,
       boardEnemyAttack: [],
       boardEnemyDefense: [],
       clickedTile: '',
@@ -48,12 +48,6 @@ export default {
   cursor: pointer;
 }
 .cell:hover {
-  background: #bbb;
-}
-.cell.miss {
-  background: blue;
-}
-.cell.hit {
-  background: red;
+  filter: brightness(85%);
 }
 </style>

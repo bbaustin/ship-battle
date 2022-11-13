@@ -11,8 +11,15 @@ html {
   height: 260px;
 }
 .cell {
+  background: #baaaaa;
   border-bottom: 1px solid black;
   border-right: 1px solid black;
   height: 25px;
   width: 25px;
+}
+.cell.miss {
+  background: blue;
+}
+.cell.hit {
+  background: red;
 }

@@ -45,23 +45,21 @@ export default {
   },
   methods: {
     placeEnemyShips() {
-      console.log('placing enemy ships');
       this.randomizeAlignment();
       this.enemyShips.forEach((ship) => {
+        let rowOrCol = Math.floor(Math.random() * 10).toString();
+        let rowOrColConstrained = Math.floor(Math.random() * (10 - ship.size)).toString();
         if (ship.alignment === 'horizontal') {
-          let row = Math.floor(Math.random() * 10).toString();
-          let col = Math.floor(Math.random() * (10 - ship.size)).toString();
-          let num = parseInt(row + col, 10);
+          let num = parseInt(rowOrCol + rowOrColConstrained, 10);
           for (let i = 0; i < ship.size; i++) {
             this.enemyBoard.push(num + i);
             // TODO: check for overlap
           }
         } else {
-          let row = Math.floor(Math.random() * (10 - ship.size)).toString();
-          let col = Math.floor(Math.random() * 10).toString();
-          let num = parseInt(row + col, 10);
+          let num = parseInt(rowOrColConstrained + rowOrCol, 10);
           for (let i = 0; i < ship.size * 10; i += 10) {
             this.enemyBoard.push(num + i);
+            //TODO: check for overlap
           }
         }
       });
@@ -69,12 +67,14 @@ export default {
     randomizeAlignment() {
       if (Math.floor(Math.random() * 2) === 1) {
         return 'vertical';
-        console.log('vert');
       } else {
         return 'horizontal';
-        console.log('hor');
       }
     },
+    aiRandom() {
+      // let possibleChoices = this.board.filter((tile) => !tile.value);
+    },
+    aiTarget() {},
   },
   created() {
     this.placeEnemyShips();
