@@ -7,6 +7,7 @@
 <script>
 import BoardDefense from './components/BoardDefense.vue';
 import BoardAttack from './components/BoardAttack.vue';
+import { BLANK_ENEMY_ATTACK_BOARD } from './assets/Constants';
 export default {
   components: { BoardDefense, BoardAttack },
   data() {
@@ -71,10 +72,6 @@ export default {
         return 'horizontal';
       }
     },
-    aiRandom() {
-      // let possibleChoices = this.board.filter((tile) => !tile.value);
-    },
-    aiTarget() {},
   },
   created() {
     this.placeEnemyShips();
