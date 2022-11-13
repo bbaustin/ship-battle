@@ -1,0 +1,18 @@
+html {
+  background: #baaaaa
+}
+.board {
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  width: 260px;
+  height: 260px;
+}
+.cell {
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  height: 25px;
+  width: 25px;
+}
