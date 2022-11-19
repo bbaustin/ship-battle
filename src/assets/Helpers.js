@@ -9,45 +9,51 @@ export const randomizeEnemyShipPlacement = (ships) => {
   return shipCoordinates;
 };
 
-// Check North
-export const checkN = (locationIndex) => {
-  if (locationIndex - 10 < 0) return;
+// Consider returning the opposite attack direction: e.g. in checkN instead of false
+//return checkS(locatinoIndex)
+// Check North board boundary
+export function checkN(locationIndex) {
+  if (locationIndex - 10 < 0) return false;
   return locationIndex - 10;
-};
+}
 
-// Check South
-export const checkS = (locationIndex) => {
-  if (locationIndex + 10 > 99) return;
+// Check South board boundary
+export function checkS(locationIndex) {
+  if (locationIndex + 10 > 99) return false;
   return locationIndex + 10;
-};
+}
 
-// Check West
-export const checkW = (locationIndex) => {
-  if (locationIndex % 10 === 0) return;
+// Check West board boundary
+export function checkW(locationIndex) {
+  if (locationIndex % 10 === 0) return false;
   return locationIndex - 1;
-};
+}
 
-// Check East
-export const checkE = (locationIndex) => {
-  if ((locationIndex + 1) % 10 === 0) return;
+// Check East board boundary
+export function checkE(locationIndex) {
+  if ((locationIndex + 1) % 10 === 0) return false;
   return locationIndex + 1;
-};
+}
 
-export const DIRECTIONAL_RELATION = {
+export const DIR_REL = {
   n: {
     check: checkN,
-    oppositecheck: checkS,
+    oppositeCheck: checkS,
+    oppositeDirection: 's',
   },
   e: {
     check: checkE,
-    oppositecheck: checkW,
+    oppositeCheck: checkW,
+    oppositeDirection: 'w',
   },
   s: {
     check: checkS,
-    oppositecheck: checkN,
+    oppositeCheck: checkN,
+    oppositeDirection: 'n',
   },
   w: {
     check: checkW,
-    oppositecheck: checkE,
+    oppositeCheck: checkE,
+    oppositeDirection: 'e',
   },
 };
