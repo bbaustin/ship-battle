@@ -9,7 +9,9 @@
         v-for="(cell, index) in this.boardDefense"
         class="cell"
         :class="this.boardDefense[index]"
-      ></div>
+      >
+        {{ index }}
+      </div>
     </div>
   </section>
 </template>
@@ -84,6 +86,11 @@ export default {
     },
     aiDestroy() {
       let nextAttack = HELPERS.DIR_REL[this.destroyDirection].check(this.lastSuccessfulEnemyAttack);
+      if (this.enemyAttacks.includes(nextAttack)) {
+        console.log('gave up and random');
+        this.enemyStrategy = 'random';
+        return this.aiRandom();
+      }
       console.log(nextAttack);
       // if you the next attack is out of bounds
       if (!nextAttack) {
@@ -93,26 +100,29 @@ export default {
         let oppositeDirectionAttack = HELPERS.DIR_REL[this.destroyDirection].check(this.enemyAttackPlanMemory.initialSuccessfulAttackCoordinate);
         if (oppositeDirectionAttack) {
           console.log(oppositeDirectionAttack);
+          this.enemyAttacks.push(oppositeDirectionAttack);
           if (this.playerShipPositions.includes(oppositeDirectionAttack)) {
             return (this.boardDefense[oppositeDirectionAttack] = 'hit');
           } else {
             this.boardDefense[oppositeDirectionAttack] = 'miss';
             this.enemyStrategy = 'random';
-            return this.aiRandom();
+            // return this.aiRandom();
           }
         }
         // ???? do i need to set soemthing here? not sure, maybe ---  this.enemyStrategy = 'random';
       }
       // If it hits, set a hit. No futher action needed?
       if (this.playerShipPositions.includes(nextAttack)) {
+        console.log('should be a hit');
         this.lastSuccessfulEnemyAttack = nextAttack;
+        this.enemyAttacks.push(nextAttack);
         return (this.boardDefense[nextAttack] = 'hit');
       }
       this.boardDefense[nextAttack] = 'miss';
       this.tryOppositeDirection();
     },
     tryOppositeDirection() {
-      // this.lastSuccessfulEnemyAttack = this.enemyAttackPlanMemory.initialSuccessfulAttackCoordinate;
+      this.lastSuccessfulEnemyAttack = this.enemyAttackPlanMemory.initialSuccessfulAttackCoordinate;
       this.destroyDirection = HELPERS.DIR_REL[this.destroyDirection].oppositeDirection;
       let isOppDirAttempted = false;
       let isOppDirOOB = false;
@@ -128,7 +138,7 @@ export default {
       }
       if (isOppDirAttempted || isOppDirOOB) {
         this.enemyStrategy = 'random';
-        return this.aiRandom();
+        // return this.aiRandom();
       }
     },
     aiAttack() {
