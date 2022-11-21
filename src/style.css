@@ -30,3 +30,7 @@ html {
 .cell.hit {
   background: red;
 }
+
+.cell.last-attack {
+  box-shadow: inset 1px 1px gold, inset -1px -1px gold;
+}

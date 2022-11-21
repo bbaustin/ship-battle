@@ -1,86 +1,53 @@
 <template>
   <main>
-    <BoardDefense />
-    <BoardAttack :enemyBoard="this.enemyBoard" />
+    <!-- @emit-attack-announcement="()=>return"  TODO: -->
+    <section id="boards">
+      <BoardDefense @emit-defense-announcement="handleEmittedAnnouncement" />
+      <BoardAttack @emit-attack-announcement="handleEmittedAnnouncement" />
+    </section>
+    <Announcement :announcement="this.announcement" />
   </main>
 </template>
 <script>
+import Announcement from './components//Announcement.vue';
 import BoardDefense from './components/BoardDefense.vue';
 import BoardAttack from './components/BoardAttack.vue';
 import { BLANK_ENEMY_ATTACK_BOARD } from './assets/Constants';
 export default {
-  components: { BoardDefense, BoardAttack },
+  components: { Announcement, BoardDefense, BoardAttack },
   data() {
     return {
-      enemyBoard: [],
-      enemyShips: [
-        {
-          name: 'Carrier',
-          size: 5,
-          alignment: this.randomizeAlignment(),
-        },
-        {
-          name: 'Battleship',
-          size: 4,
-          alignment: this.randomizeAlignment(),
-        },
-        {
-          name: 'Destroyer',
-          size: 3,
-          alignment: this.randomizeAlignment(),
-        },
-        {
-          name: 'Submarine',
-          size: 3,
-          alignment: this.randomizeAlignment(),
-        },
-        {
-          name: 'Patrol Boat',
-          size: 2,
-          alignment: this.randomizeAlignment(),
-        },
-      ],
+      announcement: '',
       gameStatus: 'play', // options are 'finish', 'placeShips', 'play'
-      whoseTurn: 1,
+      isPlayersTurn: true,
     };
   },
   methods: {
-    placeEnemyShips() {
-      this.randomizeAlignment();
-      this.enemyShips.forEach((ship) => {
-        let rowOrCol = Math.floor(Math.random() * 10).toString();
-        let rowOrColConstrained = Math.floor(Math.random() * (10 - ship.size)).toString();
-        if (ship.alignment === 'horizontal') {
-          let num = parseInt(rowOrCol + rowOrColConstrained, 10);
-          for (let i = 0; i < ship.size; i++) {
-            this.enemyBoard.push(num + i);
-            // TODO: check for overlap
-          }
-        } else {
-          let num = parseInt(rowOrColConstrained + rowOrCol, 10);
-          for (let i = 0; i < ship.size * 10; i += 10) {
-            this.enemyBoard.push(num + i);
-            //TODO: check for overlap
-          }
-        }
-      });
+    handleEmittedAnnouncement(emittedAnnouncement) {
+      this.announcement = emittedAnnouncement;
     },
-    randomizeAlignment() {
-      if (Math.floor(Math.random() * 2) === 1) {
-        return 'vertical';
+    switchPlayers() {
+      this.isPlayersTurn = !this.isPlayersTurn;
+      if (this.isPlayersTurn) {
+        // TODO: allow for clicking [see tic tac toe]
       } else {
-        return 'horizontal';
+        setTimeout(() => {
+          // TODO: trigger aiAttack();
+        }, 500);
       }
     },
-  },
-  created() {
-    this.placeEnemyShips();
   },
 };
 </script>
 <style>
 main {
   display: flex;
+  flex-direction: column;
   gap: 100px;
+}
+#boards {
+  display: flex;
+  gap: 100px;
+  margin-left: 5%;
 }
 </style>
