@@ -5,10 +5,10 @@
     <div>{{ enemyStrategy }}</div>
     <div>{{ enemyAttackPlan }}</div>
     <div>{{ lastSuccessfulEnemyAttack }}</div>
-    <div
-      class="board"
-      @click="[this.aiAttack(), $emit('emit-defense-announcement', this.defenseAnnouncement)]"
-    >
+    <div class="board">
+      <!-- No longer need below line. Delete when you don't want to reference it anymore. -->
+      <!-- @click="[this.aiAttack(), $emit('emit-defense-announcement', this.defenseAnnouncement)]" -->
+
       <div
         v-for="(cell, index) in this.boardDefense"
         class="cell"
@@ -24,6 +24,7 @@ import { BLANK_BATTLESHIP_DEFENSE_BOARD } from '../assets/Constants.js';
 import * as HELPERS from '../assets/Helpers.js';
 export default {
   emits: ['emit-defense-announcement'],
+  props: ['gameStatus'],
   data() {
     return {
       boardDefense: BLANK_BATTLESHIP_DEFENSE_BOARD,

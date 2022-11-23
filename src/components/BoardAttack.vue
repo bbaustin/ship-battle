@@ -15,7 +15,8 @@
 <script>
 import { BLANK_BATTLESHIP_ATTACK_BOARD } from '../assets/Constants.js';
 export default {
-  emits: ['emit-attack-announcement'],
+  emits: ['emit-attack-announcement', 'switchToEnemy'],
+  props: ['isPlayersTurn'],
   data() {
     return {
       attackAnnouncement: 'test',
@@ -55,6 +56,8 @@ export default {
   },
   methods: {
     handleTileAttackClick(tileIndex) {
+      if (!this.isPlayersTurn) return;
+      this.$emit('switchToEnemy');
       if (this.boardAttack[tileIndex]) {
         return;
       }

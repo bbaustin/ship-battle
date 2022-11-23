@@ -1,15 +1,9 @@
 # todos
-+ ship placement overlap checker and re-do-er
 + let human place own ship
 + ai (yeahh...?)
 + move steps (copy from tic tac toe)
 + stylin
 + in BoardDefense, have the playerShips use the ship object and/or find some other way to make it register when a ship is sunk. 
-+ Make a function for "Register Attack" in BoardDefense.
-  + Include register 'hit' or 'miss'
-  + Include adding to 'lastSuccessfulEnemyAttack'
-  + Include pushing to enemyAttacks
-  + Include sending announcement
 
 
 # known bugs
@@ -22,12 +16,25 @@
 
 
 # next time...
-+ Try to get turns to switch back and forth between computer and player
-  + Although you could probably emit straight between BoardAttack and BoardDefense, I think it's safer and more flexible to use App.vue as a middleman, and keep an arguably arbitrary state of whose turn it is
-  + So, you'll want to trigger switchPlayers() with a setTimeout when: 
-    + player clicks to attack
-    + computer finishes a turn (probably strangely hard to find when that happens. Good reason to make a function for that reason, so you don't have to copy/paste)
-+ Make an '
+### below two are related... 
++ Ship placement overlap checker and re-do-er
++ Also ship destruction recognition
+  + A ton of ways to do this... 
+  + A cool way to do this might be to add it in boardAttack
+  + Like ['', '', '', '', '', 'carrier', 'carrier', 'carrier', 'carrier', 'carrier', '', ''], etc.
+    + Could do string trickery here, using regex or just js. carrier_hit
+    + if (tile !== ''), // do something... tile += ', hit' 
+    + else { tile = 'miss' }
+## Actually, this one is probably also related. Because
+## Instead of your dummy array of playerShips, you probably want an array of arrays.
+## In which case, your registerAttack() function could likely handle looping through that... 
+# ^ This might not be true actually (see above)
++ Make a function for "Register Attack" in BoardDefense.
+  + Include register 'hit' or 'miss'
+  + Include adding to 'lastSuccessfulEnemyAttack'
+  + Include pushing to enemyAttacks
+  + Include sending announcement (currently not happening)
+
 
 
 # Solved?
@@ -46,7 +53,10 @@
 + Try to get the attackAnnouncement and defenseAnnouncement working.
   + Can you emit straight from child to child? (MAYBE? BUT I DID NOT)
   + Or should you use the intermediary of App (YES I DID THIS)
-
-
 + 48 was shot at. Later, it goes 68, 58, and then doesn't turn around.
 + I think these were both solved by adding the second condition in `if ((!nextAttack && nextAttack !== 0) || this.enemyAttacks.includes(nextAttack)) { ...`
++ Try to get turns to switch back and forth between computer and player
+  + Although you could probably emit straight between BoardAttack and BoardDefense, I think it's safer and more flexible to use App.vue as a middleman, and keep an arguably arbitrary state of whose turn it is
+  + So, you'll want to trigger switchPlayers() with a setTimeout when: 
+    + player clicks to attack
+    + computer finishes a turn (probably strangely hard to find when that happens. Good reason to make a function for that reason, so you don't have to copy/paste)

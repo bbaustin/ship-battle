@@ -1,15 +1,24 @@
 <template>
   <main>
-    <!-- @emit-attack-announcement="()=>return"  TODO: -->
+    <h1 v-if="isPlayersTurn">Player's Turn</h1>
+    <h1 v-else>Computer's Turn</h1>
     <section id="boards">
-      <BoardDefense @emit-defense-announcement="handleEmittedAnnouncement" />
-      <BoardAttack @emit-attack-announcement="handleEmittedAnnouncement" />
+      <BoardDefense
+        ref="boardDefense"
+        :gameStatus="this.gameStatus"
+        @emit-defense-announcement="handleEmittedAnnouncement"
+      />
+      <BoardAttack
+        :isPlayersTurn="this.isPlayersTurn"
+        @emit-attack-announcement="handleEmittedAnnouncement"
+        @switch-to-enemy="switchPlayers"
+      />
     </section>
     <Announcement :announcement="this.announcement" />
   </main>
 </template>
 <script>
-import Announcement from './components//Announcement.vue';
+import Announcement from './components/Announcement.vue';
 import BoardDefense from './components/BoardDefense.vue';
 import BoardAttack from './components/BoardAttack.vue';
 import { BLANK_ENEMY_ATTACK_BOARD } from './assets/Constants';
@@ -29,10 +38,11 @@ export default {
     switchPlayers() {
       this.isPlayersTurn = !this.isPlayersTurn;
       if (this.isPlayersTurn) {
-        // TODO: allow for clicking [see tic tac toe]
+        // TODO: ? Nothing? Idk haha
       } else {
         setTimeout(() => {
-          // TODO: trigger aiAttack();
+          this.$refs.boardDefense.aiAttack(); // NOTE: Could also do this via props (might be better practice, but more convoluted): https://stackoverflow.com/questions/55316490/vue-best-practice-for-calling-a-method-in-a-child-component
+          this.isPlayersTurn = !this.isPlayersTurn;
         }, 500);
       }
     },
