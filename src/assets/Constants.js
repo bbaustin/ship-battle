@@ -1,3 +1,39 @@
+export const SHIP_SPECS = [
+  {
+    name: 'Aircraft Carrier',
+    size: 5,
+  },
+  {
+    name: 'Battleship',
+    size: 4,
+  },
+  {
+    name: 'Destroyer',
+    size: 3,
+  },
+  {
+    name: 'Submarine',
+    size: 3,
+  },
+  {
+    name: 'Tanker',
+    size: 2,
+  },
+];
+
+export const ANNOUNCEMENTS = {
+  ENEMY_HIT: ['', ''], //TODO: Randomize choices for variety
+  ENEMY_MISS: [],
+  PLAYER_HIT: [],
+  PLAYER_MISS: [],
+  GENERAL: {
+    NOT_PLAYERS_TURN: '',
+    PLAYER_WINS: '',
+    PLAYER_LOSES: '',
+    SAME_SQUARE_CLICKED: '',
+  },
+};
+
 export const BLANK_BOARD = [
   '',
   '',

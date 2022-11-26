@@ -21,7 +21,6 @@
 import Announcement from './components/Announcement.vue';
 import BoardDefense from './components/BoardDefense.vue';
 import BoardAttack from './components/BoardAttack.vue';
-import { BLANK_ENEMY_ATTACK_BOARD } from './assets/Constants';
 export default {
   components: { Announcement, BoardDefense, BoardAttack },
   data() {

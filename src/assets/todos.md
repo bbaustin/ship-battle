@@ -18,19 +18,8 @@
 # next time...
 ### below two are related...
 
++ Make messages recognizing ship destruction, and add to "sunkShips" additional message board
 
-+ Ship placement overlap checker and re-do-er
-+ Also ship destruction recognition
-  + A ton of ways to do this... 
-  + A cool way to do this might be to add it in boardAttack
-  + Like ['', '', '', '', '', 'carrier', 'carrier', 'carrier', 'carrier', 'carrier', '', ''], etc.
-    + Could do string trickery here, using regex or just js. carrier_hit
-    + if (tile !== ''), // do something... tile += ', hit' 
-    + else { tile = 'miss' }
-## Actually, this one is probably also related. Because
-## Instead of your dummy array of playerShips, you probably want an array of arrays.
-## In which case, your registerAttack() function could likely handle looping through that... 
-# ^ This might not be true actually (see above)
 + Make a function for "Register Attack" in BoardDefense.
   + Include register 'hit' or 'miss'
   + Include adding to 'lastSuccessfulEnemyAttack'
@@ -73,3 +62,12 @@
     + https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
 
 + Easy: when you click an already clicked square, it goes to computer turn
+
++ Ship placement overlap checker and re-do-er
++ Also ship destruction recognition
+  + A ton of ways to do this... 
+  + A cool way to do this might be to add it in boardAttack
+  + Like ['', '', '', '', '', 'carrier', 'carrier', 'carrier', 'carrier', 'carrier', '', ''], etc.
+    + Could do string trickery here, using regex or just js. carrier_hit
+    + if (tile !== ''), // do something... tile += ', hit' 
+    + else { tile = 'miss' }

@@ -13,7 +13,7 @@
   <h2>{{ this.clickedTile }}</h2>
 </template>
 <script>
-import { BLANK_BOARD } from '../assets/Constants.js';
+import { BLANK_BOARD, SHIP_SPECS } from '../assets/Constants.js';
 export default {
   emits: ['emit-attack-announcement', 'switchToEnemy'],
   props: ['isPlayersTurn'],
@@ -21,37 +21,8 @@ export default {
     return {
       attackAnnouncement: 'test',
       boardAttack: [...BLANK_BOARD],
-      boardEnemyAttack: [],
-      boardEnemyDefense: [],
       clickedTile: '',
-      enemyBoard: [],
-      enemyShips: [
-        {
-          name: 'Carrier',
-          size: 5,
-          alignment: this.randomizeAlignment(),
-        },
-        {
-          name: 'Battleship',
-          size: 4,
-          alignment: this.randomizeAlignment(),
-        },
-        {
-          name: 'Destroyer',
-          size: 3,
-          alignment: this.randomizeAlignment(),
-        },
-        {
-          name: 'Submarine',
-          size: 3,
-          alignment: this.randomizeAlignment(),
-        },
-        {
-          name: 'Patrol Boat',
-          size: 2,
-          alignment: this.randomizeAlignment(),
-        },
-      ],
+      sunkShips: undefined,
     };
   },
   methods: {
@@ -60,14 +31,15 @@ export default {
         this.attackAnnouncement = 'We must wait for our turn';
         return;
       }
-      if (this.boardAttack[tileIndex]) {
+      if (this.boardAttack[tileIndex] === 'miss' || this.boardAttack[tileIndex].includes(' hit')) {
+        // Could also check last three characters
         this.attackAnnouncement = 'This space has already been attempted!';
         return;
       }
       this.$emit('switchToEnemy');
       this.clickedTile = tileIndex;
-      if (this.enemyBoard.includes(tileIndex)) {
-        this.boardAttack[tileIndex] = 'hit';
+      if (this.boardAttack[tileIndex]) {
+        this.boardAttack[tileIndex] += ' hit';
         // checkWinner
         // if won emit to app that player won and don't switch turns
         // also emit to announcement that player won
@@ -80,29 +52,46 @@ export default {
       }
     },
     placeEnemyShips() {
-      this.randomizeAlignment();
-      this.enemyShips.forEach((ship) => {
-        let rowOrCol = Math.floor(Math.random() * 10).toString();
-        let rowOrColConstrained = Math.floor(Math.random() * (10 - ship.size)).toString();
-        if (ship.alignment === 'horizontal') {
-          let num = parseInt(rowOrCol + rowOrColConstrained, 10);
-          for (let i = 0; i < ship.size; i++) {
-            this.enemyBoard.push(num + i);
-            // TODO: check for overlap
-          }
-        } else {
-          let num = parseInt(rowOrColConstrained + rowOrCol, 10);
-          for (let i = 0; i < ship.size * 10; i += 10) {
-            this.enemyBoard.push(num + i);
-            //TODO: check for overlap
-          }
-        }
+      SHIP_SPECS.forEach((ship) => {
+        let alignment = this.randomizeAlignment(); // 'horizontal' or 'vertical'
+        let position = this.randomizePosition(ship, alignment); // Array<number>
+        position.forEach((coordinate) => {
+          this.boardAttack[coordinate] = ship.name;
+        });
       });
     },
     randomizeAlignment() {
       if (Math.floor(Math.random() * 2) === 1) return 'vertical';
       return 'horizontal';
     },
+    randomizePosition(ship, alignment) {
+      // Randomize a starting row/col
+      // There are ten rows/cols, so to make sure the ship doesn't go OOB, subtract the ship's size from 10.
+      let rowOrCol = Math.floor(Math.random() * 10).toString();
+      let rowOrColConstrained = Math.floor(Math.random() * (10 - ship.size)).toString();
+      let attemptedPosition = [];
+      let num, addend;
+      if (alignment === 'horizontal') {
+        num = parseInt(rowOrCol + rowOrColConstrained, 10);
+        addend = 1;
+      } else {
+        // vertical
+        num = parseInt(rowOrColConstrained + rowOrCol, 10);
+        addend = 10;
+      }
+      for (let i = 0; i < ship.size * addend; i += addend) {
+        let coordinate = num + i;
+        if (this.boardAttack[coordinate] !== '') {
+          // The position was already taken, so start over. Feel free to log this for debugging: (`${ship.name}: ${coordinate} was already taken`);
+          return this.randomizePosition(ship, alignment);
+        } else {
+          // The position is untaken, so add this to the array to return.
+          attemptedPosition.push(num + i);
+        }
+      }
+      return attemptedPosition;
+    },
+    attemptToPlaceShips() {},
   },
   created() {
     this.placeEnemyShips();
