@@ -13,14 +13,14 @@
   <h2>{{ this.clickedTile }}</h2>
 </template>
 <script>
-import { BLANK_BATTLESHIP_ATTACK_BOARD } from '../assets/Constants.js';
+import { BLANK_BOARD } from '../assets/Constants.js';
 export default {
   emits: ['emit-attack-announcement', 'switchToEnemy'],
   props: ['isPlayersTurn'],
   data() {
     return {
       attackAnnouncement: 'test',
-      boardAttack: BLANK_BATTLESHIP_ATTACK_BOARD,
+      boardAttack: [...BLANK_BOARD],
       boardEnemyAttack: [],
       boardEnemyDefense: [],
       clickedTile: '',
@@ -56,11 +56,15 @@ export default {
   },
   methods: {
     handleTileAttackClick(tileIndex) {
-      if (!this.isPlayersTurn) return;
-      this.$emit('switchToEnemy');
-      if (this.boardAttack[tileIndex]) {
+      if (!this.isPlayersTurn) {
+        this.attackAnnouncement = 'We must wait for our turn';
         return;
       }
+      if (this.boardAttack[tileIndex]) {
+        this.attackAnnouncement = 'This space has already been attempted!';
+        return;
+      }
+      this.$emit('switchToEnemy');
       this.clickedTile = tileIndex;
       if (this.enemyBoard.includes(tileIndex)) {
         this.boardAttack[tileIndex] = 'hit';

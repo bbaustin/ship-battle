@@ -16,7 +16,9 @@
 
 
 # next time...
-### below two are related... 
+### below two are related...
+
+
 + Ship placement overlap checker and re-do-er
 + Also ship destruction recognition
   + A ton of ways to do this... 
@@ -35,6 +37,9 @@
   + Include pushing to enemyAttacks
   + Include sending announcement (currently not happening)
 
+
+# notes
++ If you ever need to, try to use "store" to pass data between siblings
 
 
 # Solved?
@@ -60,3 +65,11 @@
   + So, you'll want to trigger switchPlayers() with a setTimeout when: 
     + player clicks to attack
     + computer finishes a turn (probably strangely hard to find when that happens. Good reason to make a function for that reason, so you don't have to copy/paste)
+
++ I think I did this... compare how I had to do it on BoardDefense and BoardAttack. Strange? 
++ See if you can make sense of how to use Constants. 
+  + On... created, (or using .once? But I think created) make a copy of the Constant that you will use in different places. And then use that, rather than the constant itself. 
+    + Object.assign https://stackoverflow.com/questions/54108402/share-constants-between-vue-components 
+    + https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+
++ Easy: when you click an already clicked square, it goes to computer turn

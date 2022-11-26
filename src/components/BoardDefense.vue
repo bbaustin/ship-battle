@@ -20,14 +20,19 @@
   </section>
 </template>
 <script>
-import { BLANK_BATTLESHIP_DEFENSE_BOARD } from '../assets/Constants.js';
+import { BLANK_BOARD } from '../assets/Constants.js';
 import * as HELPERS from '../assets/Helpers.js';
 export default {
   emits: ['emit-defense-announcement'],
   props: ['gameStatus'],
+  created() {
+    this.playerShipPositions.forEach((position) => {
+      this.boardDefense[position] = 'boat';
+    });
+  },
   data() {
     return {
-      boardDefense: BLANK_BATTLESHIP_DEFENSE_BOARD,
+      boardDefense: [...BLANK_BOARD],
       defenseAnnouncement: '',
       destroyDirection: undefined,
       enemyAttacks: [],
@@ -39,7 +44,7 @@ export default {
       },
       enemyStrategy: 'random', // random, seek, destroy
       lastSuccessfulEnemyAttack: undefined,
-      playerShipPositions: [0, 1, 2, 3, 4, 8, 9, 41, 51, 61, 58, 68, 78, 88, 90, 91, 92, 98, 99], // NOTE: Do you need this and boardDefense? Can't you just add 'boat' class directly to boardDefense? Think about it
+      playerShipPositions: [0, 1, 2, 3, 4, 8, 9, 22, 25, 32, 42, 52, 53, 54, 59, 48, 58, 68, 69, 79, 89, 90, 91, 92, 99], // NOTE: Do you need this and boardDefense? Can't you just add 'boat' class directly to boardDefense? Think about it
     };
   },
   methods: {
@@ -177,11 +182,6 @@ export default {
       if (this.enemyStrategy === 'seek') return this.aiSeek();
       if (this.enemyStrategy === 'destroy') return this.aiDestroy();
     },
-  },
-  created() {
-    this.playerShipPositions.forEach((position) => {
-      this.boardDefense[position] = 'boat';
-    });
   },
 };
 </script>
