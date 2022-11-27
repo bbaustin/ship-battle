@@ -10,46 +10,71 @@
       ></div>
     </div>
   </section>
-  <h2>{{ this.clickedTile }}</h2>
+  <h2>{{ this.sunkShips }}</h2>
 </template>
 <script>
 import { BLANK_BOARD, SHIP_SPECS } from '../assets/Constants.js';
+import * as HELPERS from '../assets/Helpers.js';
 export default {
-  emits: ['emit-attack-announcement', 'switchToEnemy'],
+  emits: ['emit-attack-announcement', 'emit-game-status-change', 'switch-to-enemy'],
   props: ['isPlayersTurn'],
   data() {
     return {
       attackAnnouncement: 'test',
       boardAttack: [...BLANK_BOARD],
-      clickedTile: '',
-      sunkShips: undefined,
+      hitCount: 0,
+      sunkShips: [],
     };
   },
   methods: {
     handleTileAttackClick(tileIndex) {
+      // return so that your click doesn't do anything.
       if (!this.isPlayersTurn) {
         this.attackAnnouncement = 'We must wait for our turn';
         return;
       }
+      // don't let player click an already-clicked tile
       if (this.boardAttack[tileIndex] === 'miss' || this.boardAttack[tileIndex].includes(' hit')) {
-        // Could also check last three characters
         this.attackAnnouncement = 'This space has already been attempted!';
         return;
       }
-      this.$emit('switchToEnemy');
-      this.clickedTile = tileIndex;
       if (this.boardAttack[tileIndex]) {
+        this.hitCount++;
         this.boardAttack[tileIndex] += ' hit';
-        // checkWinner
-        // if won emit to app that player won and don't switch turns
-        // also emit to announcement that player won
-        this.attackAnnouncement = "The player's attack hit!";
+        if (this.didWin()) return;
+        this.didSink(tileIndex);
+        this.$emit('switch-to-enemy');
       } else {
         this.boardAttack[tileIndex] = 'miss';
-        // send "Miss..." to Announcement
-        // emit whoseTurn to switch
         this.attackAnnouncement = "The player's missile landed harmlessly in the water."; //TODO: randomize these!
+        this.$emit('switch-to-enemy');
       }
+    },
+    didWin() {
+      if (this.hitCount === 17) {
+        this.$emit('emit-game-status-change', 'playerWin');
+      }
+    },
+    didSink(tileIndex) {
+      //TODO: Do you want to move this in HELPERS? By adding board in the passed thing
+      let shipName = this.boardAttack[tileIndex].slice(0, -4); // Removing ' hit'
+      let shipSize;
+      // Get the ship's size
+      SHIP_SPECS.forEach((ship) => {
+        if (ship.name === shipName) shipSize = ship.size; // TODO: This seems not great
+      });
+      let shipHitCount = 0;
+      //TODO: Could do better logic here; you don't need to loop through the entire array...
+      this.boardAttack.forEach((tile) => {
+        if (tile === `${shipName} hit`) shipHitCount++;
+      });
+      if (shipHitCount === shipSize) {
+        this.sunkShips.push(shipName);
+        this.attackAnnouncement = `You sunk the enemy's ${shipName}`;
+        return;
+      }
+      this.attackAnnouncement = `You hit an enemy ship!`;
+      return;
     },
     placeEnemyShips() {
       SHIP_SPECS.forEach((ship) => {

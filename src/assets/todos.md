@@ -1,9 +1,9 @@
 # todos
-+ let human place own ship
-+ ai (yeahh...?)
-+ move steps (copy from tic tac toe)
 + stylin
-+ in BoardDefense, have the playerShips use the ship object and/or find some other way to make it register when a ship is sunk. 
++ Having all emit names contain the word 'emit' probably isn't necessary hah
++ captains..??? (in the future)
++ Randomize messages
+  + Hard part might be using SHIP.NAME to replace a placeholder. 
 
 
 # known bugs
@@ -16,9 +16,10 @@
 
 
 # next time...
-### below two are related...
-
 + Make messages recognizing ship destruction, and add to "sunkShips" additional message board
++ let human place own ship
+  + easiest way is with a form, I guess. 
+  + Show this instead of the attackBoard
 
 + Make a function for "Register Attack" in BoardDefense.
   + Include register 'hit' or 'miss'
@@ -71,3 +72,12 @@
     + Could do string trickery here, using regex or just js. carrier_hit
     + if (tile !== ''), // do something... tile += ', hit' 
     + else { tile = 'miss' }
+
++ GameEnd dialog thing.
+  + Use `<dialog>`? I guess so. Do you need `open` attribute? Maybe.
+  + Do you need an additional emit to say who won? Or can you somehow use some logic about what component the emit came from? Look into that.
+    + About this, I'm just adding an additional option to gameStatus. Feels a little cheap, but I think it's simpler. 
+
++ ai (yeahh...?)
++ move steps (copy from tic tac toe)
++ in BoardDefense, have the playerShips use the ship object and/or find some other way to make it register when a ship is sunk. 

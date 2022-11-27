@@ -22,14 +22,33 @@ export const SHIP_SPECS = [
 ];
 
 export const ANNOUNCEMENTS = {
-  ENEMY_HIT: ['', ''], //TODO: Randomize choices for variety
-  ENEMY_MISS: [],
-  PLAYER_HIT: [],
-  PLAYER_MISS: [],
+  ENEMY_HIT: ["We're hit!", "We're taking fire!", 'All hands on deck! The enemy is attacking!', "Man your stations! We're under attack!"],
+  ENEMY_HIT_CONTINUED: [
+    'The enemy continues their onslaught.',
+    'Our ship continues to be barraged!',
+    "The ship can't take much more of this!",
+    'How much longer can we hold?',
+    "We're taking heavy fire!",
+    'The enemy is locked on!',
+  ],
+  ENEMY_MISS: [
+    'The enemy shoots and misses.',
+    'The enemy has no idea where we are.',
+    'The enemy missile lands harmlessly in the water.',
+    "We've managed to outmanuever the enemy.",
+  ],
+  ENEMY_SINK_SHIP: [
+    'They sunk our SHIP.NAME',
+    "We've lost our SHIP.NAME",
+    "We've lost contact with our SHIP.NAME",
+    'Our SHIP.NAME appears to have been destroyed.',
+  ], // TODO: How
+  PLAYER_HIT: ["We've made a direct hit!", "We've damaged an enemy ship!", "A hit! Let's continue our attack!"],
+  PLAYER_HIT_CONTINUED: ["We're locked on!", 'Keep going! Continue the attack!', "Surely their ship can't take much more of this!"],
+  PLAYER_MISS: ['Our shot missed.', 'The shot was unsuccessful.', 'Readjust aim.', 'Negative.', 'Miss.'],
+  PLAYER_SINK_SHIP: [], // TODO: How
   GENERAL: {
-    NOT_PLAYERS_TURN: '',
-    PLAYER_WINS: '',
-    PLAYER_LOSES: '',
+    NOT_PLAYERS_TURN: ['We must wait our turn.', "It is the enemy's turn.", 'It is not our time to attack.'],
     SAME_SQUARE_CLICKED: '',
   },
 };

@@ -4,13 +4,12 @@ export const createAlphabet = (howManyLetters) => {
   return alphabet;
 };
 
-export const randomizeEnemyShipPlacement = (ships) => {
-  let shipCoordinates = [];
-  return shipCoordinates;
+export const randomizeAnnouncement = (announcementList) => {
+  return announcementList[Math.floor(Math.random() * announcementList.length)];
 };
 
-// Consider returning the opposite attack direction: e.g. in checkN instead of false
-//return checkS(locatinoIndex)
+export const handleHit = () => {};
+
 // Check North board boundary
 export function checkN(locationIndex) {
   if (locationIndex - 10 < 0) return false;
