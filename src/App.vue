@@ -1,5 +1,6 @@
 <template>
   <Modal :gameStatus="this.gameStatus" />
+  <ShipPlacer />
   <main>
     <h1 v-if="isPlayersTurn">Player's Turn</h1>
     <h1 v-else>Computer's Turn</h1>
@@ -23,8 +24,9 @@ import Announcement from './components/Announcement.vue';
 import BoardDefense from './components/BoardDefense.vue';
 import BoardAttack from './components/BoardAttack.vue';
 import Modal from './components/Modal.vue';
+import ShipPlacer from './components/ShipPlacer.vue';
 export default {
-  components: { Announcement, BoardDefense, BoardAttack, Modal },
+  components: { Announcement, BoardDefense, BoardAttack, Modal, ShipPlacer },
   data() {
     return {
       announcement: '',

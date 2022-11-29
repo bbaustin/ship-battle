@@ -1,6 +1,6 @@
 export const SHIP_SPECS = [
   {
-    name: 'Aircraft Carrier',
+    name: 'Carrier', // TODO: Aircraft
     size: 5,
   },
   {

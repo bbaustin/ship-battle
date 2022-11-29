@@ -61,10 +61,11 @@ export default {
       let shipSize;
       // Get the ship's size
       SHIP_SPECS.forEach((ship) => {
-        if (ship.name === shipName) shipSize = ship.size; // TODO: This seems not great
+        if (ship.name === shipName) shipSize = ship.size; // TODO: This seems not great. Can't you access by ship name, instead of looping?
       });
       let shipHitCount = 0;
       //TODO: Could do better logic here; you don't need to loop through the entire array...
+      // Kind of difficult, but you actually want to mimic attacking?
       this.boardAttack.forEach((tile) => {
         if (tile === `${shipName} hit`) shipHitCount++;
       });
@@ -76,50 +77,9 @@ export default {
       this.attackAnnouncement = `You hit an enemy ship!`;
       return;
     },
-    placeEnemyShips() {
-      SHIP_SPECS.forEach((ship) => {
-        let alignment = this.randomizeAlignment(); // 'horizontal' or 'vertical'
-        let position = this.randomizePosition(ship, alignment); // Array<number>
-        position.forEach((coordinate) => {
-          this.boardAttack[coordinate] = ship.name;
-        });
-      });
-    },
-    randomizeAlignment() {
-      if (Math.floor(Math.random() * 2) === 1) return 'vertical';
-      return 'horizontal';
-    },
-    randomizePosition(ship, alignment) {
-      // Randomize a starting row/col
-      // There are ten rows/cols, so to make sure the ship doesn't go OOB, subtract the ship's size from 10.
-      let rowOrCol = Math.floor(Math.random() * 10).toString();
-      let rowOrColConstrained = Math.floor(Math.random() * (10 - ship.size)).toString();
-      let attemptedPosition = [];
-      let num, addend;
-      if (alignment === 'horizontal') {
-        num = parseInt(rowOrCol + rowOrColConstrained, 10);
-        addend = 1;
-      } else {
-        // vertical
-        num = parseInt(rowOrColConstrained + rowOrCol, 10);
-        addend = 10;
-      }
-      for (let i = 0; i < ship.size * addend; i += addend) {
-        let coordinate = num + i;
-        if (this.boardAttack[coordinate] !== '') {
-          // The position was already taken, so start over. Feel free to log this for debugging: (`${ship.name}: ${coordinate} was already taken`);
-          return this.randomizePosition(ship, alignment);
-        } else {
-          // The position is untaken, so add this to the array to return.
-          attemptedPosition.push(num + i);
-        }
-      }
-      return attemptedPosition;
-    },
-    attemptToPlaceShips() {},
   },
   created() {
-    this.placeEnemyShips();
+    HELPERS.placeShips(SHIP_SPECS, this.boardAttack);
   },
 };
 </script>

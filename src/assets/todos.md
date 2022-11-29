@@ -4,6 +4,7 @@
 + captains..??? (in the future)
 + Randomize messages
   + Hard part might be using SHIP.NAME to replace a placeholder. 
++ Figure out how to get a function description to show when you hover over it
 
 
 # known bugs

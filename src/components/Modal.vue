@@ -3,6 +3,7 @@
     <dialog open>
       <h1 v-if="this.gameStatus === 'enemyWin'">All our ships were sunk!</h1>
       <h1 v-else>Congratulations! We've won!</h1>
+      <!-- TODO: Reset a bunch of stuff on button click -->
       <button>Play again?</button>
     </dialog>
   </section>
