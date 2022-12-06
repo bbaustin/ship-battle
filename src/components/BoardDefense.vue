@@ -19,8 +19,11 @@
 <script>
 import { BLANK_BOARD } from '../assets/Constants.js';
 import * as HELPERS from '../assets/Helpers.js';
+// import { store } from '../store.js';
+
 export default {
   emits: ['emit-defense-announcement'], //'emit-game-status-change'
+  props: ['gameStatus'],
   created() {
     this.playerShipPositions.forEach((position) => {
       this.boardDefense[position] = 'boat';
@@ -28,6 +31,7 @@ export default {
   },
   data() {
     return {
+      // store,
       boardDefense: [...BLANK_BOARD],
       defenseAnnouncement: '',
       destroyDirection: undefined,
@@ -181,8 +185,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.boat {
-  background: green;
-}
-</style>

@@ -1,15 +1,23 @@
 <template>
   <Modal :gameStatus="this.gameStatus" />
-  <ShipPlacer />
   <main>
-    <h1 v-if="isPlayersTurn">Player's Turn</h1>
-    <h1 v-else>Computer's Turn</h1>
+    <h1 v-if="gameStatus === 'placeShips'">Welcome to Ship Battle. Place your ships!</h1>
+    <div v-else>
+      <h1 v-if="isPlayersTurn">Player's Turn</h1>
+      <h1 v-else>Computer's Turn</h1>
+    </div>
     <section id="boards">
+      <ShipPlacer v-if="this.gameStatus === 'placeShips'" />
       <BoardDefense
+        v-show="gameStatus === 'play'"
         ref="boardDefense"
+        :gameStatus="this.gameStatus"
         @emit-defense-announcement="handleEmittedAnnouncement"
       />
+      <!-- TODO: Why is the below v-show not working (while the above one is? Haha)-->
+      <!-- You can wrap these in a div [or template?], but I'd rather not if possible I guess? -->
       <BoardAttack
+        v-show="gameStatus === 'play'"
         :isPlayersTurn="this.isPlayersTurn"
         @emit-attack-announcement="handleEmittedAnnouncement"
         @emit-game-status-change="handleGameStatusChange"
@@ -24,13 +32,13 @@ import Announcement from './components/Announcement.vue';
 import BoardDefense from './components/BoardDefense.vue';
 import BoardAttack from './components/BoardAttack.vue';
 import Modal from './components/Modal.vue';
-import ShipPlacer from './components/ShipPlacer.vue';
+import ShipPlacer from './components//ShipPlacer.vue';
 export default {
   components: { Announcement, BoardDefense, BoardAttack, Modal, ShipPlacer },
   data() {
     return {
       announcement: '',
-      gameStatus: 'play', // options are 'placeShips', 'play', 'playerWin', 'enemyWin'
+      gameStatus: 'placeShips', // options are 'placeShips', 'play', 'playerWin', 'enemyWin'
       isPlayersTurn: true,
     };
   },

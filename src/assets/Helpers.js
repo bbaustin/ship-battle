@@ -11,6 +11,10 @@ export const randomizeAnnouncement = (announcementList) => {
   return announcementList[Math.floor(Math.random() * announcementList.length)];
 };
 
+export const shortenShipName = (shipName) => {
+  return shipName.slice(0, -4).split(' ').join('');
+};
+
 export const handleHit = () => {};
 
 /***********************************/
@@ -64,6 +68,7 @@ export const placeShips = (ships, board) => {
       board[coordinate] = ship.name;
     });
   });
+  return board;
 };
 
 /***********************************/

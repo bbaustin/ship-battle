@@ -1,10 +1,13 @@
 # todos
 + stylin
-+ Having all emit names contain the word 'emit' probably isn't necessary hah
++ Standardize names
+  + Having all emit names contain the word 'emit' probably isn't necessary hah
+  + 'cell' or 'tile'? 
 + captains..??? (in the future)
 + Randomize messages
   + Hard part might be using SHIP.NAME to replace a placeholder. 
 + Figure out how to get a function description to show when you hover over it
++ Not totally needed, but gameStatus could be controlled via store
 
 
 # known bugs
@@ -17,10 +20,18 @@
 
 
 # next time...
-+ Make messages recognizing ship destruction, and add to "sunkShips" additional message board
 + let human place own ship
   + easiest way is with a form, I guess. 
   + Show this instead of the attackBoard
+  + Right now, I'm randomizing initial ship placement. 
+    + Need to look for ship overlap when making select form
+  + What I think you can do is try to use "store" here. 
+    + Very clear docs: https://vuejs.org/guide/scaling-up/state-management.html#simple-state-management-with-reactivity-api
+    + Unclear if you want to initialize values in store. Initalize them in BoardDefense. Or initialize them in ShipPlacer. See what makes the most sense... 
+    + UPDATE: Wait, maybe store doesn't make sense. Because after gameStatus is not placeShips, you never use ShipPlacer again.
+    + So instead, maybe you want shipPlacer to place its own ships on its own board. Or you want... to simply pass the data from shipPlacer to DefenseBoard
+
++ Make messages recognizing ship destruction, and add to "sunkShips" additional message board
 
 + Make a function for "Register Attack" in BoardDefense.
   + Include register 'hit' or 'miss'
@@ -82,3 +93,30 @@
 + ai (yeahh...?)
 + move steps (copy from tic tac toe)
 + in BoardDefense, have the playerShips use the ship object and/or find some other way to make it register when a ship is sunk. 
+
+
+
+
+# Removed code
++ Using select for rows/columns
+```
+<!-- ROW -->
+<select>
+  <template v-if="this.alignment === 'vertical'">
+    <option v-for="n in 10">{{ n }}</option>
+  </template>
+  <template v-else>
+    <option>TODO</option>
+  </template>
+</select>
+
+<!-- COLUMN -->
+<select>
+  <template v-if="this.alignment === 'horizontal'">
+    <option v-for="n in 10">{{ n }}</option>
+  </template>
+  <template v-else>
+    <option>TODO</option>
+  </template>
+</select>
+```
