@@ -108,21 +108,25 @@ export function checkE(locationIndex) {
 /*****************************************************/
 export const DIR_REL = {
   n: {
+    addend: -10,
     check: checkN,
     oppositeCheck: checkS,
     oppositeDirection: 's',
   },
   e: {
+    addend: 1,
     check: checkE,
     oppositeCheck: checkW,
     oppositeDirection: 'w',
   },
   s: {
+    addend: 10,
     check: checkS,
     oppositeCheck: checkN,
     oppositeDirection: 'n',
   },
   w: {
+    addend: -1,
     check: checkW,
     oppositeCheck: checkE,
     oppositeDirection: 'e',

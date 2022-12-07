@@ -17,9 +17,15 @@
   + You solved this error, I guess for 2, 3, 4, etc. But for some reason not 1.
   + Starting on 2 with 5 hit already didn't go to 1
   + See your error message: //TODO: I thought this would solve an error, but it might not. If not, delete.
++ ShipPlacer movement logic does not work with a one-tile ship (solution: don't use a one tile ship)
 
 
 # next time...
++ Continuing with below:
+  + Try to make handleDown actually handle all of the directions. 
+    + Using addend, direction as a parameter, etc.
+    + Basically, you can't have 4 different functions, one for each direction.
+
 + let human place own ship
   + easiest way is with a form, I guess. 
   + Show this instead of the attackBoard

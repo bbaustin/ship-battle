@@ -24,10 +24,10 @@
       <option>horizontal</option>
       <option>vertical</option>
     </select>
-    <button @click.prevent="handleUp">U</button>
-    <button @click.prevent="handleRight">R</button>
-    <button @click.prevent="handleLeft">L</button>
-    <button @click.prevent="handleDown">D</button>
+    <button @click.prevent="handleDirectionClick('n')">U</button>
+    <button @click.prevent="handleDirectionClick('e')">R</button>
+    <button @click.prevent="handleDirectionClick('w')">L</button>
+    <button @click.prevent="handleDirectionClick('s')">D</button>
 
     <button @click.prevent="confirmPosition">Confirm Ship Positions</button>
   </form>
@@ -78,71 +78,66 @@ export default {
   },
   methods: {
     handleAlignment() {},
-    // NOTE: This would be slightly easier if you could grab the alignment from HELPERS.placeShips. It might be worth having it return that..?
-    handleDown() {
+    handleDirectionClick(direction) {
       let coordinates = [...this.placement[this.activeShip].coordinates];
-      let attemptedSouthCoordinate = HELPERS.checkS(Math.max(...coordinates));
+      let dir = HELPERS.DIR_REL[direction];
+      let attemptedCoordinate = dir.addend > 0 ? dir.check(Math.max(...coordinates)) : dir.check(Math.min(...coordinates));
       // NOTE: Probably controlled by state later?
       let alignment = coordinates[0] + 1 === coordinates[1] ? 'horizontal' : 'vertical';
-      if (!attemptedSouthCoordinate) return;
+      if (attemptedCoordinate !== 0 && !attemptedCoordinate) return;
 
-      ////////////////////
-      // VERTICAL ///////
-      ///////////////////
-      if (alignment === 'vertical') {
-        // If attempted spot is occupied by another ship, return
-        if (this.boardShipPlacement[attemptedSouthCoordinate]) return;
-
-        // Otherwise, the first spot of the ship, and add to the intended new spot
-        this.boardShipPlacement[coordinates[0]] = '';
-        this.boardShipPlacement[coordinates.at(-1) + 10] = this.activeShip;
-
-        // Update temp coordinates accordingly
-        coordinates.shift();
-        coordinates.push(coordinates.at(-1) + 10);
-
-        // Set actual coordinates to the updated coordinates
-        this.placement[this.activeShip].coordinates = coordinates;
-      }
-
-      ///////////////////
-      // HORIZONTAL /////
-      //////////////////
-      if (alignment === 'horizontal') {
-        let newCoordinates = [];
-        coordinates.forEach((coordinate) => {
-          if (this.boardShipPlacement[coordinate + 10]) return;
-          newCoordinates.push(coordinate + 10);
-        });
-
-        // Only continue if you could successfully access each coordinate
-        if (newCoordinates.length === this.placement[this.activeShip].coordinates.length) {
-          this.placement[this.activeShip].coordinates = newCoordinates;
-          coordinates.forEach((coordinate) => {
-            this.boardShipPlacement[coordinate] = '';
-            this.boardShipPlacement[coordinate + 10] = this.activeShip;
-          });
+      if (direction === 'n' || direction === 's') {
+        if (alignment === 'vertical') {
+          return this.handleStraightMovement(alignment, dir, coordinates, attemptedCoordinate);
         }
+        return this.handleLateralMovement(alignment, dir, coordinates, attemptedCoordinate);
+      } else {
+        if (alignment === 'vertical') {
+          return this.handleLateralMovement(alignment, dir, coordinates, attemptedCoordinate);
+        }
+        return this.handleStraightMovement(alignment, dir, coordinates, attemptedCoordinate);
       }
     },
 
-    handleLeft() {
-      let coordinates = [...this.placement[this.activeShip].coordinates];
-      let attemptedWestCoordinate = HELPERS.checkW(Math.min(...coordinates));
-      if (attemptedWestCoordinate && !this.boardShipPlacement[attemptedWestCoordinate]) {
+    handleStraightMovement(alignment, dir, coordinates, attemptedCoordinate) {
+      // If attempted spot is occupied by another ship, return
+      if (this.boardShipPlacement[attemptedCoordinate]) return;
+      // Otherwise, the first spot of the ship, and add to the intended new spot
+      if (dir.addend > 0) {
+        this.boardShipPlacement[coordinates[0]] = '';
+        this.boardShipPlacement[coordinates.at(-1) + dir.addend] = this.activeShip;
+        // Remove the first element
+        coordinates.shift();
+        // Add (at the end) the value of the last element + addend
+        coordinates.push(coordinates.at(-1) + dir.addend);
+      } else {
+        this.boardShipPlacement[coordinates[0] + dir.addend] = this.activeShip;
+        this.boardShipPlacement[coordinates.at(-1)] = '';
+        // Remove the last element
+        coordinates.pop();
+        // Add (at the beginning) the value of the first element + addend
+        coordinates.unshift(coordinates[0] + dir.addend);
+      }
+
+      // Set actual coordinates to the updated coordinates
+      this.placement[this.activeShip].coordinates = coordinates;
+    },
+    handleLateralMovement(alignment, dir, coordinates, attemptedCoordinate) {
+      let newCoordinates = [];
+      coordinates.forEach((coordinate) => {
+        if (this.boardShipPlacement[coordinate + dir.addend]) return;
+        newCoordinates.push(coordinate + dir.addend);
+      });
+
+      // Only continue if you could successfully access each coordinate
+      if (newCoordinates.length === this.placement[this.activeShip].coordinates.length) {
+        this.placement[this.activeShip].coordinates = newCoordinates;
         coordinates.forEach((coordinate) => {
           this.boardShipPlacement[coordinate] = '';
-          this.boardShipPlacement[coordinate - 1] = this.activeShip;
+          this.boardShipPlacement[coordinate + dir.addend] = this.activeShip;
         });
-        let newCoordinates = [];
-        this.placement[this.activeShip].coordinates.forEach((coordinate) => {
-          newCoordinates.push(coordinate - 1);
-        });
-        this.placement[this.activeShip].coordinates = newCoordinates;
       }
     },
-    handleRight() {},
-    handleUp() {},
     confirmPosition() {
       // emit boardShipPlacement (to boardDefense)
     },
