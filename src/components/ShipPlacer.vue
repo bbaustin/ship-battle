@@ -1,7 +1,6 @@
 <template>
   <form>
     <!-- SHIP -->
-    <!--NOTE: could also use regex in the value. str.replace(/\s+/g, '');-->
     <select
       v-model="this.activeShip"
       @change="handleActiveShip"
@@ -18,16 +17,16 @@
     <!-- ORIENTATION/ALIGNMENT -->
     <select
       v-model="this.alignment"
-      @change="handleAlignment"
+      @change="handleAlignmentChange"
     >
       <!-- NOTE: I guess value isn't needed with v-model? -->
       <option>horizontal</option>
       <option>vertical</option>
     </select>
-    <button @click.prevent="handleDirectionClick('n')">U</button>
-    <button @click.prevent="handleDirectionClick('e')">R</button>
-    <button @click.prevent="handleDirectionClick('w')">L</button>
-    <button @click.prevent="handleDirectionClick('s')">D</button>
+    <button @click.prevent="handleMovement('n')">U</button>
+    <button @click.prevent="handleMovement('e')">R</button>
+    <button @click.prevent="handleMovement('w')">L</button>
+    <button @click.prevent="handleMovement('s')">D</button>
 
     <button @click.prevent="confirmPosition">Confirm Ship Positions</button>
   </form>
@@ -65,11 +64,13 @@ export default {
         this.placement[tile].coordinates.push(index);
       }
     });
+    // Compute the alignment of the just-placed activeShip
+    this.alignment = this.getAlignment();
   },
   data() {
     return {
       // store,
-      activeShip: '',
+      activeShip: SHIP_SPECS[0].name,
       alignment: '',
       boardShipPlacement: [...BLANK_BOARD], //TODO: Arguably, you sort of don't need this, in the same way that you're only relying on "board" in other components. But it's OK to have, I guess.
       placement: {},
@@ -77,8 +78,69 @@ export default {
     };
   },
   methods: {
-    handleAlignment() {},
-    handleDirectionClick(direction) {
+    // TODO: Maybe you want this, but idk
+    getAlignment() {
+      let coordinates = [...this.placement[this.activeShip].coordinates];
+      return coordinates[0] + 1 === coordinates[1] ? 'horizontal' : 'vertical';
+    },
+    handleActiveShip() {
+      this.alignment = this.getAlignment();
+    },
+    handleAlignmentChange() {
+      let coordinates = [...this.placement[this.activeShip].coordinates];
+      let alignment = coordinates[0] + 1 === coordinates[1] ? 'horizontal' : 'vertical';
+      // If we're horizontal, we'll be turning vertical (hence addend is +-10.)
+      let addend = alignment === 'horizontal' ? 10 : 1;
+      console.log(`addend: ${addend}`);
+      let shipLength = this.placement[this.activeShip].coordinates.length;
+
+      // COORDINATE LOOP
+      // This will loop through each coordinate (duh)
+      // If we have a submarine on 63, 64, 65, 66 it will simply loop through those coordinates.
+      let didRotate = false;
+      for (let i = 0; i < coordinates.length; i++) {
+        let availableCoordinates = [];
+        if (!didRotate) {
+          for (let mod = shipLength * -addend; mod < shipLength * addend; mod += addend) {
+            let attemptedCoordinate = coordinates[i] + mod;
+            console.table({ coordinate: coordinates[i], mod: mod, attemptedCoordinate: attemptedCoordinate, shipLength: shipLength, addend: addend });
+            if (attemptedCoordinate > 99 || attemptedCoordinate < 0) {
+              console.log(`${attemptedCoordinate} is an illegal value!`);
+            }
+
+            // Check if the tile is occupied by a ship (other than your own, because you'll cross your own pivot point)
+            else if (this.boardShipPlacement[attemptedCoordinate] && this.boardShipPlacement[attemptedCoordinate] !== this.activeShip) {
+              availableCoordinates = [];
+            } else {
+              availableCoordinates.push(attemptedCoordinate);
+              console.log(`just pushed to availableCoordnates for ${this.activeShip}`);
+              console.log(availableCoordinates);
+            }
+
+            if (availableCoordinates.length === shipLength) {
+              console.log(`We have a match of length ${shipLength}`);
+              this.updateShipAlignment(availableCoordinates, coordinates, addend);
+              didRotate = true;
+              return availableCoordinates;
+            }
+
+            let checksPassed;
+            // Check if we should run the next tile, or if it's OOB
+            if (coordinates[i] === attemptedCoordinate) checksPassed = true;
+            if (addend === 1 && coordinates[i] > attemptedCoordinate) checksPassed = !!HELPERS.checkW(attemptedCoordinate);
+            if (addend === 1 && coordinates[i] < attemptedCoordinate) checksPassed = !!HELPERS.checkE(attemptedCoordinate);
+            if (addend === 10 && coordinates[i] > attemptedCoordinate) checksPassed = !!HELPERS.checkN(attemptedCoordinate);
+            if (addend === 10 && coordinates[i] < attemptedCoordinate) checksPassed = !!HELPERS.checkS(attemptedCoordinate);
+            console.log(`checksPassed status: ${checksPassed} for ${attemptedCoordinate}`);
+            if (!checksPassed) {
+              console.log('chcks didnt pass but what should i do here hah');
+              availableCoordinates = [];
+            }
+          }
+        }
+      }
+    },
+    handleMovement(direction) {
       let coordinates = [...this.placement[this.activeShip].coordinates];
       let dir = HELPERS.DIR_REL[direction];
       let attemptedCoordinate = dir.addend > 0 ? dir.check(Math.max(...coordinates)) : dir.check(Math.min(...coordinates));
@@ -131,12 +193,24 @@ export default {
 
       // Only continue if you could successfully access each coordinate
       if (newCoordinates.length === this.placement[this.activeShip].coordinates.length) {
-        this.placement[this.activeShip].coordinates = newCoordinates;
-        coordinates.forEach((coordinate) => {
-          this.boardShipPlacement[coordinate] = '';
-          this.boardShipPlacement[coordinate + dir.addend] = this.activeShip;
-        });
+        this.updateShipPositionLateral(newCoordinates, coordinates, dir.addend);
       }
+    },
+    updateShipPositionLateral(arrayOfCoordinates, existingCoordinates, addend) {
+      this.placement[this.activeShip].coordinates = arrayOfCoordinates;
+      existingCoordinates.forEach((coordinate) => {
+        this.boardShipPlacement[coordinate] = '';
+        this.boardShipPlacement[coordinate + addend] = this.activeShip;
+      });
+    },
+    updateShipAlignment(arrayOfCoordinates, existingCoordinates, addend) {
+      this.placement[this.activeShip].coordinates = arrayOfCoordinates;
+      existingCoordinates.forEach((coordinate) => {
+        this.boardShipPlacement[coordinate] = '';
+      });
+      arrayOfCoordinates.forEach((coordinate) => {
+        this.boardShipPlacement[coordinate] = this.activeShip;
+      });
     },
     confirmPosition() {
       // emit boardShipPlacement (to boardDefense)

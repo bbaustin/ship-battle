@@ -8,6 +8,7 @@
   + Hard part might be using SHIP.NAME to replace a placeholder. 
 + Figure out how to get a function description to show when you hover over it
 + Not totally needed, but gameStatus could be controlled via store
++ Allow for use of computer keys instead of clicking when attacking
 
 
 # known bugs
@@ -21,10 +22,14 @@
 
 
 # next time...
-+ Continuing with below:
-  + Try to make handleDown actually handle all of the directions. 
-    + Using addend, direction as a parameter, etc.
-    + Basically, you can't have 4 different functions, one for each direction.
++ CONTINUE figuring out how to do rotation (BIG)
+  + Still buggy AF
+  + You're a little unclear about when/how to reset a loop when you reach an illegal number, etc.
+  + Also, you're console.tabling some useful stuff. Some of the numbers might be a little off (esp with negatives?). See if it matters. 
+
+
++ let human finalize their ship placement (SMALL)
++ allow for ship placement to use computer keys (MEDIUM)
 
 + let human place own ship
   + easiest way is with a form, I guess. 
@@ -100,6 +105,10 @@
 + move steps (copy from tic tac toe)
 + in BoardDefense, have the playerShips use the ship object and/or find some other way to make it register when a ship is sunk. 
 
++ Continuing with below:
+  + Try to make handleDown actually handle all of the directions. 
+    + Using addend, direction as a parameter, etc.
+    + Basically, you can't have 4 different functions, one for each direction.
 
 
 
