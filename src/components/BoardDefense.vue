@@ -1,10 +1,7 @@
 <template>
   <section id="defense">
     <h1>my ships</h1>
-    <div>{{ enemyAttacks }}</div>
-    <div>{{ enemyStrategy }}</div>
-    <div>{{ enemyAttackPlan }}</div>
-    <div>{{ lastSuccessfulEnemyAttack }}</div>
+    <button @click.prevent="this.handleCoordinatesToggle">toggle coordinates</button>
     <div class="board">
       <div
         v-for="(cell, index) in this.boardDefense"
@@ -15,8 +12,14 @@
           this.boardDefense[index].slice(-3) === 'hit' ? 'hit' : '',
           this.enemyAttacks.at(-1) === index ? 'last-attack' : '',
         ]"
-      ></div>
+      >
+        <span v-if="this.canSeeCoordinates">{{ index }}</span>
+      </div>
     </div>
+    <div>{{ enemyAttacks }}</div>
+    <div>{{ enemyStrategy }}</div>
+    <div>{{ enemyAttackPlan }}</div>
+    <div>{{ lastSuccessfulEnemyAttack }}</div>
   </section>
 </template>
 <script>
@@ -32,6 +35,7 @@ export default {
   data() {
     return {
       boardDefense: [],
+      canSeeCoordinates: false,
       defenseAnnouncement: '',
       destroyDirection: undefined,
       enemyAttacks: [],
@@ -184,6 +188,9 @@ export default {
       if (this.enemyStrategy === 'random') return this.aiRandom();
       if (this.enemyStrategy === 'seek') return this.aiSeek();
       if (this.enemyStrategy === 'destroy') return this.aiDestroy();
+    },
+    handleCoordinatesToggle() {
+      return (this.canSeeCoordinates = !this.canSeeCoordinates);
     },
   },
 };

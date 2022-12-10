@@ -1,13 +1,16 @@
 <template>
   <section id="attack">
     <h1>attack!</h1>
+    <button @click.prevent="this.handleCoordinatesToggle">toggle coordinates</button>
     <div class="board">
       <div
         v-for="(cell, index) in this.boardAttack"
         class="cell"
         :class="this.boardAttack[index]"
         @click="[this.handleTileAttackClick(index), $emit('emit-attack-announcement', this.attackAnnouncement)]"
-      ></div>
+      >
+        <span v-if="this.canSeeCoordinates">{{ index }}</span>
+      </div>
     </div>
   </section>
   <h2>{{ this.sunkShips }}</h2>
@@ -22,6 +25,7 @@ export default {
     return {
       attackAnnouncement: 'test',
       boardAttack: [...BLANK_BOARD],
+      canSeeCoordinates: false,
       sunkShips: [],
     };
   },
@@ -79,6 +83,9 @@ export default {
       }
       this.attackAnnouncement = `You hit an enemy ship!`;
       return;
+    },
+    handleCoordinatesToggle() {
+      return (this.canSeeCoordinates = !this.canSeeCoordinates);
     },
   },
   created() {

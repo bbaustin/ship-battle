@@ -8,9 +8,10 @@
   + Hard part might be using SHIP.NAME to replace a placeholder. 
 + Figure out how to get a function description to show when you hover over it
 + Not totally needed, but gameStatus could be controlled via store
++ Allow for ship placement to use computer keys (MEDIUM)
 + Allow for use of computer keys instead of clicking when attacking
-+ Could have a toggleIndex button to show grid numbers or not
-
++ toggleCoordinates is copy/pasted in all three boards. It's the same logic each time (but different boards). It doesn't make sense to be in "store", I don't think (no logic being shared BETWEEN components). But is there a more DRY way of doing it?
+  + I guess emitting to App.js, which would have an array of all boards that have a toggle? But... your way seems OK... Something to think about anyway. 
 
 # known bugs
 + If it hits 8-9, and 7 is open, when it cycles back to 7, it will (in one turn) hit both 7 and another tile
@@ -23,26 +24,6 @@
 
 
 # next time...
-+ CONTINUE figuring out how to do rotation (BIG)
-  + Still buggy AF
-  + You're a little unclear about when/how to reset a loop when you reach an illegal number, etc.
-  + Also, you're console.tabling some useful stuff. Some of the numbers might be a little off (esp with negatives?). See if it matters. 
-
-
-+ let human finalize their ship placement (SMALL)
-+ allow for ship placement to use computer keys (MEDIUM)
-
-+ let human place own ship
-  + easiest way is with a form, I guess. 
-  + Show this instead of the attackBoard
-  + Right now, I'm randomizing initial ship placement. 
-    + Need to look for ship overlap when making select form
-  + What I think you can do is try to use "store" here. 
-    + Very clear docs: https://vuejs.org/guide/scaling-up/state-management.html#simple-state-management-with-reactivity-api
-    + Unclear if you want to initialize values in store. Initalize them in BoardDefense. Or initialize them in ShipPlacer. See what makes the most sense... 
-    + UPDATE: Wait, maybe store doesn't make sense. Because after gameStatus is not placeShips, you never use ShipPlacer again.
-    + So instead, maybe you want shipPlacer to place its own ships on its own board. Or you want... to simply pass the data from shipPlacer to DefenseBoard
-
 + Make messages recognizing ship destruction, and add to "sunkShips" additional message board
 
 + Make a function for "Register Attack" in BoardDefense.
@@ -106,10 +87,28 @@
 + move steps (copy from tic tac toe)
 + in BoardDefense, have the playerShips use the ship object and/or find some other way to make it register when a ship is sunk. 
 
+
++ CONTINUE figuring out how to do rotation (BIG)
+  + Still buggy AF
+  + You're a little unclear about when/how to reset a loop when you reach an illegal number, etc.
+  + Also, you're console.tabling some useful stuff. Some of the numbers might be a little off (esp with negatives?). See if it matters. 
++ let human finalize their ship placement (SMALL)
++ let human place own ship
+  + easiest way is with a form, I guess. 
+  + Show this instead of the attackBoard
+  + Right now, I'm randomizing initial ship placement. 
+    + Need to look for ship overlap when making select form
+  + What I think you can do is try to use "store" here. 
+    + Very clear docs: https://vuejs.org/guide/scaling-up/state-management.html#simple-state-management-with-reactivity-api
+    + Unclear if you want to initialize values in store. Initalize them in BoardDefense. Or initialize them in ShipPlacer. See what makes the most sense... 
+    + UPDATE: Wait, maybe store doesn't make sense. Because after gameStatus is not placeShips, you never use ShipPlacer again.
+    + So instead, maybe you want shipPlacer to place its own ships on its own board. Or you want... to simply pass the data from shipPlacer to DefenseBoard
 + Continuing with below:
   + Try to make handleDown actually handle all of the directions. 
     + Using addend, direction as a parameter, etc.
     + Basically, you can't have 4 different functions, one for each direction.
+
++ Could have a toggleIndex button to show grid numbers or not
 
 
 

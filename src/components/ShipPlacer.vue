@@ -33,13 +33,14 @@
 
   <section id="placement">
     <h1>choose your ship placement</h1>
+    <button @click.prevent="this.handleCoordinatesToggle">toggle coordinates</button>
     <div class="board">
       <div
         v-for="(cell, index) in this.boardShipPlacement"
         class="cell"
         :class="this.getTileClass(cell)"
       >
-        {{ index }}
+        <span v-if="this.canSeeCoordinates">{{ index }}</span>
       </div>
     </div>
   </section>
@@ -71,6 +72,7 @@ export default {
       activeShip: SHIP_SPECS[0].name,
       alignment: '',
       boardShipPlacement: [...BLANK_BOARD], //TODO: Arguably, you sort of don't need this, in the same way that you're only relying on "board" in other components. But it's OK to have, I guess.
+      canSeeCoordinates: true,
       placement: {},
       ships: [...SHIP_SPECS],
     };
@@ -224,6 +226,9 @@ export default {
       if (this.activeShip && tileContent === this.activeShip) return 'selected';
       if (tileContent) return 'boat';
       return '';
+    },
+    handleCoordinatesToggle() {
+      return (this.canSeeCoordinates = !this.canSeeCoordinates);
     },
   },
 };
