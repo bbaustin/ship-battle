@@ -101,7 +101,7 @@ export default {
         if (!didRotate) {
           for (let mod = shipLength * -addend; mod < shipLength * addend; mod += addend) {
             let attemptedCoordinate = coordinates[i] + mod;
-            console.table({ coordinate: coordinates[i], mod: mod, attemptedCoordinate: attemptedCoordinate, shipLength: shipLength, addend: addend });
+            // console.table({ coordinate: coordinates[i], mod: mod, attemptedCoordinate: attemptedCoordinate, shipLength: shipLength, addend: addend });
             if (attemptedCoordinate > 99 || attemptedCoordinate < 0) {
               console.log(`${attemptedCoordinate} is an illegal value!`);
             }
@@ -125,10 +125,18 @@ export default {
             let checksPassed;
             // Check if we should run the next tile, or if it's OOB
             if (coordinates[i] === attemptedCoordinate) checksPassed = true;
-            if (addend === 1 && coordinates[i] > attemptedCoordinate) checksPassed = !!HELPERS.checkW(attemptedCoordinate);
-            if (addend === 1 && coordinates[i] < attemptedCoordinate) checksPassed = !!HELPERS.checkE(attemptedCoordinate);
-            if (addend === 10 && coordinates[i] > attemptedCoordinate) checksPassed = !!HELPERS.checkN(attemptedCoordinate);
-            if (addend === 10 && coordinates[i] < attemptedCoordinate) checksPassed = !!HELPERS.checkS(attemptedCoordinate);
+            if (addend === 1 && coordinates[i] > attemptedCoordinate) checksPassed = !!HELPERS.checkW(coordinates[i]);
+            if (addend === 1 && coordinates[i] < attemptedCoordinate) checksPassed = !!HELPERS.checkE(coordinates[i]);
+            if (addend === 10 && coordinates[i] > attemptedCoordinate) checksPassed = !!HELPERS.checkN(coordinates[i]);
+            if (addend === 10 && coordinates[i] < attemptedCoordinate) checksPassed = !!HELPERS.checkS(coordinates[i]);
+            console.table({
+              coordinate: coordinates[i],
+              mod: mod,
+              attemptedCoordinate: attemptedCoordinate,
+              checksPassed: checksPassed,
+              shipLength: shipLength,
+              addend: addend,
+            });
             if (!checksPassed) {
               console.log('checks did not pass');
               availableCoordinates = [];
