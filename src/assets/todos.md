@@ -1,5 +1,13 @@
 # todos
-+ stylin
++ stylin (PROBABLY USE SCSS FOR COLOR VARIABLES AND STUFF)
+  + black background
+  + matrix green, (outline and good guy ships)
+  + bright red (hits),
+  + pylon yellow (misses),
+  + orange? purple? idk (selected)
+  + computer-looking text
+  + scrolly text (maybe js, not stylin)
+  + blinking stuff? 
 + Standardize names
   + Having all emit names contain the word 'emit' probably isn't necessary hah
   + 'cell' or 'tile'? 
@@ -12,6 +20,19 @@
 + Allow for use of computer keys instead of clicking when attacking
 + toggleCoordinates is copy/pasted in all three boards. It's the same logic each time (but different boards). It doesn't make sense to be in "store", I don't think (no logic being shared BETWEEN components). But is there a more DRY way of doing it?
   + I guess emitting to App.js, which would have an array of all boards that have a toggle? But... your way seems OK... Something to think about anyway. 
++ sounds!
+  + playerMove
+  + playerPlace
+  + playerHit
+  + playerMiss
+  + playerSink
+  + playerWin
+  + enemyHit
+  + enemyMiss
+  + enemySink
+  + enemyWin
+
+
 
 # known bugs
 + If it hits 8-9, and 7 is open, when it cycles back to 7, it will (in one turn) hit both 7 and another tile
@@ -35,6 +56,7 @@
 
 # notes
 + If you ever need to, try to use "store" to pass data between siblings
++ utilizing break or continue, instead of return could helpful in your more complicated loops
 
 
 # Solved?
@@ -134,4 +156,13 @@
     <option>TODO</option>
   </template>
 </select>
+```
+
++ Randomizing alphabet (you're using numbers 0-99, rather than A1-J9 or whatever)
+```
+export const createAlphabet = (howManyLetters) => {
+  const alpha = Array.from(Array(howManyLetters)).map((e, i) => i + 65);
+  const alphabet = alpha.map((x) => String.fromCharCode(x));
+  return alphabet;
+};
 ```

@@ -16,10 +16,10 @@
         <span v-if="this.canSeeCoordinates">{{ index }}</span>
       </div>
     </div>
-    <div>{{ enemyAttacks }}</div>
-    <div>{{ enemyStrategy }}</div>
-    <div>{{ enemyAttackPlan }}</div>
-    <div>{{ lastSuccessfulEnemyAttack }}</div>
+    <div>PAST ENEMY ATTACKS: {{ enemyAttacks }}</div>
+    <div>ENEMY ATTACK STRATEGY: {{ enemyStrategy }}</div>
+    <div>EXPECTED ENEMY ATTACK: {{ enemyAttackPlan }}</div>
+    <div>LAST ON TARGET ATTACK: {{ lastSuccessfulEnemyAttack }}</div>
   </section>
 </template>
 <script>
@@ -47,8 +47,6 @@ export default {
       },
       enemyStrategy: 'random', // random, seek, destroy
       lastSuccessfulEnemyAttack: undefined,
-      // TODO: BIG TIME! Delete below
-      // playerShipPositions: [0, 1, 2, 3, 4, 8, 9, 22, 25, 32, 42, 52, 53, 54, 59, 48, 58, 68, 69, 79, 89, 90, 91, 92, 99], // NOTE: Do you need this and boardDefense? Can't you just add 'boat' class directly to boardDefense? Think about it
     };
   },
   methods: {

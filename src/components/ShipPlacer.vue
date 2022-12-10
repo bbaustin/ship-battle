@@ -236,5 +236,6 @@ export default {
 <style scoped>
 .selected {
   background: orange;
+  color: #242424;
 }
 </style>

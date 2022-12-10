@@ -1,12 +1,6 @@
 /***********************************/
 //  * * * * G E N E R A L * * * * * /
 /***********************************/
-export const createAlphabet = (howManyLetters) => {
-  const alpha = Array.from(Array(howManyLetters)).map((e, i) => i + 65);
-  const alphabet = alpha.map((x) => String.fromCharCode(x));
-  return alphabet;
-};
-
 export const randomizeAnnouncement = (announcementList) => {
   return announcementList[Math.floor(Math.random() * announcementList.length)];
 };

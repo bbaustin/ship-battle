@@ -99,5 +99,7 @@ export default {
 }
 .cell:hover {
   filter: brightness(85%);
+  background-image: radial-gradient(yellow 0.5px, transparent 0);
+  background-size: 2px 2px;
 }
 </style>
