@@ -2,27 +2,32 @@
   <Modal :gameStatus="this.gameStatus" />
   <main>
     <h1 v-if="gameStatus === 'placeShips'">Welcome to Ship Battle. Place your ships!</h1>
-    <div v-else>
+    <template v-else>
       <h1 v-if="isPlayersTurn">Player's Turn</h1>
       <h1 v-else>Computer's Turn</h1>
-    </div>
-    <section id="boards">
-      <ShipPlacer v-if="this.gameStatus === 'placeShips'" />
-      <BoardDefense
-        v-show="gameStatus === 'play'"
-        ref="boardDefense"
-        :gameStatus="this.gameStatus"
-        @emit-defense-announcement="handleEmittedAnnouncement"
+    </template>
+    <section>
+      <ShipPlacer
+        v-if="this.gameStatus === 'placeShips'"
+        @set-player-ships="handleSetPlayerShips"
       />
-      <!-- TODO: Why is the below v-show not working (while the above one is? Haha)-->
-      <!-- You can wrap these in a div [or template?], but I'd rather not if possible I guess? -->
-      <BoardAttack
-        v-show="gameStatus === 'play'"
-        :isPlayersTurn="this.isPlayersTurn"
-        @emit-attack-announcement="handleEmittedAnnouncement"
-        @emit-game-status-change="handleGameStatusChange"
-        @switch-to-enemy="switchPlayers"
-      />
+      <div
+        class="boards"
+        v-show="this.gameStatus === 'play'"
+      >
+        <BoardDefense
+          ref="boardDefense"
+          :gameStatus="this.gameStatus"
+          :boardShipPlacement="this.boardShipPlacement"
+          @emit-defense-announcement="handleEmittedAnnouncement"
+        />
+        <BoardAttack
+          :isPlayersTurn="this.isPlayersTurn"
+          @emit-attack-announcement="handleEmittedAnnouncement"
+          @emit-game-status-change="handleGameStatusChange"
+          @switch-to-enemy="switchPlayers"
+        />
+      </div>
     </section>
     <Announcement :announcement="this.announcement" />
   </main>
@@ -38,6 +43,7 @@ export default {
   data() {
     return {
       announcement: '',
+      boardShipPlacement: [], // TODO: Does this need to be data in App? Can I pass this without changing
       gameStatus: 'placeShips', // options are 'placeShips', 'play', 'playerWin', 'enemyWin'
       isPlayersTurn: true,
     };
@@ -48,6 +54,10 @@ export default {
     },
     handleGameStatusChange(emittedStatus) {
       this.gameStatus = emittedStatus;
+    },
+    handleSetPlayerShips(boardShipPlacement) {
+      this.boardShipPlacement = [...boardShipPlacement];
+      this.gameStatus = 'play';
     },
     switchPlayers() {
       this.isPlayersTurn = !this.isPlayersTurn;
@@ -67,7 +77,7 @@ main {
   flex-direction: column;
   gap: 100px;
 }
-#boards {
+.boards {
   display: flex;
   gap: 100px;
   margin-left: 5%;

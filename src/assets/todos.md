@@ -9,6 +9,7 @@
 + Figure out how to get a function description to show when you hover over it
 + Not totally needed, but gameStatus could be controlled via store
 + Allow for use of computer keys instead of clicking when attacking
++ Could have a toggleIndex button to show grid numbers or not
 
 
 # known bugs

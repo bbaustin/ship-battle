@@ -9,30 +9,29 @@
       <div
         v-for="(cell, index) in this.boardDefense"
         class="cell"
-        :class="[this.boardDefense[index], this.enemyAttacks.at(-1) === index ? 'last-attack' : '']"
-      >
-        {{ index }}
-      </div>
+        :class="[
+          this.boardDefense[index] && this.boardDefense[index] !== 'miss' ? 'boat' : '',
+          this.boardDefense[index] === 'miss' ? 'miss' : '',
+          this.boardDefense[index].slice(-3) === 'hit' ? 'hit' : '',
+          this.enemyAttacks.at(-1) === index ? 'last-attack' : '',
+        ]"
+      ></div>
     </div>
   </section>
 </template>
 <script>
 import { BLANK_BOARD } from '../assets/Constants.js';
 import * as HELPERS from '../assets/Helpers.js';
-// import { store } from '../store.js';
 
 export default {
   emits: ['emit-defense-announcement'], //'emit-game-status-change'
-  props: ['gameStatus'],
-  created() {
-    this.playerShipPositions.forEach((position) => {
-      this.boardDefense[position] = 'boat';
-    });
+  props: ['gameStatus', 'boardShipPlacement'],
+  updated() {
+    this.boardDefense = this.boardShipPlacement;
   },
   data() {
     return {
-      // store,
-      boardDefense: [...BLANK_BOARD],
+      boardDefense: [],
       defenseAnnouncement: '',
       destroyDirection: undefined,
       enemyAttacks: [],
@@ -44,15 +43,19 @@ export default {
       },
       enemyStrategy: 'random', // random, seek, destroy
       lastSuccessfulEnemyAttack: undefined,
-      playerShipPositions: [0, 1, 2, 3, 4, 8, 9, 22, 25, 32, 42, 52, 53, 54, 59, 48, 58, 68, 69, 79, 89, 90, 91, 92, 99], // NOTE: Do you need this and boardDefense? Can't you just add 'boat' class directly to boardDefense? Think about it
+      // TODO: BIG TIME! Delete below
+      // playerShipPositions: [0, 1, 2, 3, 4, 8, 9, 22, 25, 32, 42, 52, 53, 54, 59, 48, 58, 68, 69, 79, 89, 90, 91, 92, 99], // NOTE: Do you need this and boardDefense? Can't you just add 'boat' class directly to boardDefense? Think about it
     };
   },
   methods: {
+    didHit(location) {
+      return !!(this.boardDefense[location] && this.boardDefense[location] !== 'miss');
+    },
     aiRandom() {
       let attackLocation = Math.floor(Math.random() * 100);
       if (this.enemyAttacks.includes(attackLocation)) return this.aiRandom();
       this.enemyAttacks.push(attackLocation);
-      if (this.playerShipPositions.includes(attackLocation)) {
+      if (this.didHit(attackLocation)) {
         this.createSeekTargets(attackLocation);
         // It's possible there are no targets. In which case, please stay 'random'
         if (this.enemyAttackPlan.length) {
@@ -61,7 +64,7 @@ export default {
         this.lastSuccessfulEnemyAttack = attackLocation;
         this.enemyAttackPlanMemory.initialSuccessfulAttackCoordinate = attackLocation;
         this.defenseAnnouncement = "Man your stations. We're under attack!";
-        return (this.boardDefense[attackLocation] = 'hit');
+        return (this.boardDefense[attackLocation] += ' hit');
       }
       this.defenseAnnouncement = 'The enemy missed our ship.';
       return (this.boardDefense[attackLocation] = 'miss');
@@ -85,12 +88,12 @@ export default {
       let thisTurnsAttackCoordinate = this.enemyAttackPlan[0].coordinate; // number
       let thisTurnsAttackDirection = this.enemyAttackPlan[0].direction; //n, s, e, w
       this.enemyAttacks.push(thisTurnsAttackCoordinate);
-      if (this.playerShipPositions.includes(thisTurnsAttackCoordinate)) {
+      if (this.didHit(thisTurnsAttackCoordinate)) {
         // Reset your attack plan (to avoid attacking wrong directions)
         this.enemyAttackPlan = [];
         // Set to hit (obvi)
         this.defenseAnnouncement = 'The enemy is locked on.';
-        this.boardDefense[thisTurnsAttackCoordinate] = 'hit';
+        this.boardDefense[thisTurnsAttackCoordinate] += ' hit';
         // Keep track of the last successful attack always
         this.lastSuccessfulEnemyAttack = thisTurnsAttackCoordinate;
         // Remember the direction that you are going to continue to attack in
@@ -119,10 +122,10 @@ export default {
           // This if is probably unneeded, due to the tryOppositeDirection fx
           if (oppositeDirectionAttack) {
             this.enemyAttacks.push(oppositeDirectionAttack);
-            if (this.playerShipPositions.includes(oppositeDirectionAttack)) {
+            if (this.didHit(oppositeDirectionAttack)) {
               // this.lastSuccessfulEnemyAttack = oppositeDirectionAttack; // NOTE: I just added this 11/22. I think I forgot it before?
               this.defenseAnnouncement = "The enemy's onslaught is relentless.";
-              return (this.boardDefense[oppositeDirectionAttack] = 'hit');
+              return (this.boardDefense[oppositeDirectionAttack] += ' hit');
             } else {
               this.defenseAnnouncement = "Thankfully, there was a reprieve in the enemy's attack.";
               this.boardDefense[oppositeDirectionAttack] = 'miss';
@@ -139,11 +142,11 @@ export default {
       //   return this.aiRandom();
       // }
       // If it hits, set a hit. No futher action needed?
-      if (this.playerShipPositions.includes(nextAttack)) {
+      if (this.didHit(nextAttack)) {
         this.lastSuccessfulEnemyAttack = nextAttack;
         this.enemyAttacks.push(nextAttack);
         this.defenseAnnouncement = 'Steel yourselves! The attack continues!';
-        return (this.boardDefense[nextAttack] = 'hit');
+        return (this.boardDefense[nextAttack] += ' hit');
       }
       this.enemyAttacks.push(nextAttack);
       this.defenseAnnouncement = "What's this? The enemy failed to connect.";

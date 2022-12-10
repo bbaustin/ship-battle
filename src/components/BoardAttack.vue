@@ -22,7 +22,6 @@ export default {
     return {
       attackAnnouncement: 'test',
       boardAttack: [...BLANK_BOARD],
-      hitCount: 0,
       sunkShips: [],
     };
   },
@@ -39,7 +38,6 @@ export default {
         return;
       }
       if (this.boardAttack[tileIndex]) {
-        this.hitCount++;
         this.boardAttack[tileIndex] += ' hit';
         if (this.didWin()) return;
         this.didSink(tileIndex);
@@ -51,8 +49,12 @@ export default {
       }
     },
     didWin() {
-      if (this.hitCount === 17) {
-        this.$emit('emit-game-status-change', 'playerWin');
+      // NOTE: This is assuming that you'll always use the all the ships in SHIP_SPECS once.
+      // This might not be the case if you ever change up game modes, etc.
+      if (this.sunkShips.length === SHIP_SPECS.length) {
+        setTimeout(() => {
+          this.$emit('emit-game-status-change', 'playerWin');
+        }, 750);
       }
     },
     didSink(tileIndex) {
@@ -71,6 +73,7 @@ export default {
       });
       if (shipHitCount === shipSize) {
         this.sunkShips.push(shipName);
+        if (this.didWin()) return;
         this.attackAnnouncement = `You sunk the enemy's ${shipName}`;
         return;
       }

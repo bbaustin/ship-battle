@@ -31,8 +31,6 @@
     <button @click.prevent="confirmPosition">Confirm Ship Positions</button>
   </form>
 
-  <h1 v-if="this.placement[this.activeShip]">{{ this.placement[this.activeShip].coordinates }}</h1>
-
   <section id="placement">
     <h1>choose your ship placement</h1>
     <div class="board">
@@ -50,6 +48,7 @@
 import * as HELPERS from '../assets/Helpers.js';
 import { BLANK_BOARD, SHIP_SPECS } from '../assets/Constants.js';
 export default {
+  emits: ['set-player-ships'],
   created() {
     // randomize placement of your ships
     HELPERS.placeShips(this.ships, this.boardShipPlacement);
@@ -69,7 +68,6 @@ export default {
   },
   data() {
     return {
-      // store,
       activeShip: SHIP_SPECS[0].name,
       alignment: '',
       boardShipPlacement: [...BLANK_BOARD], //TODO: Arguably, you sort of don't need this, in the same way that you're only relying on "board" in other components. But it's OK to have, I guess.
@@ -131,9 +129,8 @@ export default {
             if (addend === 1 && coordinates[i] < attemptedCoordinate) checksPassed = !!HELPERS.checkE(attemptedCoordinate);
             if (addend === 10 && coordinates[i] > attemptedCoordinate) checksPassed = !!HELPERS.checkN(attemptedCoordinate);
             if (addend === 10 && coordinates[i] < attemptedCoordinate) checksPassed = !!HELPERS.checkS(attemptedCoordinate);
-            console.log(`checksPassed status: ${checksPassed} for ${attemptedCoordinate}`);
             if (!checksPassed) {
-              console.log('chcks didnt pass but what should i do here hah');
+              console.log('checks did not pass');
               availableCoordinates = [];
             }
           }
@@ -160,7 +157,6 @@ export default {
         return this.handleStraightMovement(alignment, dir, coordinates, attemptedCoordinate);
       }
     },
-
     handleStraightMovement(alignment, dir, coordinates, attemptedCoordinate) {
       // If attempted spot is occupied by another ship, return
       if (this.boardShipPlacement[attemptedCoordinate]) return;
@@ -213,7 +209,8 @@ export default {
       });
     },
     confirmPosition() {
-      // emit boardShipPlacement (to boardDefense)
+      // TODO: This should prboably pop up a confirmation modal, and THEN that modal would do the following. But it's ok for now
+      this.$emit('set-player-ships', this.boardShipPlacement);
     },
     getTileClass(tileContent) {
       if (this.activeShip && tileContent === this.activeShip) return 'selected';
