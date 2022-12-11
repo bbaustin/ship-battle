@@ -31,6 +31,7 @@
   + enemyMiss
   + enemySink
   + enemyWin
++ More fun sciency looking stuff. Hit percentages. Percentage to land next hit 
 
 
 
@@ -42,6 +43,7 @@
   + Starting on 2 with 5 hit already didn't go to 1
   + See your error message: //TODO: I thought this would solve an error, but it might not. If not, delete.
 + ShipPlacer movement logic does not work with a one-tile ship (solution: don't use a one tile ship)
++ still a splitting bug with rotate. See image "Screenshot 2022-12-11 at 16.43.57" to recreate
 
 
 # next time...
@@ -166,3 +168,17 @@ export const createAlphabet = (howManyLetters) => {
   return alphabet;
 };
 ```
+
++ Not working scrolling text
+```
+  // watch: {
+  //   announcement() {
+  //     for (let i = 0; i < this.announcement.length; i++) {
+  //       console.log(this.announcement, this.announcement.length, this.announcement[i]);
+  //       setTimeout(() => {
+  //         this.scrollingAnnouncement += this.announcement[i];
+  //       }, 500);
+  //     }
+  //   },
+  // },
+  ```

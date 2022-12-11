@@ -75,7 +75,6 @@ export default {
 main {
   display: flex;
   flex-direction: column;
-  gap: 100px;
 }
 .boards {
   display: flex;

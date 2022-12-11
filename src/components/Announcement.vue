@@ -1,11 +1,45 @@
 <template>
   <div id="announcement">
-    <p>{{ this.announcement }}</p>
+    <!-- <p>{{ Date.now() }}</p> -->
+    <p>{{ this.scrollingAnnouncement }}</p>
+    <p v-for="(announcement, index) in this.scrollingAnnouncementArray">{{ announcement }}</p>
   </div>
 </template>
 <script>
 export default {
   props: ['announcement'],
+  data() {
+    return {
+      scrollingAnnouncementArray: [],
+      scrollingAnnouncement: '',
+    };
+  },
+  watch: {
+    // TODO: There's probably some better way to do this
+    announcement() {
+      this.scrollingAnnouncementArray.unshift(this.scrollingAnnouncement);
+      this.scrollingAnnouncement = '';
+      let annArr = this.announcement.split('');
+      let current = 0;
+      setInterval(() => {
+        if (current < annArr.length) {
+          this.scrollingAnnouncement += annArr[current++];
+        }
+      }, 10);
+      clearInterval();
+    },
+  },
 };
 </script>
-<style></style>
+<style lang="scss">
+@import '../scss/modules/colors.scss';
+#announcement {
+  border: 1px solid $green;
+  font-size: 16px;
+  min-height: 50px;
+  padding: 0px 20px;
+}
+#announcement p:first-child {
+  color: $tng_green;
+}
+</style>

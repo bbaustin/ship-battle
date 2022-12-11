@@ -12,8 +12,11 @@
         <span v-if="this.canSeeCoordinates">{{ index }}</span>
       </div>
     </div>
+    <p>
+      DESTROYED ENEMY SHIPS:<span v-if="this.sunkShips.length">{{ this.sunkShips }}</span
+      ><span v-else> n/a</span>
+    </p>
   </section>
-  <h2>{{ this.sunkShips }}</h2>
 </template>
 <script>
 import { BLANK_BOARD, SHIP_SPECS } from '../assets/Constants.js';

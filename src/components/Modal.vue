@@ -13,6 +13,8 @@ export default {
   props: ['gameStatus'],
   methods: {
     resetGame() {
+      // QUESTION: Will simply changing the gameStatus fix most of these?
+      // ANSWER: It appears not, using Vue DevTools, at least
       // Reset boardShipPlacement
       // Randomize boardShipPlacement
       // Reset boardEnemy

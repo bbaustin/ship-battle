@@ -1,0 +1,23 @@
+@import "./modules/colors.scss";
+@import "./modules/cells.scss";
+
+html {
+  background: #242424;
+  color: $green;
+  font-family: monospace;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 100;
+}
+.board {
+  border-top: 1px solid $green;
+  border-left: 1px solid $green;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  width: 260px;
+  height: 260px;
+}
+button {
+  cursor: pointer;
+}

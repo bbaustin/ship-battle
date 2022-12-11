@@ -1,0 +1,44 @@
+.cell {
+  background: $grey;
+  border-bottom: 1px solid $green;
+  border-right: 1px solid $green;
+  height: 25px;
+  width: 25px;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 100;
+  font-size: 12px;
+}
+.cell.boat {
+  background-image: radial-gradient($blue 0.5px, transparent 0);
+  background-size: 2px 2px;  color: $grey;
+  box-shadow: inset 4px 4px $grey, inset -4px -4px $grey;
+}
+.cell.miss {
+  background-image: radial-gradient($green 0.5px, transparent 0);
+  background-size: 2px 2px;
+  color: $grey;
+}
+.cell.miss:has(span) {
+  background: $green;
+}
+.cell.hit {
+  background: radial-gradient($red 5px, transparent 0);
+  color: $grey;
+}
+.cell.last-attack.hit {
+  background: radial-gradient($yellow 5px, transparent 0);
+}
+.cell.last-attack.miss {
+  background-image: radial-gradient($yellow 0.5px, transparent 0);
+}
+.cell.last-attack.miss:has(span) {
+  background: $yellow;
+}
+.cell.hit span {
+  background: $red;
+  padding: 2px;
+  border-radius: 100%;
+}

@@ -94,10 +94,9 @@ export default {
       console.log(`addend: ${addend}`);
       let shipLength = this.placement[this.activeShip].coordinates.length;
 
-      // COORDINATE LOOP
+      let didRotate = false;
       // This will loop through each coordinate (duh)
       // If we have a submarine on 63, 64, 65, 66 it will simply loop through those coordinates.
-      let didRotate = false;
       for (let i = 0; i < coordinates.length; i++) {
         let availableCoordinates = [];
         if (!didRotate) {
@@ -151,23 +150,20 @@ export default {
       let coordinates = [...this.placement[this.activeShip].coordinates];
       let dir = HELPERS.DIR_REL[direction];
       let attemptedCoordinate = dir.addend > 0 ? dir.check(Math.max(...coordinates)) : dir.check(Math.min(...coordinates));
-      // NOTE: Probably controlled by state later?
-      let alignment = coordinates[0] + 1 === coordinates[1] ? 'horizontal' : 'vertical';
       if (attemptedCoordinate !== 0 && !attemptedCoordinate) return;
-
       if (direction === 'n' || direction === 's') {
-        if (alignment === 'vertical') {
-          return this.handleStraightMovement(alignment, dir, coordinates, attemptedCoordinate);
+        if (this.alignment === 'vertical') {
+          return this.handleStraightMovement(dir, coordinates, attemptedCoordinate);
         }
-        return this.handleLateralMovement(alignment, dir, coordinates, attemptedCoordinate);
+        return this.handleLateralMovement(dir, coordinates, attemptedCoordinate);
       } else {
-        if (alignment === 'vertical') {
-          return this.handleLateralMovement(alignment, dir, coordinates, attemptedCoordinate);
+        if (this.alignment === 'vertical') {
+          return this.handleLateralMovement(dir, coordinates, attemptedCoordinate);
         }
-        return this.handleStraightMovement(alignment, dir, coordinates, attemptedCoordinate);
+        return this.handleStraightMovement(dir, coordinates, attemptedCoordinate);
       }
     },
-    handleStraightMovement(alignment, dir, coordinates, attemptedCoordinate) {
+    handleStraightMovement(dir, coordinates, attemptedCoordinate) {
       // If attempted spot is occupied by another ship, return
       if (this.boardShipPlacement[attemptedCoordinate]) return;
       // Otherwise, the first spot of the ship, and add to the intended new spot
@@ -190,7 +186,7 @@ export default {
       // Set actual coordinates to the updated coordinates
       this.placement[this.activeShip].coordinates = coordinates;
     },
-    handleLateralMovement(alignment, dir, coordinates, attemptedCoordinate) {
+    handleLateralMovement(dir, coordinates, attemptedCoordinate) {
       let newCoordinates = [];
       coordinates.forEach((coordinate) => {
         if (this.boardShipPlacement[coordinate + dir.addend]) return;
