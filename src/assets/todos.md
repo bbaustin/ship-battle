@@ -1,19 +1,9 @@
 # todos
-+ stylin (PROBABLY USE SCSS FOR COLOR VARIABLES AND STUFF)
-  + black background
-  + matrix green, (outline and good guy ships)
-  + bright red (hits),
-  + pylon yellow (misses),
-  + orange? purple? idk (selected)
-  + computer-looking text
-  + scrolly text (maybe js, not stylin)
-  + blinking stuff? 
 + Standardize names
   + Having all emit names contain the word 'emit' probably isn't necessary hah
   + 'cell' or 'tile'? 
 + captains..??? (in the future)
-+ Randomize messages
-  + Hard part might be using SHIP.NAME to replace a placeholder. 
+
 + Figure out how to get a function description to show when you hover over it
 + Not totally needed, but gameStatus could be controlled via store
 + Allow for ship placement to use computer keys (MEDIUM)
@@ -21,17 +11,23 @@
 + toggleCoordinates is copy/pasted in all three boards. It's the same logic each time (but different boards). It doesn't make sense to be in "store", I don't think (no logic being shared BETWEEN components). But is there a more DRY way of doing it?
   + I guess emitting to App.js, which would have an array of all boards that have a toggle? But... your way seems OK... Something to think about anyway. 
 + sounds!
-  + playerMove
-  + playerPlace
-  + playerHit
-  + playerMiss
-  + playerSink
-  + playerWin
-  + enemyHit
-  + enemyMiss
-  + enemySink
-  + enemyWin
+  + In Ableton, FUNKWELL LEAD with major/minor triads
+  + playerMove  [snare]
+  + playerPlace [cymbal]
+  + playerRotate[trombone]
+  + playerHit   [major-triad]
+  + playerMiss  [low-note]
+  + playerSink  [happy-melody] Like a microwave song
+  + playerWin   [super-happy-melody]
+  + enemyHit    [minor-triad]
+  + enemyMiss   [lower-note]
+  + enemySink   [sad-melody]
+  + enemyWin    [even-sadder-melody]
 + More fun sciency looking stuff. Hit percentages. Percentage to land next hit 
++ Style form
++ Research :has() in CSS. Alternative for Firefox?
++ If ship was destroyed, add visual marker 
+  + (probably easy... kind of indirect, but use the DestroyedShipList and loop through and add a style to each of the tiles that has the class of that ship)
 
 
 
@@ -47,13 +43,23 @@
 
 
 # next time...
-+ Make messages recognizing ship destruction, and add to "sunkShips" additional message board
++ There's no logic for recognizing a player ship has been sunk. Add that and emit accordingly
+
++ Continue with the DestroyedShipsList component OR
+
++ Continue work on Announcements
+  + Adding time (Date.now())
+  + Make the holder scroll/resize more nicely
+  + Randomize messages
+    + Hard part might be using SHIP.NAME to replace a placeholder when you are sinking.
+      + Easy I think: sentences[1].replace('SHIP_NAME', 'Battleship');
+    + There will also be props being sent around to two places when a ship is sunk (destroyed ship list and announcements) 
 
 + Make a function for "Register Attack" in BoardDefense.
   + Include register 'hit' or 'miss'
   + Include adding to 'lastSuccessfulEnemyAttack'
   + Include pushing to enemyAttacks
-  + Include sending announcement (currently not happening)
+  + Include emitting announcement to App
 
 
 # notes
@@ -134,6 +140,18 @@
 
 + Could have a toggleIndex button to show grid numbers or not
 
++ stylin (PROBABLY USE SCSS FOR COLOR VARIABLES AND STUFF)
+  + black background
+  + matrix green, (outline and good guy ships)
+  + bright red (hits),
+  + pylon yellow (misses),
+  + orange? purple? idk (selected)
+  + computer-looking text
+  + scrolly text (maybe js, not stylin)
+  + blinking stuff? 
+
++ I think in every case, you want to send the coordinate to the helper and add another sentence to your message. So, add that logic in announcements.  DONE-ish
++ The enemy will have to emit for each variation of an attack. Later, this can be combined into its own method (that's in your todos). But for now, you can emit each time the new announcement is GENERATED 
 
 
 # Removed code

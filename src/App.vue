@@ -81,4 +81,7 @@ main {
   gap: 100px;
   margin-left: 5%;
 }
+.boards section {
+  width: 50%;
+}
 </style>

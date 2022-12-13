@@ -2,7 +2,7 @@
   <div id="announcement">
     <!-- <p>{{ Date.now() }}</p> -->
     <p>{{ this.scrollingAnnouncement }}</p>
-    <p v-for="(announcement, index) in this.scrollingAnnouncementArray">{{ announcement }}</p>
+    <p v-for="announcement in this.announcementArray">{{ announcement }}</p>
   </div>
 </template>
 <script>
@@ -10,15 +10,18 @@ export default {
   props: ['announcement'],
   data() {
     return {
-      scrollingAnnouncementArray: [],
+      announcementArray: ['Welcome to ship battle. Please place your ships.'],
       scrollingAnnouncement: '',
     };
   },
   watch: {
     // TODO: There's probably some better way to do this
     announcement() {
-      this.scrollingAnnouncementArray.unshift(this.scrollingAnnouncement);
+      // Add previous announcement to list of other previous announcements
+      this.announcementArray.unshift(this.scrollingAnnouncement);
+      // Get ready for a new scrolling announcement
       this.scrollingAnnouncement = '';
+      // Split the incoming announcement (from props) into each character
       let annArr = this.announcement.split('');
       let current = 0;
       setInterval(() => {

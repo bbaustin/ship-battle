@@ -65,10 +65,12 @@ export default {
         }
         this.lastSuccessfulEnemyAttack = attackLocation;
         this.enemyAttackPlanMemory.initialSuccessfulAttackCoordinate = attackLocation;
-        this.defenseAnnouncement = "Man your stations. We're under attack!";
+        this.defenseAnnouncement = HELPERS.generateAnnouncement(false, attackLocation, 'ENEMY_HIT', this.boardDefense[attackLocation]);
+        this.$emit('emit-defense-announcement', this.defenseAnnouncement);
         return (this.boardDefense[attackLocation] += ' hit');
       }
-      this.defenseAnnouncement = 'The enemy missed our ship.';
+      this.defenseAnnouncement = HELPERS.generateAnnouncement(false, attackLocation, 'ENEMY_MISS', '');
+      this.$emit('emit-defense-announcement', this.defenseAnnouncement);
       return (this.boardDefense[attackLocation] = 'miss');
     },
     createSeekTargets(initialAttackLocation) {
@@ -94,7 +96,8 @@ export default {
         // Reset your attack plan (to avoid attacking wrong directions)
         this.enemyAttackPlan = [];
         // Set to hit (obvi)
-        this.defenseAnnouncement = 'The enemy is locked on.';
+        this.defenseAnnouncement = HELPERS.generateAnnouncement(false, thisTurnsAttackCoordinate, 'ENEMY_HIT', this.boardDefense[thisTurnsAttackCoordinate]);
+        this.$emit('emit-defense-announcement', this.defenseAnnouncement);
         this.boardDefense[thisTurnsAttackCoordinate] += ' hit';
         // Keep track of the last successful attack always
         this.lastSuccessfulEnemyAttack = thisTurnsAttackCoordinate;
@@ -106,7 +109,8 @@ export default {
         this.enemyStrategy = 'destroy';
         this.destroyDirection = thisTurnsAttackDirection;
       } else {
-        this.defenseAnnouncement = "The enemy's shot was wide.";
+        this.defenseAnnouncement = HELPERS.generateAnnouncement(false, thisTurnsAttackCoordinate, 'ENEMY_MISS', '');
+        this.$emit('emit-defense-announcement', this.defenseAnnouncement);
         this.boardDefense[thisTurnsAttackCoordinate] = 'miss';
         // Remove first element (i.e. this missed attack) in Attack Plan
         this.enemyAttackPlan.splice(0, 1);
@@ -126,10 +130,22 @@ export default {
             this.enemyAttacks.push(oppositeDirectionAttack);
             if (this.didHit(oppositeDirectionAttack)) {
               // this.lastSuccessfulEnemyAttack = oppositeDirectionAttack; // NOTE: I just added this 11/22. I think I forgot it before?
-              this.defenseAnnouncement = "The enemy's onslaught is relentless.";
+              this.defenseAnnouncement = HELPERS.generateAnnouncement(
+                false,
+                oppositeDirectionAttack,
+                'ENEMY_HIT_CONTINUED',
+                this.boardDefense[oppositeDirectionAttack]
+              );
+              this.$emit('emit-defense-announcement', this.defenseAnnouncement);
               return (this.boardDefense[oppositeDirectionAttack] += ' hit');
             } else {
-              this.defenseAnnouncement = "Thankfully, there was a reprieve in the enemy's attack.";
+              this.defenseAnnouncement = this.defenseAnnouncement = HELPERS.generateAnnouncement(
+                false,
+                oppositeDirectionAttack,
+                'ENEMY_REPRIEVE',
+                this.boardDefense[oppositeDirectionAttack]
+              );
+              this.$emit('emit-defense-announcement', this.defenseAnnouncement);
               this.boardDefense[oppositeDirectionAttack] = 'miss';
               this.enemyStrategy = 'random';
             }
@@ -147,11 +163,13 @@ export default {
       if (this.didHit(nextAttack)) {
         this.lastSuccessfulEnemyAttack = nextAttack;
         this.enemyAttacks.push(nextAttack);
-        this.defenseAnnouncement = 'Steel yourselves! The attack continues!';
+        this.defenseAnnouncement = HELPERS.generateAnnouncement(false, nextAttack, 'ENEMY_HIT_CONTINUED', this.boardDefense[nextAttack]);
+        this.$emit('emit-defense-announcement', this.defenseAnnouncement);
         return (this.boardDefense[nextAttack] += ' hit');
       }
       this.enemyAttacks.push(nextAttack);
-      this.defenseAnnouncement = "What's this? The enemy failed to connect.";
+      this.defenseAnnouncement = HELPERS.generateAnnouncement(false, nextAttack, 'ENEMY_REPRIEVE', ''); //TODO: Should this be miss or reprieve?
+      this.$emit('emit-defense-announcement', this.defenseAnnouncement);
       this.boardDefense[nextAttack] = 'miss';
       this.tryOppositeDirection();
     },

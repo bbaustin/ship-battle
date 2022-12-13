@@ -19,7 +19,7 @@
   </section>
 </template>
 <script>
-import { BLANK_BOARD, SHIP_SPECS } from '../assets/Constants.js';
+import { ANNOUNCEMENTS, BLANK_BOARD, SHIP_SPECS } from '../assets/Constants.js';
 import * as HELPERS from '../assets/Helpers.js';
 export default {
   emits: ['emit-attack-announcement', 'emit-game-status-change', 'switch-to-enemy'],
@@ -36,12 +36,13 @@ export default {
     handleTileAttackClick(tileIndex) {
       // return so that your click doesn't do anything.
       if (!this.isPlayersTurn) {
-        this.attackAnnouncement = 'We must wait for our turn';
+        // TODO: Mashing will create garbled text. Kind of feels like a pain to troubleshoot this ha
+        // this.attackAnnouncement = HELPERS.randomizeAnnouncement('NOT_PLAYERS_TURN');
         return;
       }
       // don't let player click an already-clicked tile
       if (this.boardAttack[tileIndex] === 'miss' || this.boardAttack[tileIndex].includes(' hit')) {
-        this.attackAnnouncement = 'This space has already been attempted!';
+        this.attackAnnouncement = HELPERS.generateAnnouncement(true, tileIndex, 'SAME_TILE_CLICKED', '');
         return;
       }
       if (this.boardAttack[tileIndex]) {
@@ -51,7 +52,7 @@ export default {
         this.$emit('switch-to-enemy');
       } else {
         this.boardAttack[tileIndex] = 'miss';
-        this.attackAnnouncement = "The player's missile landed harmlessly in the water."; //TODO: randomize these!
+        this.attackAnnouncement = HELPERS.generateAnnouncement(true, tileIndex, 'PLAYER_MISS', '');
         this.$emit('switch-to-enemy');
       }
     },
@@ -81,10 +82,10 @@ export default {
       if (shipHitCount === shipSize) {
         this.sunkShips.push(shipName);
         if (this.didWin()) return;
-        this.attackAnnouncement = `You sunk the enemy's ${shipName}`;
+        this.attackAnnouncement = HELPERS.generateAnnouncement(true, tileIndex, 'PLAYER_SINK_SHIP', shipName);
         return;
       }
-      this.attackAnnouncement = `You hit an enemy ship!`;
+      this.attackAnnouncement = HELPERS.generateAnnouncement(true, tileIndex, 'PLAYER_HIT', shipName);
       return;
     },
     handleCoordinatesToggle() {

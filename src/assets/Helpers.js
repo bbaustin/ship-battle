@@ -1,8 +1,21 @@
 /***********************************/
 //  * * * * G E N E R A L * * * * * /
+
+import { ANNOUNCEMENTS } from './Constants';
+
 /***********************************/
-export const randomizeAnnouncement = (announcementList) => {
-  return announcementList[Math.floor(Math.random() * announcementList.length)];
+export const randomizeAnnouncement = (category, shipName) => {
+  let topic = ANNOUNCEMENTS[category];
+  let announcement = topic.length === 1 ? topic[0] : topic[Math.floor(Math.random() * topic.length)];
+  return announcement.includes('SHIP_NAME') ? announcement.replace('SHIP_NAME', shipName) : announcement;
+};
+
+export const createAttackAnnouncement = (isPlayersTurn, coordinate) => {
+  return isPlayersTurn ? ANNOUNCEMENTS.PLAYER_ATTACK[0].replace('COORDINATE', coordinate) : ANNOUNCEMENTS.ENEMY_ATTACK[0].replace('COORDINATE', coordinate);
+};
+
+export const generateAnnouncement = (isPlayersTurn, coordinate, category, shipName) => {
+  return `${createAttackAnnouncement(isPlayersTurn, coordinate)} ${randomizeAnnouncement(category, shipName)}`;
 };
 
 export const shortenShipName = (shipName) => {

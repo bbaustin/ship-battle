@@ -22,35 +22,60 @@ export const SHIP_SPECS = [
 ];
 
 export const ANNOUNCEMENTS = {
-  ENEMY_HIT: ["We're hit!", "We're taking fire!", 'All hands on deck! The enemy is attacking!', "Man your stations! We're under attack!"],
+  ENEMY_ATTACK: ['The enemy attacked COORDINATE.'],
+  ENEMY_HIT: [
+    "We're hit!",
+    "We're taking fire!",
+    'All hands on deck! The enemy is attacking!',
+    "Man your stations! We're under attack!",
+    'They hit our SHIP_NAME!',
+    'Our SHIP_NAME is under attack!',
+    'Our SHIP_NAME is taking heavy fire!',
+  ],
   ENEMY_HIT_CONTINUED: [
     'The enemy continues their onslaught.',
-    'Our ship continues to be barraged!',
-    "The ship can't take much more of this!",
-    'How much longer can we hold?',
-    "We're taking heavy fire!",
-    'The enemy is locked on!',
+    'Our SHIP_NAME continues to be barraged!',
+    "Our SHIP_NAME can't take much more of this!",
+    'How much longer can our SHIP_NAME hold?',
+    'Our SHIP_NAME is taking heavy fire!',
+    'The enemy is locked on to our SHIP_NAME!',
+  ],
+  ENEMY_REPRIEVE: [
+    'Thankfully, there was a reprieve in the enemy attack.',
+    'What? They missed!',
+    'OK, collect yourselves. The enemy attack will likely begin again soon.',
+    'The enemy is readjusting their sights.',
+    'We managed to dodge. But I doubt how much longer we can avoid enemy fire.',
   ],
   ENEMY_MISS: [
     'The enemy shoots and misses.',
     'The enemy has no idea where we are.',
     'The enemy missile lands harmlessly in the water.',
     "We've managed to outmanuever the enemy.",
+    'Miss!',
+    'Negative!',
   ],
   ENEMY_SINK_SHIP: [
-    'They sunk our SHIP.NAME',
-    "We've lost our SHIP.NAME",
-    "We've lost contact with our SHIP.NAME",
-    'Our SHIP.NAME appears to have been destroyed.',
-  ], // TODO: How
+    'They sunk our SHIP_NAME',
+    "We've lost our SHIP_NAME",
+    "We've lost contact with our SHIP_NAME",
+    'Our SHIP_NAME appears to have been destroyed.',
+  ],
+  PLAYER_ATTACK: ['We attacked COORDINATE.'],
   PLAYER_HIT: ["We've made a direct hit!", "We've damaged an enemy ship!", "A hit! Let's continue our attack!"],
   PLAYER_HIT_CONTINUED: ["We're locked on!", 'Keep going! Continue the attack!', "Surely their ship can't take much more of this!"],
   PLAYER_MISS: ['Our shot missed.', 'The shot was unsuccessful.', 'Readjust aim.', 'Negative.', 'Miss.'],
-  PLAYER_SINK_SHIP: [], // TODO: How
-  GENERAL: {
-    NOT_PLAYERS_TURN: ['We must wait our turn.', "It is the enemy's turn.", 'It is not our time to attack.'],
-    SAME_SQUARE_CLICKED: '',
-  },
+  PLAYER_SINK_SHIP: [
+    "We've sunk their SHIP_NAME!",
+    'We sunk their SHIP_NAME!',
+    'The enemy SHIP_NAME is sinking to the bottom of the ocean.',
+    'Scouts has confirmed that the enemy SHIP_NAME has been destroyed.',
+    'The enemy SHIP_NAME has been destroyed.',
+    'The enemy SHIP_NAME is no longer sailing.',
+    'Scouts have confirmed that the enemy SHIP_NAME is no longer sailing.',
+  ],
+  NOT_PLAYERS_TURN: ['We must wait our turn.', "It is the enemy's turn.", 'It is not our time to attack.'],
+  SAME_TILE_CLICKED: ['This space has already been attempted.'],
 };
 
 export const BLANK_BOARD = [
