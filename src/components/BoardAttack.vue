@@ -42,19 +42,27 @@ export default {
       }
       // don't let player click an already-clicked tile
       if (this.boardAttack[tileIndex] === 'miss' || this.boardAttack[tileIndex].includes(' hit')) {
+        // TODO: If you mash, this will create garbled text. I would have thought the return above would stop this.
         this.attackAnnouncement = HELPERS.generateAnnouncement(true, tileIndex, 'SAME_TILE_CLICKED', '');
         return;
       }
       if (this.boardAttack[tileIndex]) {
+        let shipName = this.boardAttack[tileIndex];
         this.boardAttack[tileIndex] += ' hit';
         if (this.didWin()) return;
-        this.didSink(tileIndex);
-        this.$emit('switch-to-enemy');
+        // didSink() will return the ship name (string) if it sunk. Otherwise it returns false.
+        let sunkShip = HELPERS.didSink(this.boardAttack, shipName);
+        if (sunkShip) {
+          this.sunkShips.push(sunkShip);
+          this.attackAnnouncement = HELPERS.generateAnnouncement(true, tileIndex, 'PLAYER_SINK_SHIP', shipName);
+        } else {
+          this.attackAnnouncement = HELPERS.generateAnnouncement(true, tileIndex, 'PLAYER_HIT', shipName);
+        }
       } else {
         this.boardAttack[tileIndex] = 'miss';
         this.attackAnnouncement = HELPERS.generateAnnouncement(true, tileIndex, 'PLAYER_MISS', '');
-        this.$emit('switch-to-enemy');
       }
+      this.$emit('switch-to-enemy');
     },
     didWin() {
       // NOTE: This is assuming that you'll always use the all the ships in SHIP_SPECS once.
@@ -64,29 +72,6 @@ export default {
           this.$emit('emit-game-status-change', 'playerWin');
         }, 750);
       }
-    },
-    didSink(tileIndex) {
-      //TODO: Do you want to move this in HELPERS? By adding board in the passed thing
-      let shipName = this.boardAttack[tileIndex].slice(0, -4); // Removing ' hit'
-      let shipSize;
-      // Get the ship's size
-      SHIP_SPECS.forEach((ship) => {
-        if (ship.name === shipName) shipSize = ship.size; // TODO: This seems not great. Can't you access by ship name, instead of looping?
-      });
-      let shipHitCount = 0;
-      //TODO: Could do better logic here; you don't need to loop through the entire array...
-      // Kind of difficult, but you actually want to mimic attacking?
-      this.boardAttack.forEach((tile) => {
-        if (tile === `${shipName} hit`) shipHitCount++;
-      });
-      if (shipHitCount === shipSize) {
-        this.sunkShips.push(shipName);
-        if (this.didWin()) return;
-        this.attackAnnouncement = HELPERS.generateAnnouncement(true, tileIndex, 'PLAYER_SINK_SHIP', shipName);
-        return;
-      }
-      this.attackAnnouncement = HELPERS.generateAnnouncement(true, tileIndex, 'PLAYER_HIT', shipName);
-      return;
     },
     handleCoordinatesToggle() {
       return (this.canSeeCoordinates = !this.canSeeCoordinates);

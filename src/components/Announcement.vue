@@ -27,7 +27,7 @@ export default {
       setInterval(() => {
         if (current < annArr.length) {
           this.scrollingAnnouncement += annArr[current++];
-        }
+        } // TODO: Add some code here to recognize when the scrolling is finished to avoid garbled text
       }, 10);
       clearInterval();
     },

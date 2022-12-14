@@ -28,7 +28,10 @@
 + Research :has() in CSS. Alternative for Firefox?
 + If ship was destroyed, add visual marker 
   + (probably easy... kind of indirect, but use the DestroyedShipList and loop through and add a style to each of the tiles that has the class of that ship)
-
++ Colors in announcements? (Red for enemy, green for player, and yellow for coordinate)
++ Need to emit gameStatusChange from BoardDefense.
+  + You're going to move didHit into HELPERS. So... you can use logic there. 
+  + And/or also move didWin into HELPERS
 
 
 # known bugs
@@ -40,9 +43,26 @@
   + See your error message: //TODO: I thought this would solve an error, but it might not. If not, delete.
 + ShipPlacer movement logic does not work with a one-tile ship (solution: don't use a one tile ship)
 + still a splitting bug with rotate. See image "Screenshot 2022-12-11 at 16.43.57" to recreate
++ Announcement: 
+  + Mashing creates garbled announcement text 
+  + If the text takes longer than the time the enemy takes to attack, there's garbled text
+  + Solution: Hold off starting the next announcement until the current one finishes (how?)
+    + See note in Announcement SetInterval
+  + Or (HACKY): create longer delay for enemy attack/shorter messages
+
 
 
 # next time...
+
+#### It sucks, but I think this is really necessary now. BoardDefense is really hard to edit. 
+##### As is, it's not registering wwhen a ship is sunk. And also, testing this requires you to edit like 5-6 places
++ Make a function for "Register Attack" in BoardDefense.
+  + Include register 'hit' or 'miss'
+  + Include adding to 'lastSuccessfulEnemyAttack'
+  + Include pushing to enemyAttacks
+  + Include emitting announcement to App
+
+
 + There's no logic for recognizing a player ship has been sunk. Add that and emit accordingly
 
 + Continue with the DestroyedShipsList component OR
@@ -55,11 +75,7 @@
       + Easy I think: sentences[1].replace('SHIP_NAME', 'Battleship');
     + There will also be props being sent around to two places when a ship is sunk (destroyed ship list and announcements) 
 
-+ Make a function for "Register Attack" in BoardDefense.
-  + Include register 'hit' or 'miss'
-  + Include adding to 'lastSuccessfulEnemyAttack'
-  + Include pushing to enemyAttacks
-  + Include emitting announcement to App
+
 
 
 # notes

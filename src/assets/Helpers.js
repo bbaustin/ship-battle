@@ -1,8 +1,7 @@
+import { ANNOUNCEMENTS, SHIP_SPECS } from './Constants';
+
 /***********************************/
 //  * * * * G E N E R A L * * * * * /
-
-import { ANNOUNCEMENTS } from './Constants';
-
 /***********************************/
 export const randomizeAnnouncement = (category, shipName) => {
   let topic = ANNOUNCEMENTS[category];
@@ -23,6 +22,25 @@ export const shortenShipName = (shipName) => {
 };
 
 export const handleHit = () => {};
+
+export const didSink = (board, shipName) => {
+  let shipSize;
+  // Get the ship's size
+  SHIP_SPECS.forEach((ship) => {
+    if (ship.name === shipName) shipSize = ship.size; // TODO: This seems not great. Can't you access by ship name, instead of looping?
+  });
+  console.log(board);
+  let shipHitCount = 0;
+  //TODO: Could do better logic here; you don't need to loop through the entire array...
+  // Kind of difficult, but you actually want to mimic attacking?
+  board.forEach((tile) => {
+    if (tile === `${shipName} hit`) shipHitCount++;
+  });
+  if (shipHitCount === shipSize) {
+    return shipName;
+  }
+  return false;
+};
 
 /***********************************/
 //  * S H I P * P L A C E M E N T * /
