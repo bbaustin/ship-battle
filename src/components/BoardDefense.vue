@@ -21,11 +21,12 @@
     <div>EXPECTED ENEMY ATTACK: {{ enemyAttackPlan }}</div>
     <div>LAST ON TARGET ATTACK: {{ lastSuccessfulEnemyAttack }}</div>
     <div>NEXT EXPECTED ACCURACY:</div>
-    <!-- <div>DESTROYED PLAYER SHIPS:</div> DestroyedShipsList -->
+    <!-- DestroyedShipsList -->
+    <div>DESTROYED PLAYER SHIPS: {{ this.sunkShips }}</div>
   </section>
 </template>
 <script>
-import { BLANK_BOARD } from '../assets/Constants.js';
+import { BLANK_BOARD, SHIP_SPECS } from '../assets/Constants.js';
 import * as HELPERS from '../assets/Helpers.js';
 
 export default {
@@ -53,44 +54,63 @@ export default {
     };
   },
   methods: {
-    didHit(location) {
-      return !!(this.boardDefense[location] && this.boardDefense[location] !== 'miss');
+    didHit(attackLocation) {
+      return !!(this.boardDefense[attackLocation] && this.boardDefense[attackLocation] !== 'miss');
     },
-    handleHit(board, shipName) {
-      if (HELPERS.didSink(board, shipName)) {
+    didWin() {
+      // NOTE: This is assuming that you'll always use the all the ships in SHIP_SPECS once.
+      // This might not be the case if you ever change up game modes, etc.
+      if (this.sunkShips.length === SHIP_SPECS.length) {
+        setTimeout(() => {
+          this.$emit('emit-game-status-change', 'enemyWin');
+        }, 750);
       }
     },
-    handleSink() {
-      console.log('did sink');
-      this.defenseAnnouncement = HELPERS.generateAnnouncement(false, attackLocation, 'ENEMY_SINK_SHIP', this.boardDefense[attackLocation]);
-      this.sunkShips.push(this.boardDefense[attackLocation]);
-      this.enemyStrategy = 'random';
-      // if you sunk, you don't need to keep attacking this area.
-      return;
+    handleMiss(attackLocation, announcementType) {
+      this.enemyAttacks.push(attackLocation);
+      if (this.enemyStrategy === 'random') this.defenseAnnouncement = HELPERS.generateAnnouncement(false, attackLocation, 'ENEMY_MISS', '');
+      if (this.enemyStrategy === 'seek' || this.enemyStrategy === 'destroy')
+        this.defenseAnnouncement = HELPERS.generateAnnouncement(false, attackLocation, 'ENEMY_REPRIEVE', '');
+      this.$emit('emit-defense-announcement', this.defenseAnnouncement);
+      this.boardDefense[attackLocation] = 'miss';
+    },
+    handleHit(attackLocation) {
+      this.enemyAttacks.push(attackLocation);
+      this.boardDefense[attackLocation] += ' hit';
+      this.lastSuccessfulEnemyAttack = attackLocation;
+      // didSink returns shipName (sliced) or false
+      let sunkShip = HELPERS.didSink(this.boardDefense, this.boardDefense[attackLocation]);
+      if (sunkShip) {
+        // NOTE: You might consider breaking this into another function, handleSink(sunkShip, attackLocation). Doesn't seem incredibly necessary, though
+        this.sunkShips.push(sunkShip);
+        if (this.didWin()) return;
+        // If ship is sunk, you don't want to continue in the same direction. Attack randomly.
+        this.enemyStrategy = 'random';
+        this.defenseAnnouncement = HELPERS.generateAnnouncement(false, attackLocation, 'ENEMY_SINK_SHIP', sunkShip);
+        this.$emit('emit-defense-announcement', this.defenseAnnouncement);
+      } else {
+        if (this.enemyStrategy === 'random')
+          this.defenseAnnouncement = HELPERS.generateAnnouncement(false, attackLocation, 'ENEMY_HIT', this.boardDefense[attackLocation].slice(0, -4));
+        if (this.enemyStrategy === 'seek' || this.enemyStrategy === 'destroy')
+          this.defenseAnnouncement = HELPERS.generateAnnouncement(false, attackLocation, 'ENEMY_HIT_CONTINUED', this.boardDefense[attackLocation].slice(0, -4));
+        this.$emit('emit-defense-announcement', this.defenseAnnouncement);
+      }
     },
     aiRandom() {
       let attackLocation = Math.floor(Math.random() * 100);
       if (this.enemyAttacks.includes(attackLocation)) return this.aiRandom();
-      this.enemyAttacks.push(attackLocation);
       if (this.didHit(attackLocation)) {
-        // NOTE: It's possible that a random attack could sink a ship (I think..?) But unlikely..?
-        this.handleHit(this.boardDefense, this.boardDefense[attackLocation]);
-        if (HELPERS.didSink(this.boardDefense, this.boardDefense[attackLocation])) {
-        }
+        this.handleHit(attackLocation);
         this.createSeekTargets(attackLocation);
         // It's possible there are no targets. In which case, please stay 'random'
         if (this.enemyAttackPlan.length) {
           this.enemyStrategy = 'seek';
         }
-        this.lastSuccessfulEnemyAttack = attackLocation;
         this.enemyAttackPlanMemory.initialSuccessfulAttackCoordinate = attackLocation;
-        this.defenseAnnouncement = HELPERS.generateAnnouncement(false, attackLocation, 'ENEMY_HIT', this.boardDefense[attackLocation]);
-        this.$emit('emit-defense-announcement', this.defenseAnnouncement);
-        return (this.boardDefense[attackLocation] += ' hit');
+        return;
       }
-      this.defenseAnnouncement = HELPERS.generateAnnouncement(false, attackLocation, 'ENEMY_MISS', '');
-      this.$emit('emit-defense-announcement', this.defenseAnnouncement);
-      return (this.boardDefense[attackLocation] = 'miss');
+      this.handleMiss(attackLocation, 'ENEMY_MISS');
+      return;
     },
     createSeekTargets(initialAttackLocation) {
       const attackOptionN = HELPERS.checkN(initialAttackLocation);
@@ -110,36 +130,21 @@ export default {
       }
       let thisTurnsAttackCoordinate = this.enemyAttackPlan[0].coordinate; // number
       let thisTurnsAttackDirection = this.enemyAttackPlan[0].direction; //n, s, e, w
-      this.enemyAttacks.push(thisTurnsAttackCoordinate);
       if (this.didHit(thisTurnsAttackCoordinate)) {
         // Reset your attack plan (to avoid attacking wrong directions)
         this.enemyAttackPlan = [];
-        // Set to hit (obvi)
-        this.boardDefense[thisTurnsAttackCoordinate] += ' hit';
-        if (HELPERS.didSink(this.boardDefense, this.boardDefense[thisTurnsAttackCoordinate])) {
-          console.log('did sink');
-          this.defenseAnnouncement = HELPERS.generateAnnouncement(false, thisTurnsAttackCoordinate, 'ENEMY_SINK', this.boardDefense[thisTurnsAttackCoordinate]);
-          this.sunkShips.push(this.boardDefense[thisTurnsAttackCoordinate]);
-          this.enemyStrategy = 'random';
-          // if you sunk, you don't need to keep attacking this area.
-          // would return this.aiRandom() create the error of two attacks?
-          return;
-        }
-        this.defenseAnnouncement = HELPERS.generateAnnouncement(false, thisTurnsAttackCoordinate, 'ENEMY_HIT', this.boardDefense[thisTurnsAttackCoordinate]);
-        this.$emit('emit-defense-announcement', this.defenseAnnouncement);
-        // Keep track of the last successful attack always
-        this.lastSuccessfulEnemyAttack = thisTurnsAttackCoordinate;
+        // Handles hit. If you sunk a ship, it 'returns', which should break you out of the rest.
+        this.handleHit(thisTurnsAttackCoordinate);
         // Remember the direction that you are going to continue to attack in
         this.enemyAttackPlanMemory.initialSuccessfulAttackDirection = thisTurnsAttackDirection;
         // Remember the opposite direction, in case you have a missed attack in the near future
         this.enemyAttackPlanMemory.backupAttackDirection = HELPERS.DIR_REL[thisTurnsAttackDirection].oppositeDirection;
         // Change your strategy. Now you are doing a strafing run, not poking around the perimeter.
-        this.enemyStrategy = 'destroy';
+        // If the strategy is 'random', that suggests that a ship was sunk (coming from handleHit)
+        if (this.enemyStrategy !== 'random') this.enemyStrategy = 'destroy';
         this.destroyDirection = thisTurnsAttackDirection;
       } else {
-        this.defenseAnnouncement = HELPERS.generateAnnouncement(false, thisTurnsAttackCoordinate, 'ENEMY_MISS', '');
-        this.$emit('emit-defense-announcement', this.defenseAnnouncement);
-        this.boardDefense[thisTurnsAttackCoordinate] = 'miss';
+        this.handleMiss(thisTurnsAttackCoordinate, 'ENEMY_MISS');
         // Remove first element (i.e. this missed attack) in Attack Plan
         this.enemyAttackPlan.splice(0, 1);
       }
@@ -155,44 +160,22 @@ export default {
           console.log(oppositeDirectionAttack);
           // This if is probably unneeded, due to the tryOppositeDirection fx
           if (oppositeDirectionAttack) {
-            this.enemyAttacks.push(oppositeDirectionAttack);
-            // TODO: I think you're missing some steps right here. Like pushing the attack, setting successful attack. Just create your function to handleHits already haha
             if (this.didHit(oppositeDirectionAttack)) {
-              this.boardDefense[oppositeDirectionAttack] += ' hit';
-              if (HELPERS.didSink(this.boardDefense, this.boardDefense[oppositeDirectionAttack])) {
-                console.log('did sink');
-                this.defenseAnnouncement = HELPERS.generateAnnouncement(
-                  false,
-                  oppositeDirectionAttack,
-                  'ENEMY_SINK',
-                  this.boardDefense[oppositeDirectionAttack]
-                );
-                this.sunkShips.push(this.boardDefense[oppositeDirectionAttack]);
-                this.enemyStrategy = 'random';
-                // if you sunk, you don't need to keep attacking this area.
-                // would return this.aiRandom() create the error of two attacks?
-                return;
-              }
-              // this.lastSuccessfulEnemyAttack = oppositeDirectionAttack; // NOTE: I just added this 11/22. I think I forgot it before?
-              this.defenseAnnouncement = HELPERS.generateAnnouncement(
-                false,
-                oppositeDirectionAttack,
-                'ENEMY_HIT_CONTINUED',
-                this.boardDefense[oppositeDirectionAttack]
-              );
-              this.$emit('emit-defense-announcement', this.defenseAnnouncement);
+              this.handleHit(oppositeDirectionAttack);
               return;
-            } else {
-              this.defenseAnnouncement = this.defenseAnnouncement = HELPERS.generateAnnouncement(
-                false,
-                oppositeDirectionAttack,
-                'ENEMY_REPRIEVE',
-                this.boardDefense[oppositeDirectionAttack]
-              );
-              this.$emit('emit-defense-announcement', this.defenseAnnouncement);
-              this.boardDefense[oppositeDirectionAttack] = 'miss';
-              this.enemyStrategy = 'random';
             }
+            console.log('check here'); //TODO: Not sure if this is needed anymore but don't wanna delete yet
+            // this.defenseAnnouncement = HELPERS.generateAnnouncement(
+            //   false,
+            //   oppositeDirectionAttack,
+            //   'ENEMY_HIT_CONTINUED',
+            //   this.boardDefense[oppositeDirectionAttack]
+            // );
+            // this.$emit('emit-defense-announcement', this.defenseAnnouncement);
+            // return;
+          } else {
+            this.handleMiss(oppositeDirectionAttack, 'ENEMY_REPRIEVE');
+            this.enemyStrategy = 'random';
           }
         }
         // Either keep this line here, OR do it in tryOppositeDirection. Not both. Probably here.
@@ -205,28 +188,13 @@ export default {
       // }
       // If it hits, set a hit. No futher action needed?
       if (this.didHit(nextAttack)) {
-        this.boardDefense[nextAttack] += ' hit';
-        if (HELPERS.didSink(this.boardDefense, this.boardDefense[nextAttack])) {
-          console.log('did sink');
-          this.defenseAnnouncement = HELPERS.generateAnnouncement(false, nextAttack, 'ENEMY_SINK', this.boardDefense[nextAttack]);
-          this.sunkShips.push(this.boardDefense[nextAttack]);
-          this.enemyStrategy = 'random';
-          // if you sunk, you don't need to keep attacking this area.
-          // would return this.aiRandom() create the error of two attacks?
-          return;
-        }
-        this.lastSuccessfulEnemyAttack = nextAttack;
-        this.enemyAttacks.push(nextAttack);
-        this.defenseAnnouncement = HELPERS.generateAnnouncement(false, nextAttack, 'ENEMY_HIT_CONTINUED', this.boardDefense[nextAttack]);
-        this.$emit('emit-defense-announcement', this.defenseAnnouncement);
+        this.handleHit(nextAttack); //NOTE: This one is intended to be 'ENEMY_HIT_CONTINUED'
         return;
       }
-      this.enemyAttacks.push(nextAttack);
-      this.defenseAnnouncement = HELPERS.generateAnnouncement(false, nextAttack, 'ENEMY_REPRIEVE', ''); //TODO: Should this be miss or reprieve?
-      this.$emit('emit-defense-announcement', this.defenseAnnouncement);
-      this.boardDefense[nextAttack] = 'miss';
+      this.handleMiss(nextAttack, 'ENEMY_REPRIEVE'); //TODO: Should this be miss or reprieve?
       this.tryOppositeDirection();
     },
+    // TODO: You can do some check of sunkShip in here for improved AI. As-is, if there are two adjacent ships and the enemy attacks them laterally, it will give up before killing either of them.
     tryOppositeDirection() {
       this.lastSuccessfulEnemyAttack = this.enemyAttackPlanMemory.initialSuccessfulAttackCoordinate; //TODO: Why do I do this
       this.destroyDirection = HELPERS.DIR_REL[this.destroyDirection].oppositeDirection;

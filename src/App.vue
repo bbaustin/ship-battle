@@ -20,6 +20,7 @@
           :gameStatus="this.gameStatus"
           :boardShipPlacement="this.boardShipPlacement"
           @emit-defense-announcement="handleEmittedAnnouncement"
+          @emit-game-status-change="handleGameStatusChange"
         />
         <BoardAttack
           :isPlayersTurn="this.isPlayersTurn"

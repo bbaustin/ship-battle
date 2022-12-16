@@ -42,7 +42,7 @@ export const ANNOUNCEMENTS = {
   ],
   ENEMY_REPRIEVE: [
     'Thankfully, there was a reprieve in the enemy attack.',
-    'What? They missed!',
+    'Somehow, the enemy missed!',
     'OK, collect yourselves. The enemy attack will likely begin again soon.',
     'The enemy is readjusting their sights.',
     'We managed to dodge. But I doubt how much longer we can avoid enemy fire.',
@@ -56,9 +56,9 @@ export const ANNOUNCEMENTS = {
     'Negative!',
   ],
   ENEMY_SINK_SHIP: [
-    'They sunk our SHIP_NAME',
-    "We've lost our SHIP_NAME",
-    "We've lost contact with our SHIP_NAME",
+    'They sunk our SHIP_NAME.',
+    "We've lost our SHIP_NAME.",
+    "We've lost contact with our SHIP_NAME.",
     'Our SHIP_NAME appears to have been destroyed.',
   ],
   PLAYER_ATTACK: ['We attacked COORDINATE.'],

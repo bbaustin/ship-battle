@@ -47,16 +47,15 @@ export default {
         return;
       }
       if (this.boardAttack[tileIndex]) {
-        let shipName = this.boardAttack[tileIndex];
         this.boardAttack[tileIndex] += ' hit';
-        if (this.didWin()) return;
         // didSink() will return the ship name (string) if it sunk. Otherwise it returns false.
-        let sunkShip = HELPERS.didSink(this.boardAttack, shipName);
+        let sunkShip = HELPERS.didSink(this.boardAttack, this.boardAttack[tileIndex]);
         if (sunkShip) {
           this.sunkShips.push(sunkShip);
-          this.attackAnnouncement = HELPERS.generateAnnouncement(true, tileIndex, 'PLAYER_SINK_SHIP', shipName);
+          if (this.didWin()) return;
+          this.attackAnnouncement = HELPERS.generateAnnouncement(true, tileIndex, 'PLAYER_SINK_SHIP', sunkShip);
         } else {
-          this.attackAnnouncement = HELPERS.generateAnnouncement(true, tileIndex, 'PLAYER_HIT', shipName);
+          this.attackAnnouncement = HELPERS.generateAnnouncement(true, tileIndex, 'PLAYER_HIT', this.boardAttack[tileIndex].slice(0, -4));
         }
       } else {
         this.boardAttack[tileIndex] = 'miss';

@@ -32,6 +32,8 @@
 + Need to emit gameStatusChange from BoardDefense.
   + You're going to move didHit into HELPERS. So... you can use logic there. 
   + And/or also move didWin into HELPERS
++ Download GitLens
++ Make Constants from ANNOUNCEMENT keys. Some good way to do this, right? 
 
 
 # known bugs
@@ -49,18 +51,19 @@
   + Solution: Hold off starting the next announcement until the current one finishes (how?)
     + See note in Announcement SetInterval
   + Or (HACKY): create longer delay for enemy attack/shorter messages
-
++ Not a bug really, but the AI doesn't know how to handle if ships are next to each other, and it only attacks two adjacent ends. It'll start attacking randomly without attacking the rest of the ships
 
 
 # next time...
 
-#### It sucks, but I think this is really necessary now. BoardDefense is really hard to edit. 
-##### As is, it's not registering wwhen a ship is sunk. And also, testing this requires you to edit like 5-6 places
 + Make a function for "Register Attack" in BoardDefense.
   + Include register 'hit' or 'miss'
   + Include adding to 'lastSuccessfulEnemyAttack'
   + Include pushing to enemyAttacks
   + Include emitting announcement to App
+  + oppositeDirectionAttack (somewhere) is not adding to the enemyAttack array. Debug, please! NOTE: I think this is OK now 
+    + Still TODO: make sure to check the enemyStrategy to see emit speciality messages like RELENTLESS 
+
 
 
 + There's no logic for recognizing a player ship has been sunk. Add that and emit accordingly
@@ -168,7 +171,7 @@
 
 + I think in every case, you want to send the coordinate to the helper and add another sentence to your message. So, add that logic in announcements.  DONE-ish
 + The enemy will have to emit for each variation of an attack. Later, this can be combined into its own method (that's in your todos). But for now, you can emit each time the new announcement is GENERATED 
-
++ Tanker destroy doesn't trigger switch to random. (Easy fix?) I think it doesn't have time to switch after being destroyed in two shots 
 
 # Removed code
 + Using select for rows/columns
