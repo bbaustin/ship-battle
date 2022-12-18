@@ -1,7 +1,7 @@
 <template>
-  <section v-if="this.gameStatus === 'enemyWin' || this.gameStatus === 'playerWin'">
+  <section v-if="store.gameStatus === 'enemyWin' || store.gameStatus === 'playerWin'">
     <dialog open>
-      <h1 v-if="this.gameStatus === 'enemyWin'">All our ships were sunk!</h1>
+      <h1 v-if="store.gameStatus === 'enemyWin'">All of our ships were sunk!</h1>
       <h1 v-else>Congratulations! We've won!</h1>
       <!-- TODO: Reset a bunch of stuff on button click -->
       <button @click.prevent="this.resetGame">Play again?</button>
@@ -9,8 +9,13 @@
   </section>
 </template>
 <script>
+import { store } from '../store.js';
 export default {
-  props: ['gameStatus'],
+  data() {
+    return {
+      store,
+    };
+  },
   methods: {
     resetGame() {
       // QUESTION: Will simply changing the gameStatus fix most of these?
@@ -30,8 +35,8 @@ export default {
 <style scoped>
 section {
   align-items: center;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(0.75rem);
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(0.5rem);
   display: flex;
   height: 100vh;
   justify-content: center;

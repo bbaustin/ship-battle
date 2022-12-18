@@ -21,22 +21,21 @@
     <div>EXPECTED ENEMY ATTACK: {{ enemyAttackPlan }}</div>
     <div>LAST ON TARGET ATTACK: {{ lastSuccessfulEnemyAttack }}</div>
     <div>NEXT EXPECTED ACCURACY:</div>
-    <!-- DestroyedShipsList -->
-    <div>DESTROYED PLAYER SHIPS: {{ this.sunkShips }}</div>
   </section>
 </template>
 <script>
 import { BLANK_BOARD, SHIP_SPECS } from '../assets/Constants.js';
 import * as HELPERS from '../assets/Helpers.js';
-
+import { store } from '../store.js';
 export default {
-  emits: ['emit-defense-announcement'], //'emit-game-status-change'
-  props: ['gameStatus', 'boardShipPlacement'],
+  emits: ['emit-defense-announcement'],
+  props: ['boardShipPlacement'],
   updated() {
     this.boardDefense = this.boardShipPlacement;
   },
   data() {
     return {
+      store,
       boardDefense: [],
       canSeeCoordinates: false,
       defenseAnnouncement: '',
@@ -50,21 +49,11 @@ export default {
       },
       enemyStrategy: 'random', // random, seek, destroy
       lastSuccessfulEnemyAttack: undefined,
-      sunkShips: [],
     };
   },
   methods: {
     didHit(attackLocation) {
       return !!(this.boardDefense[attackLocation] && this.boardDefense[attackLocation] !== 'miss');
-    },
-    didWin() {
-      // NOTE: This is assuming that you'll always use the all the ships in SHIP_SPECS once.
-      // This might not be the case if you ever change up game modes, etc.
-      if (this.sunkShips.length === SHIP_SPECS.length) {
-        setTimeout(() => {
-          this.$emit('emit-game-status-change', 'enemyWin');
-        }, 750);
-      }
     },
     handleMiss(attackLocation, announcementType) {
       this.enemyAttacks.push(attackLocation);
@@ -82,8 +71,9 @@ export default {
       let sunkShip = HELPERS.didSink(this.boardDefense, this.boardDefense[attackLocation]);
       if (sunkShip) {
         // NOTE: You might consider breaking this into another function, handleSink(sunkShip, attackLocation). Doesn't seem incredibly necessary, though
-        this.sunkShips.push(sunkShip);
-        if (this.didWin()) return;
+        store.sunkShips.enemy.push(sunkShip);
+        // didWin(isPlayersTurn: boolean)
+        if (HELPERS.didWin(false)) return;
         // If ship is sunk, you don't want to continue in the same direction. Attack randomly.
         this.enemyStrategy = 'random';
         this.defenseAnnouncement = HELPERS.generateAnnouncement(false, attackLocation, 'ENEMY_SINK_SHIP', sunkShip);

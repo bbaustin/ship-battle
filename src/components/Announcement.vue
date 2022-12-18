@@ -10,7 +10,7 @@ export default {
   props: ['announcement'],
   data() {
     return {
-      announcementArray: ['Welcome to ship battle. Please place your ships.'],
+      announcementArray: ['Welcome to Ship Battle. Please place your ships.'],
       scrollingAnnouncement: '',
     };
   },

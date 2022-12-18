@@ -1,6 +1,9 @@
-// import { reactive } from 'vue';
-// import { BLANK_BOARD } from './assets/Constants';
-//
-// export const store = reactive({
-//   storeBoardDefense: [...BLANK_BOARD],
-// });
+import { reactive } from 'vue';
+
+export const store = reactive({
+  gameStatus: 'placeShips', // options are 'placeShips', 'play', 'playerWin', 'enemyWin', 'pending'
+  sunkShips: {
+    player: [],
+    enemy: [],
+  },
+});

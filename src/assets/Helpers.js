@@ -1,5 +1,5 @@
 import { ANNOUNCEMENTS, SHIP_SPECS } from './Constants';
-
+import { store } from '../store.js';
 /***********************************/
 //  * * * * G E N E R A L * * * * * /
 /***********************************/
@@ -43,7 +43,17 @@ export const didSink = (board, hitShipName) => {
   }
   return false;
 };
-
+export const didWin = (isPlayersTurn) => {
+  // NOTE: This is assuming that you'll always use the all the ships in SHIP_SPECS once.
+  // This might not be the case if you ever change up game modes, etc.
+  let currentPlayer = isPlayersTurn ? 'player' : 'enemy';
+  if (store.sunkShips[currentPlayer].length === SHIP_SPECS.length) {
+    store.gameStatus = 'pending';
+    setTimeout(() => {
+      store.gameStatus = `${currentPlayer}Win`;
+    }, 750);
+  }
+};
 /***********************************/
 //  * S H I P * P L A C E M E N T * /
 /***********************************/

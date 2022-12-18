@@ -3,11 +3,10 @@
   + Having all emit names contain the word 'emit' probably isn't necessary hah
   + 'cell' or 'tile'? 
 + captains..??? (in the future)
-
 + Figure out how to get a function description to show when you hover over it
-+ Not totally needed, but gameStatus could be controlled via store
-+ Allow for ship placement to use computer keys (MEDIUM)
-+ Allow for use of computer keys instead of clicking when attacking
++ Keyboard
+  + Allow for ship placement to use computer keys (MEDIUM)
+  + Allow for attacking to use of computer keys
 + toggleCoordinates is copy/pasted in all three boards. It's the same logic each time (but different boards). It doesn't make sense to be in "store", I don't think (no logic being shared BETWEEN components). But is there a more DRY way of doing it?
   + I guess emitting to App.js, which would have an array of all boards that have a toggle? But... your way seems OK... Something to think about anyway. 
 + sounds!
@@ -29,11 +28,9 @@
 + If ship was destroyed, add visual marker 
   + (probably easy... kind of indirect, but use the DestroyedShipList and loop through and add a style to each of the tiles that has the class of that ship)
 + Colors in announcements? (Red for enemy, green for player, and yellow for coordinate)
-+ Need to emit gameStatusChange from BoardDefense.
-  + You're going to move didHit into HELPERS. So... you can use logic there. 
-  + And/or also move didWin into HELPERS
++ HUD
++ Related to HUD, smartphone styling
 + Download GitLens
-+ Make Constants from ANNOUNCEMENT keys. Some good way to do this, right? 
 
 
 # known bugs
@@ -47,6 +44,7 @@
 + still a splitting bug with rotate. See image "Screenshot 2022-12-11 at 16.43.57" to recreate
 + Announcement: 
   + Mashing creates garbled announcement text 
+    + Ideally, you want to be able to have more than one ScrollingAnnouncement at once
   + If the text takes longer than the time the enemy takes to attack, there's garbled text
   + Solution: Hold off starting the next announcement until the current one finishes (how?)
     + See note in Announcement SetInterval
@@ -56,26 +54,26 @@
 
 # next time...
 
-+ Make a function for "Register Attack" in BoardDefense.
-  + Include register 'hit' or 'miss'
-  + Include adding to 'lastSuccessfulEnemyAttack'
-  + Include pushing to enemyAttacks
-  + Include emitting announcement to App
-  + oppositeDirectionAttack (somewhere) is not adding to the enemyAttack array. Debug, please! NOTE: I think this is OK now 
-    + Still TODO: make sure to check the enemyStrategy to see emit speciality messages like RELENTLESS 
++ You just added 'pending' game state
+  + I think you kinda need that, to make sure someone doesn't click after losing
+  + If that's the case, add it to the v-if's determinign what's viewable 
+  
 
++ Finish SunkShipsDisplay! Gerd jerb earlier 
+  + Last (?) step. Helpers can't $emit (it's a JS file, duh!). So... hmm... Think about if it's worth having didWin() as a helper (I think it still is)
+    + If you keep it as a Helper, just call didWin() and have it return true/false, and emit from each respective board
+      + BETTER IDEA: gameStatus will be in Store. And so you can update store. 
+        + Might add a 'pending' state
+  + All you gotta do is have BoardDefense push to store when didSink(), and also adjust to use HELPERS.didWin(isPlayersTurn *false*) 
+  + Prev notes (done):
+    + sunkShips actually might be something to be controlled by store: YES
+      + shared with SunkShipsDisplay
+      + right now, didWin is in both boards and emitting game-status-change
 
-
-+ There's no logic for recognizing a player ship has been sunk. Add that and emit accordingly
-
-+ Continue with the DestroyedShipsList component OR
++ Make Constants from ANNOUNCEMENT keys. Some good way to do this, right? 
 
 + Continue work on Announcements
-  + Adding time (Date.now())
   + Make the holder scroll/resize more nicely
-  + Randomize messages
-    + Hard part might be using SHIP.NAME to replace a placeholder when you are sinking.
-      + Easy I think: sentences[1].replace('SHIP_NAME', 'Battleship');
     + There will also be props being sent around to two places when a ship is sunk (destroyed ship list and announcements) 
 
 
@@ -172,6 +170,21 @@
 + I think in every case, you want to send the coordinate to the helper and add another sentence to your message. So, add that logic in announcements.  DONE-ish
 + The enemy will have to emit for each variation of an attack. Later, this can be combined into its own method (that's in your todos). But for now, you can emit each time the new announcement is GENERATED 
 + Tanker destroy doesn't trigger switch to random. (Easy fix?) I think it doesn't have time to switch after being destroyed in two shots 
++ Need to emit gameStatusChange from BoardDefense.
+  + You're going to move didHit into HELPERS. So... you can use logic there. 
+  + And/or also move didWin into HELPERS
++ Make a function for "Register Attack" in BoardDefense.
+  + Include register 'hit' or 'miss'
+  + Include adding to 'lastSuccessfulEnemyAttack'
+  + Include pushing to enemyAttacks
+  + Include emitting announcement to App
+  + oppositeDirectionAttack (somewhere) is not adding to the enemyAttack array. Debug, please! NOTE: I think this is OK now 
+    + make sure to check the enemyStrategy to see emit speciality messages like RELENTLESS 
++ There's no logic for recognizing a player ship has been sunk. Add that and emit accordingly
++ Randomize announcements
+  + Hard part might be using SHIP.NAME to replace a placeholder when you are sinking.
+    + Easy I think: sentences[1].replace('SHIP_NAME', 'Battleship');
+
 
 # Removed code
 + Using select for rows/columns
