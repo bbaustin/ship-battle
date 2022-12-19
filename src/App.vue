@@ -9,6 +9,7 @@
     <section>
       <ShipPlacer
         v-if="store.gameStatus === 'placeShips'"
+        @emit-ship-placer-announcement="handleEmittedAnnouncement"
         @set-player-ships="handleSetPlayerShips"
       />
       <div
@@ -19,6 +20,7 @@
           ref="boardDefense"
           :boardShipPlacement="this.boardShipPlacement"
           @emit-defense-announcement="handleEmittedAnnouncement"
+          @emit-enemy-intel="handleEmittedEnemyIntel"
         />
         <SunkShipsDisplay />
         <BoardAttack
@@ -28,6 +30,10 @@
         />
       </div>
     </section>
+    <EnemyIntelDisplay
+      v-if="store.gameStatus !== 'placeShips'"
+      :enemyIntel="this.enemyIntel"
+    />
     <Announcement :announcement="this.announcement" />
   </main>
 </template>
@@ -36,22 +42,35 @@ import { store } from './store.js';
 import Announcement from './components/Announcement.vue';
 import BoardDefense from './components/BoardDefense.vue';
 import BoardAttack from './components/BoardAttack.vue';
+import EnemyIntelDisplay from './components/EnemyIntelDisplay.vue';
 import Modal from './components/Modal.vue';
 import ShipPlacer from './components/ShipPlacer.vue';
 import SunkShipsDisplay from './components/SunkShipsDisplay.vue';
 export default {
-  components: { Announcement, BoardDefense, BoardAttack, Modal, ShipPlacer, SunkShipsDisplay },
+  components: {
+    Announcement,
+    BoardDefense,
+    BoardAttack,
+    EnemyIntelDisplay,
+    Modal,
+    ShipPlacer,
+    SunkShipsDisplay,
+  },
   data() {
     return {
       store,
       announcement: '',
       boardShipPlacement: [], // TODO: Does this need to be data in App? Can I pass this without changing
+      enemyIntel: undefined,
       isPlayersTurn: true,
     };
   },
   methods: {
     handleEmittedAnnouncement(emittedAnnouncement) {
       this.announcement = emittedAnnouncement;
+    },
+    handleEmittedEnemyIntel(emittedEnemyIntel) {
+      this.enemyIntel = emittedEnemyIntel;
     },
     handleSetPlayerShips(boardShipPlacement) {
       this.boardShipPlacement = [...boardShipPlacement];

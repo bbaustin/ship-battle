@@ -22,11 +22,11 @@ export default {
       // Get ready for a new scrolling announcement
       this.scrollingAnnouncement = '';
       // Split the incoming announcement (from props) into each character
-      let annArr = this.announcement.split('');
+      let individualCharacters = this.announcement.split('');
       let current = 0;
       setInterval(() => {
-        if (current < annArr.length) {
-          this.scrollingAnnouncement += annArr[current++];
+        if (current < individualCharacters.length) {
+          this.scrollingAnnouncement += individualCharacters[current++];
         } // TODO: Add some code here to recognize when the scrolling is finished to avoid garbled text
       }, 10);
       clearInterval();

@@ -49,7 +49,7 @@
 import * as HELPERS from '../assets/Helpers.js';
 import { BLANK_BOARD, SHIP_SPECS } from '../assets/Constants.js';
 export default {
-  emits: ['set-player-ships'],
+  emits: ['set-player-ships', 'emit-ship-placer-announcement'],
   created() {
     // randomize placement of your ships
     HELPERS.placeShips(this.ships, this.boardShipPlacement);
@@ -217,6 +217,7 @@ export default {
     confirmPosition() {
       // TODO: This should prboably pop up a confirmation modal, and THEN that modal would do the following. But it's ok for now
       this.$emit('set-player-ships', this.boardShipPlacement);
+      this.$emit('emit-ship-placer-announcement', 'Ships placement confirmed. Make your first attack!');
     },
     getTileClass(tileContent) {
       if (this.activeShip && tileContent === this.activeShip) return 'selected';

@@ -16,11 +16,6 @@
         <span v-if="this.canSeeCoordinates">{{ index }}</span>
       </div>
     </div>
-    <div>PAST ENEMY ATTACKS: {{ enemyAttacks }}</div>
-    <div>ENEMY ATTACK STRATEGY: {{ enemyStrategy }}</div>
-    <div>EXPECTED ENEMY ATTACK: {{ enemyAttackPlan }}</div>
-    <div>LAST ON TARGET ATTACK: {{ lastSuccessfulEnemyAttack }}</div>
-    <div>NEXT EXPECTED ACCURACY:</div>
   </section>
 </template>
 <script>
@@ -28,7 +23,7 @@ import { BLANK_BOARD, SHIP_SPECS } from '../assets/Constants.js';
 import * as HELPERS from '../assets/Helpers.js';
 import { store } from '../store.js';
 export default {
-  emits: ['emit-defense-announcement'],
+  emits: ['emit-defense-announcement', 'emit-enemy-intel'],
   props: ['boardShipPlacement'],
   updated() {
     this.boardDefense = this.boardShipPlacement;
@@ -62,6 +57,7 @@ export default {
         this.defenseAnnouncement = HELPERS.generateAnnouncement(false, attackLocation, 'ENEMY_REPRIEVE', '');
       this.$emit('emit-defense-announcement', this.defenseAnnouncement);
       this.boardDefense[attackLocation] = 'miss';
+      this.emitEnemyIntel();
     },
     handleHit(attackLocation) {
       this.enemyAttacks.push(attackLocation);
@@ -84,7 +80,16 @@ export default {
         if (this.enemyStrategy === 'seek' || this.enemyStrategy === 'destroy')
           this.defenseAnnouncement = HELPERS.generateAnnouncement(false, attackLocation, 'ENEMY_HIT_CONTINUED', this.boardDefense[attackLocation].slice(0, -4));
         this.$emit('emit-defense-announcement', this.defenseAnnouncement);
+        this.emitEnemyIntel();
       }
+    },
+    emitEnemyIntel() {
+      this.$emit('emit-enemy-intel', {
+        boardDefense: this.boardDefense,
+        enemyAttacks: this.enemyAttacks,
+        enemyStrategy: this.enemyStrategy,
+        lastSuccessfulEnemyAttack: this.lastSuccessfulEnemyAttack,
+      });
     },
     aiRandom() {
       let attackLocation = Math.floor(Math.random() * 100);

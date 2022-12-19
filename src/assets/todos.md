@@ -30,7 +30,6 @@
 + Colors in announcements? (Red for enemy, green for player, and yellow for coordinate)
 + HUD
 + Related to HUD, smartphone styling
-+ Download GitLens
 
 
 # known bugs
@@ -53,28 +52,24 @@
 
 
 # next time...
++ EnemyIntelDisplay
+  + The only tricky one is nextAttackCoordinate, because ...coordinate doeesn't always exist 
+  + From BoardDefense, need to emit the following to App:
+    + enemyAttacks
+      + From this, you can create: 
+        + lastEnemyAttack (enemyAttacks.at(-1))
+        + nextAttackSuccessLikelihood ((100 - enemyAttacks.length) / 100)
+    + enemyStrategy
+    + enemyAttackPlan
+    + lasSuccessfulEnemyAttack
 
-+ You just added 'pending' game state
-  + I think you kinda need that, to make sure someone doesn't click after losing
-  + If that's the case, add it to the v-if's determinign what's viewable 
-  
-
-+ Finish SunkShipsDisplay! Gerd jerb earlier 
-  + Last (?) step. Helpers can't $emit (it's a JS file, duh!). So... hmm... Think about if it's worth having didWin() as a helper (I think it still is)
-    + If you keep it as a Helper, just call didWin() and have it return true/false, and emit from each respective board
-      + BETTER IDEA: gameStatus will be in Store. And so you can update store. 
-        + Might add a 'pending' state
-  + All you gotta do is have BoardDefense push to store when didSink(), and also adjust to use HELPERS.didWin(isPlayersTurn *false*) 
-  + Prev notes (done):
-    + sunkShips actually might be something to be controlled by store: YES
-      + shared with SunkShipsDisplay
-      + right now, didWin is in both boards and emitting game-status-change
 
 + Make Constants from ANNOUNCEMENT keys. Some good way to do this, right? 
 
 + Continue work on Announcements
   + Make the holder scroll/resize more nicely
     + There will also be props being sent around to two places when a ship is sunk (destroyed ship list and announcements) 
+  + Allow for more than one scrolling announcement at a time
 
 
 
@@ -185,6 +180,23 @@
   + Hard part might be using SHIP.NAME to replace a placeholder when you are sinking.
     + Easy I think: sentences[1].replace('SHIP_NAME', 'Battleship');
 
++ You just added 'pending' game state
+  + I think you kinda need that, to make sure someone doesn't click after losing
+  + If that's the case, add it to the v-if's determinign what's viewable 
+  
+
++ Finish SunkShipsDisplay! Gerd jerb earlier 
+  + Last (?) step. Helpers can't $emit (it's a JS file, duh!). So... hmm... Think about if it's worth having didWin() as a helper (I think it still is)
+    + If you keep it as a Helper, just call didWin() and have it return true/false, and emit from each respective board
+      + BETTER IDEA: gameStatus will be in Store. And so you can update store. 
+        + Might add a 'pending' state
+  + All you gotta do is have BoardDefense push to store when didSink(), and also adjust to use HELPERS.didWin(isPlayersTurn *false*) 
+  + Prev notes (done):
+    + sunkShips actually might be something to be controlled by store: YES
+      + shared with SunkShipsDisplay
+      + right now, didWin is in both boards and emitting game-status-change
++ Download GitLens
+
 
 # Removed code
 + Using select for rows/columns
@@ -221,14 +233,37 @@ export const createAlphabet = (howManyLetters) => {
 
 + Not working scrolling text
 ```
-  // watch: {
-  //   announcement() {
-  //     for (let i = 0; i < this.announcement.length; i++) {
-  //       console.log(this.announcement, this.announcement.length, this.announcement[i]);
-  //       setTimeout(() => {
-  //         this.scrollingAnnouncement += this.announcement[i];
-  //       }, 500);
-  //     }
-  //   },
-  // },
+   watch: {
+     announcement() {
+       for (let i = 0; i < this.announcement.length; i++) {
+         console.log(this.announcement, this.announcement.length, this.announcement[i]);
+         setTimeout(() => {
+           this.scrollingAnnouncement += this.announcement[i];
+         }, 500);
+       }
+     },
+   },
   ```
+
+Next expected probability of attack in EnemyIntelDisplay 
+```
+// TODO: You could make this kind of cool if you used more logic from BoardDefense. But it's not really worth the work?
+     nextAttacksProbabilityOfSuccess() {
+       if (this.enemyIntel?.boardDefense) {
+         let boardDefense = this.enemyIntel.boardDefense;
+         let remainingShipTiles = 0;
+         let remainingTiles = 0;
+         if (this.currentEnemyAttackPattern === 'seek') return '25%';
+         if (this.currentEnemyAttackPattern === 'destroy') return '50%';
+          //TODO: This could have better logic for sure
+         boardDefense.forEach((tile) => {
+           console.log(tile);
+           if (tile !== '' && !tile.includes(' hit')) remainingShipTiles++;
+           else remainingTiles++;
+         });
+         console.log(remainingShipTiles, remainingTiles);
+         return `${(remainingShipTiles / (remainingShipTiles + remainingTiles)) * 100}%`;
+       }
+       return 'N/A';
+     },
+```
