@@ -1,7 +1,7 @@
 <template>
   <section id="defense">
     <h1>my ships</h1>
-    <button @click.prevent="this.handleCoordinatesToggle">toggle coordinates</button>
+    <ToggleCoordinatesButton @toggle-coordinates="() => (this.toggled = !this.toggled)" />
     <div class="board">
       <div
         v-for="(cell, index) in this.boardDefense"
@@ -11,9 +11,10 @@
           this.boardDefense[index] === 'miss' ? 'miss' : '',
           this.boardDefense[index].slice(-3) === 'hit' ? 'hit' : '',
           this.enemyAttacks.at(-1) === index ? 'last-attack' : '',
+          this.toggled ? 'toggled' : '',
         ]"
       >
-        <span v-if="this.canSeeCoordinates">{{ index }}</span>
+        <span v-if="this.toggled">{{ index }}</span>
       </div>
     </div>
   </section>
@@ -22,8 +23,10 @@
 import { BLANK_BOARD, SHIP_SPECS } from '../assets/Constants.js';
 import * as HELPERS from '../assets/Helpers.js';
 import { store } from '../store.js';
+import ToggleCoordinatesButton from './ToggleCoordinatesButton.vue';
 export default {
-  emits: ['emit-defense-announcement', 'emit-enemy-intel'],
+  components: { ToggleCoordinatesButton },
+  emits: ['emit-defense-announcement', 'emit-enemy-intel', 'toggle-coordinates'],
   props: ['boardShipPlacement'],
   updated() {
     this.boardDefense = this.boardShipPlacement;
@@ -32,7 +35,7 @@ export default {
     return {
       store,
       boardDefense: [],
-      canSeeCoordinates: false,
+      toggled: false,
       defenseAnnouncement: '',
       destroyDirection: undefined,
       enemyAttacks: [],
@@ -44,6 +47,7 @@ export default {
       },
       enemyStrategy: 'random', // random, seek, destroy
       lastSuccessfulEnemyAttack: undefined,
+      toggled: false,
     };
   },
   methods: {
@@ -221,9 +225,6 @@ export default {
       if (this.enemyStrategy === 'random') return this.aiRandom();
       if (this.enemyStrategy === 'seek') return this.aiSeek();
       if (this.enemyStrategy === 'destroy') return this.aiDestroy();
-    },
-    handleCoordinatesToggle() {
-      return (this.canSeeCoordinates = !this.canSeeCoordinates);
     },
   },
 };

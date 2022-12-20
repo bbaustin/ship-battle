@@ -1,15 +1,15 @@
 <template>
   <section id="attack">
     <h1>attack!</h1>
-    <button @click.prevent="this.handleCoordinatesToggle">toggle coordinates</button>
+    <ToggleCoordinatesButton @toggle-coordinates="() => (this.toggled = !this.toggled)" />
     <div class="board">
       <div
         v-for="(cell, index) in this.boardAttack"
         class="cell"
-        :class="this.boardAttack[index]"
+        :class="[this.boardAttack[index], this.toggled ? 'toggled' : '']"
         @click="[this.handleTileAttackClick(index), $emit('emit-attack-announcement', this.attackAnnouncement)]"
       >
-        <span v-if="this.canSeeCoordinates">{{ index }}</span>
+        <span v-if="this.toggled">{{ index }}</span>
       </div>
     </div>
   </section>
@@ -18,15 +18,17 @@
 import { ANNOUNCEMENTS, BLANK_BOARD, SHIP_SPECS } from '../assets/Constants.js';
 import * as HELPERS from '../assets/Helpers.js';
 import { store } from '../store.js';
+import ToggleCoordinatesButton from './ToggleCoordinatesButton.vue';
 export default {
-  emits: ['emit-attack-announcement', 'switch-to-enemy'],
+  components: { ToggleCoordinatesButton },
+  emits: ['emit-attack-announcement', 'switch-to-enemy', 'toggle-coordinates'],
   props: ['isPlayersTurn'],
   data() {
     return {
       store,
       attackAnnouncement: 'test',
       boardAttack: [...BLANK_BOARD],
-      canSeeCoordinates: false,
+      toggled: false,
     };
   },
   methods: {
@@ -60,22 +62,24 @@ export default {
       }
       this.$emit('switch-to-enemy');
     },
-    handleCoordinatesToggle() {
-      return (this.canSeeCoordinates = !this.canSeeCoordinates);
-    },
   },
   created() {
     HELPERS.placeShips(SHIP_SPECS, this.boardAttack);
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
+@import '../scss/modules/colors.scss';
 .cell {
   cursor: pointer;
 }
 .cell:hover {
   filter: brightness(85%);
-  background-image: radial-gradient(yellow 0.5px, transparent 0);
+  background-image: radial-gradient($yellow 0.5px, transparent 0);
   background-size: 2px 2px;
+}
+.cell.toggled:hover {
+  background: $yellow;
+  color: $grey;
 }
 </style>

@@ -22,6 +22,7 @@
   + enemyMiss   [lower-note]
   + enemySink   [sad-melody]
   + enemyWin    [even-sadder-melody]
++ Pretty low priority, but if you can wrangle up a way to get the yellow spotted background to go behind a red hit dot, that'd be cool 
 
 
 
@@ -48,8 +49,6 @@
 + PICK YOUR NEXT TASK FROM BELOW
 
 + Make Constants from ANNOUNCEMENT keys. Some good way to do this, right? 
-
-+ Research :has() in CSS. Alternative for Firefox?
 
 + If ship was destroyed, add visual marker 
   + (probably easy... kind of indirect, but use the DestroyedShipList and loop through and add a style to each of the tiles that has the class of that ship)
@@ -209,7 +208,10 @@
 + Make buttons a little triangle shape
   + You can do this fairly easily with an extra div
     + I wonder if you can use grid or something? IDK, it's probably not worth haha
-
++ Research :has() in CSS. Alternative for Firefox?
+  + So for this, I will add a toggle class on... everything? Or anything that's not blank?
+  + And add styles to this class in the main style.css
+  + With this, see if you can componentize Toggle Button 
 
 # Removed code
 + Using select for rows/columns
@@ -279,4 +281,12 @@ Next expected probability of attack in EnemyIntelDisplay
        }
        return 'N/A';
      },
+```
+
++ You can use stuff like this when Firefox supports :has()
+  + Currently, instead, you're using .toggled class 
+```
+// .cell.miss:has(span) {
+//   background: $green;
+// }
 ```

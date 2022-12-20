@@ -2,14 +2,14 @@
   <div class="flex-container">
     <section id="placement">
       <h1>choose your ship placement</h1>
-      <button @click.prevent="this.handleCoordinatesToggle">toggle coordinates</button>
+      <ToggleCoordinatesButton @toggle-coordinates="() => (this.toggled = !this.toggled)" />
       <div class="board">
         <div
           v-for="(cell, index) in this.boardShipPlacement"
           class="cell"
-          :class="this.getTileClass(cell)"
+          :class="[this.getTileClass(cell), this.toggled ? 'toggled' : '']"
         >
-          <span v-if="this.canSeeCoordinates">{{ index }}</span>
+          <span v-if="this.toggled">{{ index }}</span>
         </div>
       </div>
     </section>
@@ -27,7 +27,6 @@
           {{ ship.name }} ({{ ship.size }})
         </option>
       </select>
-
       <!-- ORIENTATION/ALIGNMENT -->
       <select
         v-model="this.alignment"
@@ -52,7 +51,6 @@
         >
           L
         </button>
-
         <button
           class="direction-button"
           @click.prevent="handleMovement('e')"
@@ -75,8 +73,10 @@
 <script>
 import * as HELPERS from '../assets/Helpers.js';
 import { BLANK_BOARD, SHIP_SPECS } from '../assets/Constants.js';
+import ToggleCoordinatesButton from './ToggleCoordinatesButton.vue';
 export default {
-  emits: ['set-player-ships', 'emit-ship-placer-announcement'],
+  components: { ToggleCoordinatesButton },
+  emits: ['set-player-ships', 'emit-ship-placer-announcement', 'toggle-coordinates'],
   created() {
     // randomize placement of your ships
     HELPERS.placeShips(this.ships, this.boardShipPlacement);
@@ -99,9 +99,9 @@ export default {
       activeShip: SHIP_SPECS[0].name,
       alignment: '',
       boardShipPlacement: [...BLANK_BOARD], //TODO: Arguably, you sort of don't need this, in the same way that you're only relying on "board" in other components. But it's OK to have, I guess.
-      canSeeCoordinates: true,
       placement: {},
       ships: [...SHIP_SPECS],
+      toggled: true,
     };
   },
   methods: {
@@ -251,8 +251,9 @@ export default {
       if (tileContent) return 'boat';
       return '';
     },
+    // lalalalalala
     handleCoordinatesToggle() {
-      return (this.canSeeCoordinates = !this.canSeeCoordinates);
+      return (this.toggled = !this.toggled);
     },
   },
 };
@@ -265,6 +266,11 @@ export default {
   justify-content: space-between;
 }
 .selected {
+  background-image: radial-gradient($orange 0.5px, transparent 0);
+  background-size: 2px 2px;
+  color: $grey;
+}
+.selected.toggled {
   background: $orange;
   color: $grey;
 }
