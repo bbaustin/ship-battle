@@ -59,7 +59,6 @@
 + HUD
   + Related to HUD, smartphone styling
 
-+ Style form
 
 + Continue work on Announcements
   + Do you want two announcement boards?
@@ -69,7 +68,7 @@
 
 + Change alignment dropdown to buttons
 
-+ Make buttons a little triangle shape
+
 
 
 # notes
@@ -206,6 +205,10 @@
     + enemyAttackPlan
     + lasSuccessfulEnemyAttack
   + More fun sciency looking stuff. Hit percentages. Percentage to land next hit 
++ Style form
++ Make buttons a little triangle shape
+  + You can do this fairly easily with an extra div
+    + I wonder if you can use grid or something? IDK, it's probably not worth haha
 
 
 # Removed code

@@ -24,10 +24,35 @@
       <option>vertical</option>
     </select>
     <div class="movement-buttons">
-      <button @click.prevent="handleMovement('n')">U</button>
-      <button @click.prevent="handleMovement('w')">L</button>
-      <button @click.prevent="handleMovement('s')">D</button>
-      <button @click.prevent="handleMovement('e')">R</button>
+      <div>
+        <button
+          class="direction-button"
+          @click.prevent="handleMovement('n')"
+        >
+          U
+        </button>
+      </div>
+      <button
+        class="direction-button"
+        @click.prevent="handleMovement('w')"
+      >
+        L
+      </button>
+
+      <button
+        class="direction-button"
+        @click.prevent="handleMovement('e')"
+      >
+        R
+      </button>
+      <div>
+        <button
+          class="direction-button"
+          @click.prevent="handleMovement('s')"
+        >
+          D
+        </button>
+      </div>
     </div>
 
     <button @click.prevent="confirmPosition">Confirm Ship Positions</button>
@@ -236,5 +261,16 @@ export default {
 .selected {
   background: orange;
   color: #242424;
+}
+.movement-buttons {
+  margin-bottom: 10px;
+  width: fit-content;
+}
+.movement-buttons div {
+  text-align: center;
+}
+.direction-button {
+  padding: 6px 10px;
+  margin: 5px;
 }
 </style>
