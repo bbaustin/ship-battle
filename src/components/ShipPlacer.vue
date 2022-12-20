@@ -23,10 +23,12 @@
       <option>horizontal</option>
       <option>vertical</option>
     </select>
-    <button @click.prevent="handleMovement('n')">U</button>
-    <button @click.prevent="handleMovement('e')">R</button>
-    <button @click.prevent="handleMovement('w')">L</button>
-    <button @click.prevent="handleMovement('s')">D</button>
+    <div class="movement-buttons">
+      <button @click.prevent="handleMovement('n')">U</button>
+      <button @click.prevent="handleMovement('w')">L</button>
+      <button @click.prevent="handleMovement('s')">D</button>
+      <button @click.prevent="handleMovement('e')">R</button>
+    </div>
 
     <button @click.prevent="confirmPosition">Confirm Ship Positions</button>
   </form>

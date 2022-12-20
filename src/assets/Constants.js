@@ -76,6 +76,7 @@ export const ANNOUNCEMENTS = {
   ],
   NOT_PLAYERS_TURN: ['We must wait our turn.', "It is the enemy's turn.", 'It is not our time to attack.'],
   SAME_TILE_CLICKED: ['This space has already been attempted.'],
+  WELCOME: 'Welcome to Ship Battle. Please place your ships.',
 };
 
 export const BLANK_BOARD = [

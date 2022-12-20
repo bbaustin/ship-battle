@@ -6,11 +6,12 @@
   </div>
 </template>
 <script>
+import { ANNOUNCEMENTS } from '../assets/Constants.js';
 export default {
   props: ['announcement'],
   data() {
     return {
-      announcementArray: ['Welcome to Ship Battle. Please place your ships.'],
+      announcementArray: [ANNOUNCEMENTS.WELCOME],
       scrollingAnnouncement: '',
     };
   },

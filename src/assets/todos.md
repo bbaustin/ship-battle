@@ -3,7 +3,7 @@
   + Having all emit names contain the word 'emit' probably isn't necessary hah
   + 'cell' or 'tile'? 
 + captains..??? (in the future)
-+ Figure out how to get a function description to show when you hover over it
++ Figure out how to get a function description to show when you hover over it. Typescript thing?
 + Keyboard
   + Allow for ship placement to use computer keys (MEDIUM)
   + Allow for attacking to use of computer keys
@@ -22,14 +22,7 @@
   + enemyMiss   [lower-note]
   + enemySink   [sad-melody]
   + enemyWin    [even-sadder-melody]
-+ More fun sciency looking stuff. Hit percentages. Percentage to land next hit 
-+ Style form
-+ Research :has() in CSS. Alternative for Firefox?
-+ If ship was destroyed, add visual marker 
-  + (probably easy... kind of indirect, but use the DestroyedShipList and loop through and add a style to each of the tiles that has the class of that ship)
-+ Colors in announcements? (Red for enemy, green for player, and yellow for coordinate)
-+ HUD
-+ Related to HUD, smartphone styling
+
 
 
 # known bugs
@@ -52,26 +45,31 @@
 
 
 # next time...
-+ EnemyIntelDisplay
-  + The only tricky one is nextAttackCoordinate, because ...coordinate doeesn't always exist 
-  + From BoardDefense, need to emit the following to App:
-    + enemyAttacks
-      + From this, you can create: 
-        + lastEnemyAttack (enemyAttacks.at(-1))
-        + nextAttackSuccessLikelihood ((100 - enemyAttacks.length) / 100)
-    + enemyStrategy
-    + enemyAttackPlan
-    + lasSuccessfulEnemyAttack
-
++ PICK YOUR NEXT TASK FROM BELOW
 
 + Make Constants from ANNOUNCEMENT keys. Some good way to do this, right? 
 
++ Research :has() in CSS. Alternative for Firefox?
+
++ If ship was destroyed, add visual marker 
+  + (probably easy... kind of indirect, but use the DestroyedShipList and loop through and add a style to each of the tiles that has the class of that ship)
+
++ Colors in announcements? (Red for enemy, green for player, and yellow for coordinate)
+
++ HUD
+  + Related to HUD, smartphone styling
+
++ Style form
+
 + Continue work on Announcements
+  + Do you want two announcement boards?
+  + Allow for more than one scrolling announcement at a time
   + Make the holder scroll/resize more nicely
     + There will also be props being sent around to two places when a ship is sunk (destroyed ship list and announcements) 
-  + Allow for more than one scrolling announcement at a time
 
++ Change alignment dropdown to buttons
 
++ Make buttons a little triangle shape
 
 
 # notes
@@ -196,6 +194,18 @@
       + shared with SunkShipsDisplay
       + right now, didWin is in both boards and emitting game-status-change
 + Download GitLens
+
++ EnemyIntelDisplay
+  + The only tricky one is nextAttackCoordinate, because ...coordinate doeesn't always exist 
+  + From BoardDefense, need to emit the following to App:
+    + enemyAttacks
+      + From this, you can create: 
+        + lastEnemyAttack (enemyAttacks.at(-1))
+        + nextAttackSuccessLikelihood ((100 - enemyAttacks.length) / 100)
+    + enemyStrategy
+    + enemyAttackPlan
+    + lasSuccessfulEnemyAttack
+  + More fun sciency looking stuff. Hit percentages. Percentage to land next hit 
 
 
 # Removed code

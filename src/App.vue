@@ -30,10 +30,6 @@
         />
       </div>
     </section>
-    <EnemyIntelDisplay
-      v-if="store.gameStatus !== 'placeShips'"
-      :enemyIntel="this.enemyIntel"
-    />
     <Announcement :announcement="this.announcement" />
   </main>
 </template>
