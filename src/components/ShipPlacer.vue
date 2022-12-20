@@ -1,76 +1,76 @@
 <template>
-  <form>
-    <!-- SHIP -->
-    <select
-      v-model="this.activeShip"
-      @change="handleActiveShip"
-    >
-      <option
-        v-for="(ship, index) in ships"
-        :value="ship.name"
-        key="i"
+  <div class="flex-container">
+    <section id="placement">
+      <h1>choose your ship placement</h1>
+      <button @click.prevent="this.handleCoordinatesToggle">toggle coordinates</button>
+      <div class="board">
+        <div
+          v-for="(cell, index) in this.boardShipPlacement"
+          class="cell"
+          :class="this.getTileClass(cell)"
+        >
+          <span v-if="this.canSeeCoordinates">{{ index }}</span>
+        </div>
+      </div>
+    </section>
+    <form>
+      <!-- SHIP -->
+      <select
+        v-model="this.activeShip"
+        @change="handleActiveShip"
       >
-        {{ ship.name }} ({{ ship.size }})
-      </option>
-    </select>
+        <option
+          v-for="(ship, index) in ships"
+          :value="ship.name"
+          key="i"
+        >
+          {{ ship.name }} ({{ ship.size }})
+        </option>
+      </select>
 
-    <!-- ORIENTATION/ALIGNMENT -->
-    <select
-      v-model="this.alignment"
-      @change="handleAlignmentChange"
-    >
-      <!-- NOTE: I guess value isn't needed with v-model? -->
-      <option>horizontal</option>
-      <option>vertical</option>
-    </select>
-    <div class="movement-buttons">
-      <div>
+      <!-- ORIENTATION/ALIGNMENT -->
+      <select
+        v-model="this.alignment"
+        @change="handleAlignmentChange"
+      >
+        <!-- NOTE: I guess value isn't needed with v-model? -->
+        <option>horizontal</option>
+        <option>vertical</option>
+      </select>
+      <div class="movement-buttons">
+        <div>
+          <button
+            class="direction-button"
+            @click.prevent="handleMovement('n')"
+          >
+            U
+          </button>
+        </div>
         <button
           class="direction-button"
-          @click.prevent="handleMovement('n')"
+          @click.prevent="handleMovement('w')"
         >
-          U
+          L
         </button>
-      </div>
-      <button
-        class="direction-button"
-        @click.prevent="handleMovement('w')"
-      >
-        L
-      </button>
 
-      <button
-        class="direction-button"
-        @click.prevent="handleMovement('e')"
-      >
-        R
-      </button>
-      <div>
         <button
           class="direction-button"
-          @click.prevent="handleMovement('s')"
+          @click.prevent="handleMovement('e')"
         >
-          D
+          R
         </button>
+        <div>
+          <button
+            class="direction-button"
+            @click.prevent="handleMovement('s')"
+          >
+            D
+          </button>
+        </div>
       </div>
-    </div>
-
-    <button @click.prevent="confirmPosition">Confirm Ship Positions</button>
-  </form>
-
-  <section id="placement">
-    <h1>choose your ship placement</h1>
-    <button @click.prevent="this.handleCoordinatesToggle">toggle coordinates</button>
-    <div class="board">
-      <div
-        v-for="(cell, index) in this.boardShipPlacement"
-        class="cell"
-        :class="this.getTileClass(cell)"
-      >
-        <span v-if="this.canSeeCoordinates">{{ index }}</span>
-      </div>
-    </div>
-  </section>
+      <button @click.prevent="confirmPosition">Confirm Ship Positions</button>
+    </form>
+  </div>
 </template>
 <script>
 import * as HELPERS from '../assets/Helpers.js';
@@ -257,10 +257,16 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
+@import '../scss/modules/colors.scss';
+.flex-container {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
 .selected {
-  background: orange;
-  color: #242424;
+  background: $orange;
+  color: $grey;
 }
 .movement-buttons {
   margin-bottom: 10px;
@@ -272,5 +278,9 @@ export default {
 .direction-button {
   padding: 6px 10px;
   margin: 5px;
+}
+.submit {
+  color: $grey;
+  background: $green;
 }
 </style>
