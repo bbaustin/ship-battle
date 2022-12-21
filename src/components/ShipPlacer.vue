@@ -66,7 +66,12 @@
           </button>
         </div>
       </div>
-      <button @click.prevent="confirmPosition">Confirm Ship Positions</button>
+      <button
+        class="special"
+        @click.prevent="confirmPosition"
+      >
+        Confirm Ship Positions
+      </button>
     </form>
   </div>
 </template>

@@ -4,7 +4,12 @@
       <h1 v-if="store.gameStatus === 'enemyWin'">All of our ships were sunk!</h1>
       <h1 v-else>Congratulations! We've won!</h1>
       <!-- TODO: Reset a bunch of stuff on button click -->
-      <button @click.prevent="this.resetGame">Play again?</button>
+      <button
+        @click.prevent="this.resetGame"
+        class="special"
+      >
+        Play again?
+      </button>
     </dialog>
   </section>
 </template>
@@ -32,7 +37,8 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
+@import '../scss/modules/colors.scss';
 section {
   align-items: center;
   background: rgba(0, 0, 0, 0.25);
@@ -49,8 +55,9 @@ section {
 }
 dialog {
   align-items: center;
-  background: white;
-  border: 1px solid black;
+  background: $grey;
+  border: 1px solid $green;
+  color: $green;
   display: flex;
   flex-direction: column;
   justify-content: center;

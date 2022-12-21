@@ -12,6 +12,7 @@
           this.boardDefense[index].slice(-3) === 'hit' ? 'hit' : '',
           this.enemyAttacks.at(-1) === index ? 'last-attack' : '',
           this.toggled ? 'toggled' : '',
+          store.sunkShips.enemy.includes(this.boardDefense[index].slice(0, -4)) ? 'sunk' : '',
         ]"
       >
         <span v-if="this.toggled">{{ index }}</span>

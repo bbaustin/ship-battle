@@ -6,7 +6,7 @@
       <div
         v-for="(cell, index) in this.boardAttack"
         class="cell"
-        :class="[this.boardAttack[index], this.toggled ? 'toggled' : '']"
+        :class="[this.boardAttack[index], this.toggled ? 'toggled' : '', store.sunkShips.player.includes(this.boardAttack[index].slice(0, -4)) ? 'sunk' : '']"
         @click="[this.handleTileAttackClick(index), $emit('emit-attack-announcement', this.attackAnnouncement)]"
       >
         <span v-if="this.toggled">{{ index }}</span>

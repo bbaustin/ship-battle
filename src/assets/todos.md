@@ -50,9 +50,6 @@
 
 + Make Constants from ANNOUNCEMENT keys. Some good way to do this, right? 
 
-+ If ship was destroyed, add visual marker 
-  + (probably easy... kind of indirect, but use the DestroyedShipList and loop through and add a style to each of the tiles that has the class of that ship)
-
 + Colors in announcements? (Red for enemy, green for player, and yellow for coordinate)
 
 + HUD
@@ -211,7 +208,10 @@
 + Research :has() in CSS. Alternative for Firefox?
   + So for this, I will add a toggle class on... everything? Or anything that's not blank?
   + And add styles to this class in the main style.css
-  + With this, see if you can componentize Toggle Button 
+  + With this, see if you can componentize Toggle Button
+
+  + If ship was destroyed, add visual marker 
+  + (probably easy... kind of indirect, but use the DestroyedShipList [from store] and loop through and add a style to each of the tiles that has the class of that ship)
 
 # Removed code
 + Using select for rows/columns

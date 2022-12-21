@@ -18,7 +18,6 @@
 .cell.miss {
   background-image: radial-gradient($green 0.5px, transparent 0);
   background-size: 2px 2px;
-  color: $grey;
 }
 .cell.hit {
   background: radial-gradient($red 5px, transparent 0);
@@ -26,6 +25,15 @@
 }
 .cell.last-attack.hit {
   background: radial-gradient($yellow 5px, transparent 0);
+}
+.cell.sunk {
+  background-image: radial-gradient($red 0.5px, transparent 0);
+  background-size: 2px 2px;
+  box-shadow: none;
+}
+.cell.last-attack.sunk {
+  background-image: radial-gradient($yellow 0.5px, transparent 0);
+  background-size: 2px 2px;
 }
 .cell.last-attack.miss {
   background-image: radial-gradient($yellow 0.5px, transparent 0);
@@ -37,9 +45,13 @@
 }
 .cell.miss.toggled {
   background: $green;
+  color: $grey;
 }
 .cell.boat.hit.toggled {
   background: none;
+}
+.cell.sunk.toggled, .cell.boat.hit.sunk.toggled {
+  background: $red;
 }
 .cell.last-attack.toggled {
   background: $yellow;
