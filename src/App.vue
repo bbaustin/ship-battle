@@ -1,11 +1,11 @@
 <template>
   <Modal />
   <main>
-    <h1 v-if="store.gameStatus === 'placeShips'">Welcome to Ship Battle. Place your ships!</h1>
+    <!-- <h1 v-if="store.gameStatus === 'placeShips'">Welcome to Ship Battle. Place your ships!</h1>
     <template v-else>
       <h1 v-if="isPlayersTurn">Player's Turn</h1>
       <h1 v-else>Computer's Turn</h1>
-    </template>
+    </template> -->
     <section>
       <ShipPlacer
         v-if="store.gameStatus === 'placeShips'"
@@ -30,7 +30,9 @@
         />
       </div>
     </section>
-    <Announcement :announcement="this.announcement" />
+    <section>
+      <Announcement :announcement="this.announcement" />
+    </section>
   </main>
 </template>
 <script>
@@ -89,6 +91,13 @@ export default {
 main {
   display: flex;
   flex-direction: column;
+}
+main > section:first-child {
+  min-height: 50vh;
+}
+main > section:last-child {
+  max-height: 50vh;
+  overflow-y: scroll;
 }
 .boards {
   display: flex;

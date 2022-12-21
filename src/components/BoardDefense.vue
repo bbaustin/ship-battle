@@ -1,7 +1,6 @@
 <template>
   <section id="defense">
-    <h1>my ships</h1>
-    <ToggleCoordinatesButton @toggle-coordinates="() => (this.toggled = !this.toggled)" />
+    <h3>OUR SHIPS [DEFEND]</h3>
     <div class="board">
       <div
         v-for="(cell, index) in this.boardDefense"
@@ -18,6 +17,7 @@
         <span v-if="this.toggled">{{ index }}</span>
       </div>
     </div>
+    <ToggleCoordinatesButton @toggle-coordinates="() => (this.toggled = !this.toggled)" />
   </section>
 </template>
 <script>

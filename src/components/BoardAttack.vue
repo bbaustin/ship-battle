@@ -1,7 +1,6 @@
 <template>
   <section id="attack">
-    <h1>attack!</h1>
-    <ToggleCoordinatesButton @toggle-coordinates="() => (this.toggled = !this.toggled)" />
+    <h3>ENEMY SHIPS [ATTACK]</h3>
     <div class="board">
       <div
         v-for="(cell, index) in this.boardAttack"
@@ -12,6 +11,7 @@
         <span v-if="this.toggled">{{ index }}</span>
       </div>
     </div>
+    <ToggleCoordinatesButton @toggle-coordinates="() => (this.toggled = !this.toggled)" />
   </section>
 </template>
 <script>
@@ -71,7 +71,7 @@ export default {
 <style scoped lang="scss">
 @import '../scss/modules/colors.scss';
 .cell {
-  cursor: pointer;
+  cursor: crosshair;
 }
 .cell:hover {
   filter: brightness(85%);

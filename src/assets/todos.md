@@ -64,6 +64,8 @@
 
 + Change alignment dropdown to buttons
 
++ Scrollbar styling for Announcements
+
 
 
 
