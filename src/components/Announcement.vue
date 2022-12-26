@@ -11,29 +11,30 @@ export default {
   data() {
     return {
       announcementArray: [ANNOUNCEMENTS.WELCOME],
-      // scienceyNumberArray: [],
+      isScrolling: false,
       scrollingAnnouncement: '',
     };
   },
   watch: {
-    // TODO: There's probably some better way to do this
     announcement() {
-      // Add previous announcement to list of other previous announcements
+      // TODO: This could be improved to let multiple messages show
+      // If it's scrolling, don't let another message start
+      if (this.isScrolling) return;
+      // Add previous announcement to list of other previous announcements, ignoring the initial load
       if (this.scrollingAnnouncement !== '') this.announcementArray.unshift(this.scrollingAnnouncement);
       // Get ready for a new scrolling announcement
       this.scrollingAnnouncement = '';
-      // NOTE: If you want arbitrary sci-fi-looking numbers you can use something like this
-      // this.scienceyNumberArray.push(`#${this.announcementArray.length}-${Date.now().toString().slice(-4)}: `);
       // Split the incoming announcement (from props) into each character
-      // this.announcement = `${scienceyNumber} ${this.announcement}`;
       let individualCharacters = this.announcement.split('');
-      let current = 0;
+      let index = 0;
+      this.isScrolling = true;
       setInterval(() => {
-        if (current < individualCharacters.length) {
-          this.scrollingAnnouncement += individualCharacters[current++];
+        if (index < individualCharacters.length) {
+          this.scrollingAnnouncement += individualCharacters[index++];
         } // TODO: Add some code here to recognize when the scrolling is finished to avoid garbled text
       }, 10);
       clearInterval();
+      this.isScrolling = false;
     },
   },
 };

@@ -23,6 +23,9 @@
   + enemySink   [sad-melody]
   + enemyWin    [even-sadder-melody]
 + Pretty low priority, but if you can wrangle up a way to get the yellow spotted background to go behind a red hit dot, that'd be cool 
++ Allow better way for handling garbled text.
+  + Now announcement returns if not finished with current message
+  + Ideally, you want an "announcementQueue" 
 
 
 
@@ -35,13 +38,6 @@
   + See your error message: //TODO: I thought this would solve an error, but it might not. If not, delete.
 + ShipPlacer movement logic does not work with a one-tile ship (solution: don't use a one tile ship)
 + still a splitting bug with rotate. See image "Screenshot 2022-12-11 at 16.43.57" to recreate
-+ Announcement: 
-  + Mashing creates garbled announcement text 
-    + Ideally, you want to be able to have more than one ScrollingAnnouncement at once
-  + If the text takes longer than the time the enemy takes to attack, there's garbled text
-  + Solution: Hold off starting the next announcement until the current one finishes (how?)
-    + See note in Announcement SetInterval
-  + Or (HACKY): create longer delay for enemy attack/shorter messages
 + Not a bug really, but the AI doesn't know how to handle if ships are next to each other, and it only attacks two adjacent ends. It'll start attacking randomly without attacking the rest of the ships
 
 
@@ -217,6 +213,13 @@
   + If ship was destroyed, add visual marker 
   + (probably easy... kind of indirect, but use the DestroyedShipList [from store] and loop through and add a style to each of the tiles that has the class of that ship)
 + Toggle Coordinates button looks weird on ShipPlacer
++ Announcement: 
+  + Mashing creates garbled announcement text 
+    + Ideally, you want to be able to have more than one ScrollingAnnouncement at once
+  + If the text takes longer than the time the enemy takes to attack, there's garbled text
+  + Solution: Hold off starting the next announcement until the current one finishes (how?)
+    + See note in Announcement SetInterval
+  + Or (HACKY): create longer delay for enemy attack/shorter messages
 
 
 # Removed code
@@ -292,7 +295,13 @@ Next expected probability of attack in EnemyIntelDisplay
 + You can use stuff like this when Firefox supports :has()
   + Currently, instead, you're using .toggled class 
 ```
-// .cell.miss:has(span) {
-//   background: $green;
-// }
+ .cell.miss:has(span) {
+   background: $green;
+ }
+```
+
+
+NOTE: If you want arbitrary sci-fi-looking numbers you can use something like this
+```
+this.scienceyNumberArray.push(`#${this.announcementArray.length}-${Date.now().toString().slice(-4)}: `);
 ```
