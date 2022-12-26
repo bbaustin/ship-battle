@@ -1,5 +1,5 @@
-@import "./modules/colors.scss";
-@import "./modules/cells.scss";
+@use "./modules/_colors" as *;
+@use "./modules/_cells" as *;
 
 html {
   background: $grey;;

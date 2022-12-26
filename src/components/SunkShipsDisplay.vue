@@ -47,7 +47,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '../scss/modules/colors.scss';
+@use '../scss/modules/_colors' as *;
 section {
   display: flex;
   flex-direction: column;

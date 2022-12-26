@@ -69,7 +69,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@import '../scss/modules/colors.scss';
+@use '../scss/modules/_colors' as *;
 .cell {
   cursor: crosshair;
 }

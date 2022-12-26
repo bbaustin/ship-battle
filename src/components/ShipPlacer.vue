@@ -264,7 +264,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@import '../scss/modules/colors.scss';
+@use '../scss/modules/_colors' as *;
 .flex-container {
   align-items: center;
   display: flex;

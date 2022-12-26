@@ -36,7 +36,7 @@ export default {
 };
 </script>
 <style lang="scss">
-@import '../scss/modules/colors.scss';
+@use '../scss/modules/_colors' as *;
 #announcement {
   border: 1px solid $green;
   font-size: 16px;
