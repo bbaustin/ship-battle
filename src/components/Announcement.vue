@@ -18,7 +18,6 @@ export default {
   watch: {
     announcement() {
       // TODO: This could be improved to let multiple messages show
-      // If it's scrolling, don't let another message start
       if (this.isScrolling) return;
       // Add previous announcement to list of other previous announcements, ignoring the initial load
       if (this.scrollingAnnouncement !== '') this.announcementArray.unshift(this.scrollingAnnouncement);
@@ -27,14 +26,16 @@ export default {
       // Split the incoming announcement (from props) into each character
       let individualCharacters = this.announcement.split('');
       let index = 0;
-      this.isScrolling = true;
       setInterval(() => {
         if (index < individualCharacters.length) {
+          this.isScrolling = true;
           this.scrollingAnnouncement += individualCharacters[index++];
         } // TODO: Add some code here to recognize when the scrolling is finished to avoid garbled text
+        else {
+          this.isScrolling = false;
+        }
       }, 10);
       clearInterval();
-      this.isScrolling = false;
     },
   },
 };

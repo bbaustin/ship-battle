@@ -1,0 +1,19 @@
+@use './colors' as *;
+
+// Firefox
+main > section:last-child {
+  scrollbar-color: $green $grey; //Firefox. Unclear if I can have outline
+}
+
+// Chrome, Safari.
+main > section:last-child::-webkit-scrollbar {
+  width: 1em;
+}
+main > section:last-child::-webkit-scrollbar,
+main > section:last-child::-webkit-scrollbar-track {
+  background: $grey;
+}
+main > section:last-child::-webkit-scrollbar-thumb {
+  background-color: $grey;
+  outline: 1px solid $green;
+}

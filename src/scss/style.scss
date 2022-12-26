@@ -1,5 +1,6 @@
-@use "./modules/_colors" as *;
-@use "./modules/_cells" as *;
+@use './modules/_cells' as *;
+@use './modules/_colors' as *;
+@use './modules/_scrollbars' as *;
 
 html {
   background: $grey;;
@@ -42,7 +43,7 @@ button, select {
 button {
   padding: 6px;
 }
-.special {
+button.special {
   background: $green;
   color: $grey;
 }
