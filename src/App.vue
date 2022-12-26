@@ -87,21 +87,33 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="scss">
+@use './scss/modules/_colors' as *;
 main {
+  align-items: center;
   display: flex;
   flex-direction: column;
+  min-width: 1000px;
 }
 main > section:first-child {
   min-height: 50vh;
 }
 main > section:last-child {
-  max-height: 50vh;
+  border: 1px solid $green;
+  max-height: 45vh;
   overflow-y: scroll;
+  scrollbar-color: $green $grey; //Firefox. Unclear if I can have outline
 }
-.boards {
-  display: flex;
-  gap: 60px;
-  margin-left: 5%;
+// Below is Chrome, Safari.
+main > section:last-child::-webkit-scrollbar {
+  width: 1em;
+}
+main > section:last-child::-webkit-scrollbar,
+main > section:last-child::-webkit-scrollbar-track {
+  background: $grey;
+}
+main > section:last-child::-webkit-scrollbar-thumb {
+  background-color: $grey;
+  outline: 1px solid $green;
 }
 </style>

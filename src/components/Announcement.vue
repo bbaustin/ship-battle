@@ -1,7 +1,6 @@
 <template>
   <div id="announcement">
-    <!-- <p>{{ Date.now() }}</p> -->
-    <p>{{ this.scrollingAnnouncement }}</p>
+    <p v-if="this.scrollingAnnouncement">{{ this.scrollingAnnouncement }}</p>
     <p v-for="announcement in this.announcementArray">{{ announcement }}</p>
   </div>
 </template>
@@ -12,6 +11,7 @@ export default {
   data() {
     return {
       announcementArray: [ANNOUNCEMENTS.WELCOME],
+      // scienceyNumberArray: [],
       scrollingAnnouncement: '',
     };
   },
@@ -19,10 +19,13 @@ export default {
     // TODO: There's probably some better way to do this
     announcement() {
       // Add previous announcement to list of other previous announcements
-      this.announcementArray.unshift(this.scrollingAnnouncement);
+      if (this.scrollingAnnouncement !== '') this.announcementArray.unshift(this.scrollingAnnouncement);
       // Get ready for a new scrolling announcement
       this.scrollingAnnouncement = '';
+      // NOTE: If you want arbitrary sci-fi-looking numbers you can use something like this
+      // this.scienceyNumberArray.push(`#${this.announcementArray.length}-${Date.now().toString().slice(-4)}: `);
       // Split the incoming announcement (from props) into each character
+      // this.announcement = `${scienceyNumber} ${this.announcement}`;
       let individualCharacters = this.announcement.split('');
       let current = 0;
       setInterval(() => {
@@ -38,12 +41,14 @@ export default {
 <style lang="scss">
 @use '../scss/modules/_colors' as *;
 #announcement {
-  border: 1px solid $green;
-  font-size: 16px;
-  min-height: 50px;
+  font-size: 13px;
   padding: 0px 20px;
+  width: 770px;
 }
 #announcement p:first-child {
   color: $tng_green;
+}
+#announcement p {
+  padding: 10px 0;
 }
 </style>

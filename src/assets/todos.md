@@ -59,8 +59,8 @@
 + Continue work on Announcements
   + Do you want two announcement boards?
   + Allow for more than one scrolling announcement at a time
-  + Make the holder scroll/resize more nicely
-    + There will also be props being sent around to two places when a ship is sunk (destroyed ship list and announcements) 
+  + Make the holder scroll/resize more nicely OK
+    + There will also be props being sent around to two places when a ship is sunk (destroyed ship list and announcements)  (?)
 
 + Change alignment dropdown to buttons
 
@@ -72,6 +72,8 @@
 # notes
 + If you ever need to, try to use "store" to pass data between siblings
 + utilizing break or continue, instead of return could helpful in your more complicated loops
++ could probably use scss mixin for _cell. But without it is also ok i guess
++ forEach... bad? https://danthedev.com/stop-using-foreach/ 
 
 
 # Solved?
@@ -214,6 +216,8 @@
 
   + If ship was destroyed, add visual marker 
   + (probably easy... kind of indirect, but use the DestroyedShipList [from store] and loop through and add a style to each of the tiles that has the class of that ship)
++ Toggle Coordinates button looks weird on ShipPlacer
+
 
 # Removed code
 + Using select for rows/columns

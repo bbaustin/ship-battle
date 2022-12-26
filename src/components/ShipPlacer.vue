@@ -1,8 +1,7 @@
 <template>
-  <div class="flex-container">
+  <div class="boards">
     <section id="placement">
       <h1>choose your ship placement</h1>
-      <ToggleCoordinatesButton @toggle-coordinates="() => (this.toggled = !this.toggled)" />
       <div class="board">
         <div
           v-for="(cell, index) in this.boardShipPlacement"
@@ -12,6 +11,7 @@
           <span v-if="this.toggled">{{ index }}</span>
         </div>
       </div>
+      <ToggleCoordinatesButton @toggle-coordinates="() => (this.toggled = !this.toggled)" />
     </section>
     <form>
       <!-- SHIP -->
@@ -265,11 +265,6 @@ export default {
 </script>
 <style scoped lang="scss">
 @use '../scss/modules/_colors' as *;
-.flex-container {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-}
 .selected {
   background-image: radial-gradient($orange 0.5px, transparent 0);
   background-size: 2px 2px;
