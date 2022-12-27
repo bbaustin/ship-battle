@@ -305,3 +305,12 @@ NOTE: If you want arbitrary sci-fi-looking numbers you can use something like th
 ```
 this.scienceyNumberArray.push(`#${this.announcementArray.length}-${Date.now().toString().slice(-4)}: `);
 ```
+
++ h1 in App.js
+```
+    <h1 v-if="store.gameStatus === 'placeShips'">Welcome to Ship Battle. Place your ships!</h1>
+    <template v-else>
+      <h1 v-if="isPlayersTurn">Player's Turn</h1>
+      <h1 v-else>Computer's Turn</h1>
+    </template>
+```

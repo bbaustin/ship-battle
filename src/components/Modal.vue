@@ -1,5 +1,5 @@
 <template>
-  <section v-if="store.gameStatus === 'enemyWin' || store.gameStatus === 'playerWin'">
+  <section>
     <dialog open>
       <h1 v-if="store.gameStatus === 'enemyWin'">All of our ships were sunk!</h1>
       <h1 v-else>Congratulations! We've won!</h1>

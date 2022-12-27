@@ -17,6 +17,7 @@ export default {
   },
   watch: {
     announcement() {
+      // TODO: STILL DOESN'T WORK!!
       // TODO: This could be improved to let multiple messages show
       if (this.isScrolling) return;
       // Add previous announcement to list of other previous announcements, ignoring the initial load
