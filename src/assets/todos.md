@@ -26,6 +26,7 @@
 + Allow better way for handling garbled text.
   + Now announcement returns if not finished with current message
   + Ideally, you want an "announcementQueue" 
++ Helpers should be Composables? https://vuejs.org/guide/reusability/composables.html 
 
 
 

@@ -1,8 +1,8 @@
 <template>
-  <div id="announcement">
+  <section id="announcement">
     <p v-if="this.scrollingAnnouncement">{{ this.scrollingAnnouncement }}</p>
     <p v-for="announcement in this.announcementArray">{{ announcement }}</p>
-  </div>
+  </section>
 </template>
 <script>
 import { ANNOUNCEMENTS } from '../assets/Constants.js';

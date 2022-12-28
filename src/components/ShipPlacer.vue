@@ -265,6 +265,11 @@ export default {
 </script>
 <style scoped lang="scss">
 @use '../scss/modules/_colors' as *;
+form {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
 .selected {
   background-image: radial-gradient($orange 0.5px, transparent 0);
   background-size: 2px 2px;

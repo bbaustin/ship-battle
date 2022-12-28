@@ -16,9 +16,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 .boards {
   display: flex;
-  justify-content: space-around;
-  margin-bottom: 25px;
-  min-width: 900px;
+  flex-direction: column;
+  width: 100%;
 }
 .board {
   border-top: 1px solid $green;
@@ -37,7 +36,6 @@ button, select {
   font-family: monospace;
   font-size: 12px;
   margin-bottom: 10px;
-  margin-right: 5px;
   padding: 5px;
 }
 button {
@@ -46,4 +44,15 @@ button {
 button.special {
   background: $green;
   color: $grey;
+}
+@media screen and (min-width: 1020px) {
+  .boards {
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 25px;
+    width: 900px;
+  }
+  button, select {
+    margin-right: 5px;
+  }
 }
