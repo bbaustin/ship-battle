@@ -48,7 +48,7 @@
     </template>
     <template #secondary>
       <HUD v-show="store.gameStatus !== 'placeShips'">
-        <template #first>
+        <template #0>
           <BoardDefense
             ref="boardDefense"
             :boardShipPlacement="this.boardShipPlacement"
@@ -56,8 +56,12 @@
             @emit-enemy-intel="handleEmittedEnemyIntel"
           />
         </template>
-        <Announcement :announcement="this.announcement" />
-        <SunkShipsDisplay />
+        <template #1>
+          <Announcement :announcement="this.announcement" />
+        </template>
+        <template #2>
+          <SunkShipsDisplay />
+        </template>
       </HUD>
     </template>
   </ResponsiveLayout>
