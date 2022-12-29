@@ -309,9 +309,20 @@ this.scienceyNumberArray.push(`#${this.announcementArray.length}-${Date.now().to
 
 + h1 in App.js
 ```
-    <h1 v-if="store.gameStatus === 'placeShips'">Welcome to Ship Battle. Place your ships!</h1>
-    <template v-else>
-      <h1 v-if="isPlayersTurn">Player's Turn</h1>
-      <h1 v-else>Computer's Turn</h1>
-    </template>
+<h1 v-if="store.gameStatus === 'placeShips'">Welcome to Ship Battle. Place your ships!</h1>
+<template v-else>
+  <h1 v-if="isPlayersTurn">Player's Turn</h1>
+  <h1 v-else>Computer's Turn</h1>
+</template>
+```
+
++ slots 
+```
+<slot name="0"></slot>
+<slot name="1"></slot>
+<slot name="2"></slot> -->
+
+<!-- This works, but it won't let your Board update correctly if you swap the board out -->
+<h1>big one here</h1>
+<slot :name="this.activeSlot"></slot>
 ```

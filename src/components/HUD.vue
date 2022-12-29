@@ -1,16 +1,14 @@
 <template>
   <section id="HUD">
-    <!-- <slot name="0"></slot>
-    <slot name="1"></slot>
-    <slot name="2"></slot> -->
-
-    <!-- This works, but it won't let your Board update correctly if you swap the board out
-    <h1>big one here</h1>
-    <slot :name="this.activeSlot"></slot> -->
-
     <!-- NOTE: Classes don't work on slots, since they're not actually elements -->
-    <h2>small ones here</h2>
-    <div class="holder">
+    <button
+      class="change-active-button"
+      type="button"
+      @click="this.changeActive('prev')"
+    >
+      prev
+    </button>
+    <div class="slot-holder">
       <template v-for="(slot, index) in this.$slots">
         <div
           v-if="index == this.activeSlot"
@@ -19,12 +17,12 @@
         <slot :name="index"></slot>
       </template>
     </div>
-
     <button
+      class="change-active-button"
       type="button"
-      @click="this.changeActive"
+      @click="this.changeActive('next')"
     >
-      button
+      next
     </button>
   </section>
 </template>
@@ -34,29 +32,45 @@ export default {
     return {
       activeSlot: 0,
       slots: this.$slots,
-      slot: this.$slots[0],
     };
   },
   methods: {
-    changeActive() {
-      // TODO: Change this to be any lenght, not just 2
-      this.activeSlot === 2 ? (this.activeSlot = 0) : this.activeSlot++;
+    changeActive(direction) {
+      if (direction === 'next') this.activeSlot === Object.keys(this.$slots).length - 1 ? (this.activeSlot = 0) : this.activeSlot++;
+      if (direction === 'prev') this.activeSlot === 0 ? (this.activeSlot = Object.keys(this.$slots).length - 1) : this.activeSlot--;
     },
   },
 };
 </script>
 <style lang="scss">
-.holder {
-  display: flex;
-  flex-direction: row;
-}
 section#HUD {
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
   width: 100%;
 }
+// All sections are invisible...
 section#HUD section {
   display: none;
 }
+// ...except for the one that is active
 section#HUD .active + section {
   display: block;
+}
+.slot-holder {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  outline: 1px solid;
+  overflow-y: scroll;
+  width: 50%;
+}
+// Don't show toggle button on mini-screen
+.slot-holder .board + button {
+  display: none;
+}
+button.change-active-button {
+  height: 40px;
 }
 </style>

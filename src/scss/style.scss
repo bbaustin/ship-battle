@@ -20,13 +20,13 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
 }
 .board {
+  aspect-ratio: 1 / 1;
   border-top: 1px solid $green;
   border-left: 1px solid $green;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
-  width: 260px;
-  height: 260px;
+  width: 95%;
 }
 button, select {
   color: $green;
@@ -48,9 +48,12 @@ button.special {
 @media screen and (min-width: 1020px) {
   .boards {
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     margin-bottom: 25px;
     width: 900px;
+  }
+  #attack, #defense, #placement {
+    width: 33%;
   }
   button, select {
     margin-right: 5px;

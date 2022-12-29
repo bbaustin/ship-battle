@@ -271,7 +271,7 @@ form {
   flex-direction: column;
 }
 .selected {
-  background-image: radial-gradient($orange 0.5px, transparent 0);
+  background-image: radial-gradient($orange 0.5px, #242424 0);
   background-size: 2px 2px;
   color: $grey;
 }
