@@ -1,5 +1,6 @@
 <template>
   <Modal v-if="store.gameStatus === 'enemyWin' || store.gameStatus === 'playerWin'" />
+  <!-- PC -->
   <ResponsiveLayout v-if="this.windowWidth >= 1020">
     <template #main>
       <section>
@@ -31,9 +32,9 @@
       </section>
     </template>
   </ResponsiveLayout>
+  <!-- MOBILE -->
   <ResponsiveLayout v-else>
     <template #main>
-      <h1>this is mobile vue</h1>
       <ShipPlacer
         v-if="store.gameStatus === 'placeShips'"
         @emit-ship-placer-announcement="handleEmittedAnnouncement"

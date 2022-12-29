@@ -52,21 +52,15 @@ section {
   display: flex;
   flex-direction: column;
 }
-h4 {
-  border-bottom: 1px solid $green;
-  margin: 0;
-  padding: 18px 0;
-  text-align: center;
-}
 div.ship-row:first-child {
   border-top: 1px solid $green;
 }
 .ship-row {
   align-items: center;
-  border: 1px solid $green;
   border-top: none;
   display: flex;
   justify-content: space-between;
+  height: 10px;
   width: 120px;
   padding: 10px;
 }
@@ -91,17 +85,29 @@ div.ship-row:first-child {
   flex-direction: column;
   text-align: center;
 }
-.middle-column p {
-  margin: 0 0 5px 0;
-}
 .cell-display {
   border-top: 1px solid $green;
   border-left: 1px solid $green;
-  display: flex;
+  display: none;
   width: fit-content;
 }
 .cell.mini {
   height: 12.5px;
   width: 12.5px;
+}
+@media screen and (min-width: 1020px) {
+  h4 {
+    padding: 18px 0;
+  }
+  .ship-row {
+    border: 1px solid $green;
+    height: auto;
+  }
+  .middle-column p {
+    margin: 0 0 5px 0;
+  }
+  .cell-display {
+    display: flex;
+  }
 }
 </style>

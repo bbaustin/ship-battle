@@ -1,7 +1,7 @@
 <template>
   <div class="boards">
     <section id="placement">
-      <h1>choose your ship placement</h1>
+      <h4>choose your ship placement</h4>
       <div class="board">
         <div
           v-for="(cell, index) in this.boardShipPlacement"

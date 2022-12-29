@@ -1,5 +1,6 @@
 <template>
   <section id="announcement">
+    <h4>ANNOUNCEMENTS</h4>
     <p v-if="this.scrollingAnnouncement">{{ this.scrollingAnnouncement }}</p>
     <p v-for="announcement in this.announcementArray">{{ announcement }}</p>
   </section>
@@ -41,7 +42,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @use '../scss/modules/_colors' as *;
 #announcement {
   font-size: 13px;
@@ -52,6 +53,11 @@ export default {
   color: $tng_green;
 }
 #announcement p {
-  padding: 10px 0;
+  padding: 7px 0;
+}
+@media screen and (min-width: 1020px) {
+  h4 {
+    display: none;
+  }
 }
 </style>

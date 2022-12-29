@@ -15,7 +15,7 @@
 .cell.boat {
   background-image: radial-gradient($blue 0.5px, #242424 0);
   background-size: 2px 2px;  color: $grey;
-  box-shadow: inset 4px 4px $grey, inset -4px -4px $grey;
+  box-shadow: inset 4px 4px $grey, inset -5px -5px $grey;
 }
 .cell.miss {
   background-image: radial-gradient($green 0.5px, #242424 0);

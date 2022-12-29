@@ -43,6 +43,13 @@ export default {
 };
 </script>
 <style lang="scss">
+@use '../scss/modules/_colors' as *;
+h4 {
+  font-size: 10px;
+  margin: 0 0 7px 0;
+  padding: 9px 0px 0px 0px;
+  text-align: center;
+}
 section#HUD {
   align-items: center;
   display: flex;
@@ -70,7 +77,17 @@ section#HUD .active + section {
 .slot-holder .board + button {
   display: none;
 }
+.slot-holder #defense {
+  width: 80%;
+}
 button.change-active-button {
   height: 40px;
+}
+@media screen and (min-width: 1020px) {
+  h4 {
+    border-bottom: 1px solid $green;
+    margin: 0;
+    padding: 18px 0;
+  }
 }
 </style>

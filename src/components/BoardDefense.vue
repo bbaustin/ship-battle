@@ -1,6 +1,6 @@
 <template>
   <section id="defense">
-    <h3>OUR SHIPS [DEFEND]</h3>
+    <h4>OUR SHIPS [DEFEND]</h4>
     <div class="board">
       <div
         v-for="(cell, index) in this.boardDefense"
