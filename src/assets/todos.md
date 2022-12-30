@@ -27,6 +27,7 @@
   + Now announcement returns if not finished with current message
   + Ideally, you want an "announcementQueue" 
 + Helpers should be Composables? https://vuejs.org/guide/reusability/composables.html 
++ Get a tablet view? Or at least add a few lines of CSS to make the HUD look less weird
 
 
 

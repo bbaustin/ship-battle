@@ -25,6 +25,7 @@ h1, h2, h3, h4, h5, h6 {
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
   margin: 0 auto;
+  max-width: 420px;
   width: 92%;
 }
 button, select {

@@ -43,27 +43,28 @@
 
 // TOGGLED // 
 .cell.boat.toggled {
-  background: $blue; 
+  background: $dim_blue; 
 }
 .cell.miss.toggled {
-  background: $green;
+  background: $dim_green;
   color: $grey;
 }
 .cell.boat.hit.toggled {
   background: none;
 }
 .cell.sunk.toggled, .cell.boat.hit.sunk.toggled {
-  background: $red;
+  background: $dim_red;
 }
 .cell.last-attack.toggled {
-  background: $yellow;
+  background: $dim_yellow;
 }
 .cell.hit span {
-  background: $red;
+  background: $dim_red;
   border-radius: 100%;
   padding: 10%;
   text-align: center;
+  width: 33%;
 }
 .cell.hit.last-attack span {
-  background: $yellow;
+  background: $dim_yellow;
 }

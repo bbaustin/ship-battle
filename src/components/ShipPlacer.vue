@@ -276,7 +276,7 @@ form {
   color: $grey;
 }
 .selected.toggled {
-  background: $orange;
+  background: $dim_orange;
   color: $grey;
 }
 .movement-buttons {
