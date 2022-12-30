@@ -28,14 +28,13 @@
         </option>
       </select>
       <!-- ORIENTATION/ALIGNMENT -->
-      <select
-        v-model="this.alignment"
-        @change="handleAlignmentChange"
+      <button
+        type="button"
+        @click="handleAlignmentChange"
       >
-        <!-- NOTE: I guess value isn't needed with v-model? -->
-        <option>horizontal</option>
-        <option>vertical</option>
-      </select>
+        <span :class="this.alignment === 'horizontal' ? 'active-alignment' : ''">horizontal</span> /
+        <span :class="this.alignment === 'vertical' ? 'active-alignment' : ''">vertical</span>
+      </button>
       <div class="movement-buttons">
         <div>
           <button
@@ -119,6 +118,8 @@ export default {
       this.alignment = this.getAlignment();
     },
     handleAlignmentChange() {
+      this.alignment === 'horizontal' ? (this.alignment = 'vertical') : (this.alignment = 'horizontal');
+      // if (this.alignment === 'vertical') this.alignment = 'horizontal';
       let coordinates = [...this.placement[this.activeShip].coordinates];
       let alignment = coordinates[0] + 1 === coordinates[1] ? 'horizontal' : 'vertical';
       // If we're horizontal, we'll be turning vertical (hence addend is +-10.)
@@ -269,6 +270,9 @@ form {
   align-items: center;
   display: flex;
   flex-direction: column;
+}
+.active-alignment {
+  color: $tng_green;
 }
 .selected {
   background-image: radial-gradient($orange 0.5px, #242424 0);

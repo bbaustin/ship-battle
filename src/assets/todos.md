@@ -20,9 +20,7 @@
   + enemyMiss   [lower-note]
   + enemySink   [sad-melody]
   + enemyWin    [even-sadder-melody]
-+ Allow better way for handling garbled text.
-  + Now announcement returns if not finished with current message
-  + Ideally, you want an "announcementQueue" 
+
 + Helpers should be Composables? https://vuejs.org/guide/reusability/composables.html 
 + Get a tablet view? Or at least add a few lines of CSS to make the HUD look less weird
 
@@ -49,21 +47,18 @@
 
 
 
-+ Continue work on Announcements
-  + Do you want two announcement boards?
-  + Allow for more than one scrolling announcement at a time
-  + Make the holder scroll/resize more nicely OK
-    + There will also be props being sent around to two places when a ship is sunk (destroyed ship list and announcements)  (?)
-
-+ Change alignment dropdown to buttons
-
-
-
-
 # wont do
 + Colors in announcements? (Red for enemy, green for player, and yellow for coordinate)
 + Figure out how to get a function description to show when you hover over it. Typescript thing?
 + Pretty low priority, but if you can wrangle up a way to get the yellow spotted background to go behind a red hit dot, that'd be cool 
++ Scrolling Announcements
+  + Do you want two announcement boards?
+  + Allow for more than one scrolling announcement at a time
+  + Make the holder scroll/resize more nicely OK
+    + There will also be props being sent around to two places when a ship is sunk (destroyed ship list and announcements)  (?)
+  + Allow better way for handling garbled text.
+    + Now announcement returns if not finished with current message
+    + Ideally, you want an "announcementQueue" 
 
 
 
@@ -227,6 +222,8 @@
   + Related to HUD, smartphone styling
 + toggleCoordinates is copy/pasted in all three boards. It's the same logic each time (but different boards). It doesn't make sense to be in "store", I don't think (no logic being shared BETWEEN components). But is there a more DRY way of doing it?
   + I guess emitting to App.js, which would have an array of all boards that have a toggle? But... your way seems OK... Something to think about anyway. 
++ Change alignment dropdown to buttons
+
 
 
 # Removed code
