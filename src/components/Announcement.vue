@@ -1,8 +1,10 @@
 <template>
   <section id="announcement">
     <h4>ANNOUNCEMENTS</h4>
-    <p v-if="this.scrollingAnnouncement">{{ this.scrollingAnnouncement }}</p>
-    <p v-for="announcement in this.announcementArray">{{ announcement }}</p>
+    <template v-for="announcement in this.announcementArray">
+      <small>Transmission {{ announcementArray.length - announcementArray.indexOf(announcement) }}:</small>
+      <p>{{ announcement }}</p>
+    </template>
   </section>
 </template>
 <script>
@@ -12,49 +14,34 @@ export default {
   data() {
     return {
       announcementArray: [ANNOUNCEMENTS.WELCOME],
-      isScrolling: false,
-      scrollingAnnouncement: '',
     };
   },
   watch: {
     announcement() {
-      // TODO: STILL DOESN'T WORK!!
-      // TODO: This could be improved to let multiple messages show
-      if (this.isScrolling) return;
-      // Add previous announcement to list of other previous announcements, ignoring the initial load
-      if (this.scrollingAnnouncement !== '') this.announcementArray.unshift(this.scrollingAnnouncement);
-      // Get ready for a new scrolling announcement
-      this.scrollingAnnouncement = '';
-      // Split the incoming announcement (from props) into each character
-      let individualCharacters = this.announcement.split('');
-      let index = 0;
-      setInterval(() => {
-        if (index < individualCharacters.length) {
-          this.isScrolling = true;
-          this.scrollingAnnouncement += individualCharacters[index++];
-        } // TODO: Add some code here to recognize when the scrolling is finished to avoid garbled text
-        else {
-          this.isScrolling = false;
-        }
-      }, 10);
-      clearInterval();
+      this.announcementArray.unshift(this.announcement);
     },
   },
 };
 </script>
 <style lang="scss" scoped>
 @use '../scss/modules/_colors' as *;
+h4 {
+  margin-bottom: 14px;
+}
 #announcement {
   font-size: 13px;
   padding: 0px 20px;
   width: 770px;
 }
-#announcement p:first-child {
+#announcement p:first-of-type,
+#announcement small:first-of-type {
   color: $tng_green;
 }
 #announcement p {
-  padding: 7px 0;
+  margin-top: 0;
+  padding-bottom: 7px;
 }
+
 @media screen and (min-width: 1020px) {
   h4 {
     display: none;

@@ -7,7 +7,7 @@
     >
       <div
         v-if="store.sunkShips.enemy.includes(ship.name)"
-        class="sunk"
+        class="sunk bad"
       ></div>
       <div
         v-else
@@ -25,7 +25,7 @@
       </div>
       <div
         v-if="store.sunkShips.player.includes(ship.name)"
-        class="sunk"
+        class="sunk good"
       ></div>
       <div
         v-else
@@ -57,7 +57,6 @@ div.ship-row:first-child {
 }
 .ship-row {
   align-items: center;
-  border-top: none;
   display: flex;
   justify-content: space-between;
   height: 10px;
@@ -68,10 +67,15 @@ div.ship-row:first-child {
   border-top: 1px solid $green; //TODOO: Make work
 }
 .sunk {
-  background: $tng_green;
   border-radius: 100%;
   height: 8px;
   width: 8px;
+}
+.sunk.good {
+  background: $tng_green;
+}
+.sunk.bad {
+  background: $tng_red;
 }
 .sunk-not {
   border: 1px solid $green;
@@ -101,7 +105,11 @@ div.ship-row:first-child {
   }
   .ship-row {
     border: 1px solid $green;
+    border-top: none;
     height: auto;
+  }
+  .sunk.bad {
+    background: $tng_green;
   }
   .middle-column p {
     margin: 0 0 5px 0;

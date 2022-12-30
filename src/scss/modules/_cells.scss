@@ -61,9 +61,9 @@
 .cell.hit span {
   background: $dim_red;
   border-radius: 100%;
+  min-width: 33%;
   padding: 10%;
   text-align: center;
-  width: 33%;
 }
 .cell.hit.last-attack span {
   background: $dim_yellow;

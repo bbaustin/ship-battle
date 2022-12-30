@@ -96,7 +96,7 @@ export default {
   data() {
     return {
       store,
-      announcement: '',
+      announcement: '', // NOTE: Everything seems to work without this. Investigate how
       boardShipPlacement: [], // TODO: Does this need to be data in App? Can I pass this without changing
       enemyIntel: undefined,
       isPlayersTurn: true,

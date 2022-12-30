@@ -3,12 +3,10 @@
   + Having all emit names contain the word 'emit' probably isn't necessary hah
   + 'cell' or 'tile'? 
 + captains..??? (in the future)
-+ Figure out how to get a function description to show when you hover over it. Typescript thing?
 + Keyboard
   + Allow for ship placement to use computer keys (MEDIUM)
   + Allow for attacking to use of computer keys
-+ toggleCoordinates is copy/pasted in all three boards. It's the same logic each time (but different boards). It doesn't make sense to be in "store", I don't think (no logic being shared BETWEEN components). But is there a more DRY way of doing it?
-  + I guess emitting to App.js, which would have an array of all boards that have a toggle? But... your way seems OK... Something to think about anyway. 
+
 + sounds!
   + In Ableton, FUNKWELL LEAD with major/minor triads
   + playerMove  [snare]
@@ -22,7 +20,6 @@
   + enemyMiss   [lower-note]
   + enemySink   [sad-melody]
   + enemyWin    [even-sadder-melody]
-+ Pretty low priority, but if you can wrangle up a way to get the yellow spotted background to go behind a red hit dot, that'd be cool 
 + Allow better way for handling garbled text.
   + Now announcement returns if not finished with current message
   + Ideally, you want an "announcementQueue" 
@@ -48,10 +45,8 @@
 
 + Make Constants from ANNOUNCEMENT keys. Some good way to do this, right? 
 
-+ Colors in announcements? (Red for enemy, green for player, and yellow for coordinate)
 
-+ HUD
-  + Related to HUD, smartphone styling
+
 
 
 + Continue work on Announcements
@@ -62,8 +57,13 @@
 
 + Change alignment dropdown to buttons
 
-+ Scrollbar styling for Announcements
 
+
+
+# wont do
++ Colors in announcements? (Red for enemy, green for player, and yellow for coordinate)
++ Figure out how to get a function description to show when you hover over it. Typescript thing?
++ Pretty low priority, but if you can wrangle up a way to get the yellow spotted background to go behind a red hit dot, that'd be cool 
 
 
 
@@ -222,6 +222,11 @@
   + Solution: Hold off starting the next announcement until the current one finishes (how?)
     + See note in Announcement SetInterval
   + Or (HACKY): create longer delay for enemy attack/shorter messages
++ Scrollbar styling for Announcements
++ HUD
+  + Related to HUD, smartphone styling
++ toggleCoordinates is copy/pasted in all three boards. It's the same logic each time (but different boards). It doesn't make sense to be in "store", I don't think (no logic being shared BETWEEN components). But is there a more DRY way of doing it?
+  + I guess emitting to App.js, which would have an array of all boards that have a toggle? But... your way seems OK... Something to think about anyway. 
 
 
 # Removed code
@@ -326,4 +331,78 @@ this.scienceyNumberArray.push(`#${this.announcementArray.length}-${Date.now().to
 <!-- This works, but it won't let your Board update correctly if you swap the board out -->
 <h1>big one here</h1>
 <slot :name="this.activeSlot"></slot>
+```
+
+
++ [MAJOR] ScrollingAnnouncement attempt
+```
+<template>
+  <!-- BIG TODO: -->
+  <!-- You had scrolling text, but it was leading to garbled text and setInterval weirdness -->
+  <!-- It's not needed, really, so if you feel like it, you can come back to it here.  -->
+  <section id="announcement">
+    <h4>ANNOUNCEMENTS</h4>
+    <p v-if="this.scrollingAnnouncement">{{ this.scrollingAnnouncement }}</p>
+    <p v-for="announcement in this.announcementArray">{{ announcement }}</p>
+  </section>
+</template>
+<script>
+import { ANNOUNCEMENTS } from '../assets/Constants.js';
+export default {
+  props: ['announcement'],
+  data() {
+    return {
+      announcementArray: [ANNOUNCEMENTS.WELCOME],
+      isScrolling: false,
+      scrollingAnnouncement: '',
+    };
+  },
+  watch: {
+    announcement() {
+      // Add previous announcement to list of other previous announcements, ignoring the initial load
+      if (this.isScrolling) {
+        return;
+      }
+      if (this.scrollingAnnouncement !== '') this.announcementArray.unshift(this.scrollingAnnouncement);
+      // Get ready for a new scrolling announcement
+      this.scrollingAnnouncement = '';
+      // Split the incoming announcement (from props) into each character
+      let individualCharacters = this.announcement.split('');
+      let index = 0;
+      setInterval(() => {
+        if (index < individualCharacters.length) {
+          this.isScrolling = true;
+          this.scrollingAnnouncement += individualCharacters[index++];
+          console.log('lala');
+        }
+        console.log('titi');
+      }, 10);
+      console.log('yoyo');
+      clearInterval();
+      console.log('after');
+      this.isScrolling = false;
+    },
+  },
+};
+</script>
+<style lang="scss" scoped>
+@use '../scss/modules/_colors' as *;
+#announcement {
+  font-size: 13px;
+  padding: 0px 20px;
+  width: 770px;
+}
+#announcement p:first-child {
+  color: $tng_green;
+}
+#announcement p {
+  padding: 7px 0;
+}
+@media screen and (min-width: 1020px) {
+  h4 {
+    display: none;
+  }
+}
+</style>
+
 ```
