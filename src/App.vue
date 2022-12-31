@@ -146,14 +146,5 @@ export default {
     height: 35vh;
     overflow-y: scroll;
   }
-  .sunk {
-    border-radius: 100%;
-    display: inline;
-    height: 8px;
-    width: 8px;
-  }
-  .sunk.good {
-    background: $tng_green;
-  }
 }
 </style>
