@@ -1,19 +1,30 @@
 @use './colors' as *;
 
 // Firefox
-main > section:last-child {
+* {
   scrollbar-color: $green $grey; //Firefox. Unclear if I can have outline
+  scrollbar-width: 5px;
 }
 
 // Chrome, Safari.
-main > section:last-child::-webkit-scrollbar {
-  width: 1em;
+*::-webkit-scrollbar {
+  width: 5px;
 }
-main > section:last-child::-webkit-scrollbar,
-main > section:last-child::-webkit-scrollbar-track {
+*::-webkit-scrollbar,
+*::-webkit-scrollbar-track {
   background: $grey;
 }
-main > section:last-child::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
   background-color: $grey;
   outline: 1px solid $green;
+}
+
+@media screen and (min-width: 1020px) {
+  * {
+    scrollbar-width: 15px;
+  }
+
+  *::-webkit-scrollbar {
+    width: 15px;
+  }
 }

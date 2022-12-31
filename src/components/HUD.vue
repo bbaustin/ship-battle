@@ -80,6 +80,15 @@ section#HUD .active + section {
 .slot-holder #defense {
   width: 80%;
 }
+.slot-holder #defense .cell.boat,
+.slot-holder #defense .cell.boat.hit.sunk,
+.slot-holder #defense .cell.boat.sunk.last-attack {
+  box-shadow: none;
+}
+.slot-holder #defense .cell.boat.hit,
+.slot-holder #defense .cell.boat.last-attack {
+  box-shadow: inset 4px 4px $grey, inset -5px -5px $grey;
+}
 button.change-active-button {
   height: 40px;
 }

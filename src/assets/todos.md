@@ -34,13 +34,18 @@
   + You solved this error, I guess for 2, 3, 4, etc. But for some reason not 1.
   + Starting on 2 with 5 hit already didn't go to 1
   + See your error message: //TODO: I thought this would solve an error, but it might not. If not, delete.
-+ ShipPlacer movement logic does not work with a one-tile ship (solution: don't use a one tile ship)
-+ still a splitting bug with rotate. See image "Screenshot 2022-12-11 at 16.43.57" to recreate
 + Not a bug really, but the AI doesn't know how to handle if ships are next to each other, and it only attacks two adjacent ends. It'll start attacking randomly without attacking the rest of the ships
 
 
 # next time...
 + PICK YOUR NEXT TASK FROM BELOW
+
++ Finish styling
+  + Ship Placement form
+  + Margin-top; have h1 come back? 
+  + Change on screen resize?
+  + Tablet view?
+  + Probably... circle stylings should be percentage-based, not px-based 
 
 + Make Constants from ANNOUNCEMENT keys. Some good way to do this, right? 
 
@@ -60,6 +65,8 @@
   + Allow better way for handling garbled text.
     + Now announcement returns if not finished with current message
     + Ideally, you want an "announcementQueue" 
++ ShipPlacer movement logic does not work with a one-tile ship (solution: don't use a one tile ship)
+
 
 
 
@@ -224,6 +231,7 @@
 + toggleCoordinates is copy/pasted in all three boards. It's the same logic each time (but different boards). It doesn't make sense to be in "store", I don't think (no logic being shared BETWEEN components). But is there a more DRY way of doing it?
   + I guess emitting to App.js, which would have an array of all boards that have a toggle? But... your way seems OK... Something to think about anyway. 
 + Change alignment dropdown to buttons
++ still a splitting bug with rotate. See image "Screenshot 2022-12-11 at 16.43.57" to recreate
 
 
 

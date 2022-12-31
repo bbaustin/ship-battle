@@ -1,6 +1,5 @@
 <template>
-  <section id="announcement">
-    <h4>ANNOUNCEMENTS</h4>
+  <section id="announcements">
     <template v-for="announcement in this.announcementArray">
       <small>Transmission {{ announcementArray.length - announcementArray.indexOf(announcement) }}:</small>
       <p>{{ announcement }}</p>
@@ -28,23 +27,23 @@ export default {
 h4 {
   margin-bottom: 14px;
 }
-#announcement {
+#announcements {
   font-size: 13px;
-  padding: 0px 20px;
+  padding: 8px 20px 0px;
   width: 770px;
 }
-#announcement p:first-of-type,
-#announcement small:first-of-type {
+#announcements p:first-of-type,
+#announcements small:first-of-type {
   color: $tng_green;
 }
-#announcement p {
+#announcements p {
   margin-top: 0;
   padding-bottom: 7px;
 }
 
 @media screen and (min-width: 1020px) {
-  h4 {
-    display: none;
+  #announcements {
+    padding-top: 15px;
   }
 }
 </style>
