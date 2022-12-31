@@ -6,6 +6,7 @@
 + Keyboard
   + Allow for ship placement to use computer keys (MEDIUM)
   + Allow for attacking to use of computer keys
++ a11y
 
 + sounds!
   + In Ableton, FUNKWELL LEAD with major/minor triads

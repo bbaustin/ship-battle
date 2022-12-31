@@ -119,7 +119,6 @@ export default {
     },
     handleAlignmentChange() {
       this.alignment === 'horizontal' ? (this.alignment = 'vertical') : (this.alignment = 'horizontal');
-      // if (this.alignment === 'vertical') this.alignment = 'horizontal';
       let coordinates = [...this.placement[this.activeShip].coordinates];
       let alignment = coordinates[0] + 1 === coordinates[1] ? 'horizontal' : 'vertical';
       // If we're horizontal, we'll be turning vertical (hence addend is +-10.)
@@ -132,6 +131,7 @@ export default {
       // If we have a submarine on 63, 64, 65, 66 it will simply loop through those coordinates.
       for (let i = 0; i < coordinates.length; i++) {
         let availableCoordinates = [];
+        // If it rotated, we don't want to run this anymore.
         if (!didRotate) {
           for (let mod = shipLength * -addend; mod < shipLength * addend; mod += addend) {
             let attemptedCoordinate = coordinates[i] + mod;
@@ -143,17 +143,12 @@ export default {
             // Check if the tile is occupied by a ship (other than your own, because you'll cross your own pivot point)
             else if (this.boardShipPlacement[attemptedCoordinate] && this.boardShipPlacement[attemptedCoordinate] !== this.activeShip) {
               availableCoordinates = [];
+            } else if (this.alignment === 'horizontal' && !this.areHorizontalTilesInSameRow(availableCoordinates)) {
+              availableCoordinates = [];
             } else {
               availableCoordinates.push(attemptedCoordinate);
               console.log(`just pushed to availableCoordnates for ${this.activeShip}`);
               console.log(availableCoordinates);
-            }
-
-            if (availableCoordinates.length === shipLength) {
-              console.log(`We have a match of length ${shipLength}`);
-              this.updateShipAlignment(availableCoordinates, coordinates, addend);
-              didRotate = true;
-              return availableCoordinates;
             }
 
             let checksPassed;
@@ -175,9 +170,34 @@ export default {
               console.log('checks did not pass');
               availableCoordinates = [];
             }
+            if (availableCoordinates.length === shipLength) {
+              console.log(`We have a match of length ${shipLength}`);
+              this.updateShipAlignment(availableCoordinates, coordinates, addend);
+              didRotate = true;
+              return availableCoordinates;
+            }
           }
         }
       }
+      // if you've made it this far, you've failed, so revert the alignment, as it could not rotate.
+      return this.alignment === 'horizontal' ? (this.alignment = 'vertical') : (this.alignment = 'horizontal');
+    },
+    areHorizontalTilesInSameRow(availableCoordinates) {
+      // if (this.alignment === 'vertical') return;
+      let stringCoordinates = availableCoordinates.map((coordinate) => coordinate.toString());
+      console.log(stringCoordinates);
+      let singleDigitCounter,
+        firstDigitCounter = 0;
+      let firstDigit = stringCoordinates[0]?.slice(0, 1);
+      console.log(`firstDigit: ${firstDigit}`);
+      stringCoordinates.forEach((coordinate) => {
+        if (coordinate.length === 1) singleDigitCounter++;
+        if (coordinate.slice(0, 1) === firstDigit) firstDigitCounter++;
+      });
+      console.log(singleDigitCounter, firstDigitCounter, availableCoordinates.length);
+      if (singleDigitCounter === availableCoordinates.length) return true;
+      if (firstDigitCounter === availableCoordinates.length) return true;
+      return false;
     },
     handleMovement(direction) {
       let coordinates = [...this.placement[this.activeShip].coordinates];
@@ -215,7 +235,6 @@ export default {
         // Add (at the beginning) the value of the first element + addend
         coordinates.unshift(coordinates[0] + dir.addend);
       }
-
       // Set actual coordinates to the updated coordinates
       this.placement[this.activeShip].coordinates = coordinates;
     },
@@ -225,7 +244,6 @@ export default {
         if (this.boardShipPlacement[coordinate + dir.addend]) return;
         newCoordinates.push(coordinate + dir.addend);
       });
-
       // Only continue if you could successfully access each coordinate
       if (newCoordinates.length === this.placement[this.activeShip].coordinates.length) {
         this.updateShipPositionLateral(newCoordinates, coordinates, dir.addend);
@@ -257,7 +275,6 @@ export default {
       if (tileContent) return 'boat';
       return '';
     },
-    // lalalalalala
     handleCoordinatesToggle() {
       return (this.toggled = !this.toggled);
     },
