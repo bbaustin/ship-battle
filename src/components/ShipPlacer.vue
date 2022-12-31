@@ -143,8 +143,6 @@ export default {
             // Check if the tile is occupied by a ship (other than your own, because you'll cross your own pivot point)
             else if (this.boardShipPlacement[attemptedCoordinate] && this.boardShipPlacement[attemptedCoordinate] !== this.activeShip) {
               availableCoordinates = [];
-            } else if (this.alignment === 'horizontal' && !this.areHorizontalTilesInSameRow(availableCoordinates)) {
-              availableCoordinates = [];
             } else {
               availableCoordinates.push(attemptedCoordinate);
               console.log(`just pushed to availableCoordnates for ${this.activeShip}`);
@@ -172,6 +170,10 @@ export default {
             }
             if (availableCoordinates.length === shipLength) {
               console.log(`We have a match of length ${shipLength}`);
+              if (!this.areHorizontalTilesInSameRow) {
+                console.log('not all in same row');
+                return false;
+              }
               this.updateShipAlignment(availableCoordinates, coordinates, addend);
               didRotate = true;
               return availableCoordinates;
