@@ -3,6 +3,7 @@
   <!-- PC -->
   <ResponsiveLayout v-if="this.windowWidth >= 1020">
     <template #main>
+      <h1>Ship Battle</h1>
       <section>
         <ShipPlacer
           v-if="store.gameStatus === 'placeShips'"
@@ -134,6 +135,7 @@ export default {
     align-items: center;
     display: flex;
     flex-direction: column;
+    margin-top: 10px;
     min-width: 1000px;
   }
   main > section:first-child {
@@ -141,8 +143,17 @@ export default {
   }
   main > section:last-child {
     border: 1px solid $green;
-    max-height: 45vh;
+    height: 35vh;
     overflow-y: scroll;
+  }
+  .sunk {
+    border-radius: 100%;
+    display: inline;
+    height: 8px;
+    width: 8px;
+  }
+  .sunk.good {
+    background: $tng_green;
   }
 }
 </style>

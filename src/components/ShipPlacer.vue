@@ -1,7 +1,7 @@
 <template>
   <div class="boards">
     <section id="placement">
-      <h4>choose your ship placement</h4>
+      <h4>PLACE YOUR SHIPS</h4>
       <div class="board">
         <div
           v-for="(cell, index) in this.boardShipPlacement"
@@ -14,55 +14,57 @@
       <ToggleCoordinatesButton @toggle-coordinates="() => (this.toggled = !this.toggled)" />
     </section>
     <form>
-      <!-- SHIP -->
-      <select
-        v-model="this.activeShip"
-        @change="handleActiveShip"
-      >
-        <option
-          v-for="(ship, index) in ships"
-          :value="ship.name"
-          key="i"
-        >
-          {{ ship.name }} ({{ ship.size }})
-        </option>
-      </select>
-      <!-- ORIENTATION/ALIGNMENT -->
-      <button
-        type="button"
-        @click="handleAlignmentChange"
-      >
-        <span :class="this.alignment === 'horizontal' ? 'active-alignment' : ''">horizontal</span> /
-        <span :class="this.alignment === 'vertical' ? 'active-alignment' : ''">vertical</span>
-      </button>
-      <div class="movement-buttons">
-        <div>
-          <button
-            class="direction-button"
-            @click.prevent="handleMovement('n')"
+      <div>
+        <div class="ship-buttons">
+          <select
+            v-model="this.activeShip"
+            @change="handleActiveShip"
           >
-            U
+            <option
+              v-for="(ship, index) in ships"
+              :value="ship.name"
+              key="i"
+            >
+              {{ ship.name }} ({{ ship.size }})
+            </option>
+          </select>
+          <button
+            type="button"
+            @click="handleAlignmentChange"
+          >
+            <span :class="this.alignment === 'horizontal' ? 'active' : ''">horizontal</span> /
+            <span :class="this.alignment === 'vertical' ? 'active' : ''">vertical</span>
           </button>
         </div>
-        <button
-          class="direction-button"
-          @click.prevent="handleMovement('w')"
-        >
-          L
-        </button>
-        <button
-          class="direction-button"
-          @click.prevent="handleMovement('e')"
-        >
-          R
-        </button>
-        <div>
+        <div class="movement-buttons">
+          <div>
+            <button
+              class="direction-button"
+              @click.prevent="handleMovement('n')"
+            >
+              U
+            </button>
+          </div>
           <button
             class="direction-button"
-            @click.prevent="handleMovement('s')"
+            @click.prevent="handleMovement('w')"
           >
-            D
+            L
           </button>
+          <button
+            class="direction-button"
+            @click.prevent="handleMovement('e')"
+          >
+            R
+          </button>
+          <div>
+            <button
+              class="direction-button"
+              @click.prevent="handleMovement('s')"
+            >
+              D
+            </button>
+          </div>
         </div>
       </div>
       <button
@@ -123,7 +125,7 @@ export default {
       let alignment = coordinates[0] + 1 === coordinates[1] ? 'horizontal' : 'vertical';
       // If we're horizontal, we'll be turning vertical (hence addend is +-10.)
       let addend = alignment === 'horizontal' ? 10 : 1;
-      console.log(`addend: ${addend}`);
+      // console.log(`addend: ${addend}`);
       let shipLength = this.placement[this.activeShip].coordinates.length;
 
       let didRotate = false;
@@ -137,7 +139,7 @@ export default {
             let attemptedCoordinate = coordinates[i] + mod;
             // console.table({ coordinate: coordinates[i], mod: mod, attemptedCoordinate: attemptedCoordinate, shipLength: shipLength, addend: addend });
             if (attemptedCoordinate > 99 || attemptedCoordinate < 0) {
-              console.log(`${attemptedCoordinate} is an illegal value!`);
+              // console.log(`${attemptedCoordinate} is an illegal value!`);
             }
 
             // Check if the tile is occupied by a ship (other than your own, because you'll cross your own pivot point)
@@ -145,8 +147,8 @@ export default {
               availableCoordinates = [];
             } else {
               availableCoordinates.push(attemptedCoordinate);
-              console.log(`just pushed to availableCoordnates for ${this.activeShip}`);
-              console.log(availableCoordinates);
+              // console.log(`just pushed to availableCoordnates for ${this.activeShip}`);
+              // console.log(availableCoordinates);
             }
 
             let checksPassed;
@@ -156,22 +158,23 @@ export default {
             if (addend === 1 && coordinates[i] < attemptedCoordinate) checksPassed = !!HELPERS.checkE(coordinates[i]);
             if (addend === 10 && coordinates[i] > attemptedCoordinate) checksPassed = !!HELPERS.checkN(coordinates[i]);
             if (addend === 10 && coordinates[i] < attemptedCoordinate) checksPassed = !!HELPERS.checkS(coordinates[i]);
-            console.table({
-              coordinate: coordinates[i],
-              mod: mod,
-              attemptedCoordinate: attemptedCoordinate,
-              checksPassed: checksPassed,
-              shipLength: shipLength,
-              addend: addend,
-            });
+            // console.table({
+            //   coordinate: coordinates[i],
+            //   mod: mod,
+            //   attemptedCoordinate: attemptedCoordinate,
+            //   checksPassed: checksPassed,
+            //   shipLength: shipLength,
+            //   addend: addend,
+            // });
             if (!checksPassed) {
-              console.log('checks did not pass');
+              // console.log('checks did not pass');
               availableCoordinates = [];
             }
             if (availableCoordinates.length === shipLength) {
-              console.log(`We have a match of length ${shipLength}`);
-              if (!this.areHorizontalTilesInSameRow) {
+              // console.log(`We have a match of length ${shipLength}`);
+              if (!this.areHorizontalTilesInSameRow(availableCoordinates)) {
                 console.log('not all in same row');
+                this.alignment = 'vertical';
                 return false;
               }
               this.updateShipAlignment(availableCoordinates, coordinates, addend);
@@ -185,6 +188,7 @@ export default {
       return this.alignment === 'horizontal' ? (this.alignment = 'vertical') : (this.alignment = 'horizontal');
     },
     areHorizontalTilesInSameRow(availableCoordinates) {
+      if (this.alignment === 'vertical') return true;
       // if (this.alignment === 'vertical') return;
       let stringCoordinates = availableCoordinates.map((coordinate) => coordinate.toString());
       console.log(stringCoordinates);
@@ -287,11 +291,23 @@ export default {
 @use '../scss/modules/_colors' as *;
 form {
   align-items: center;
+  align-self: center;
+  border: 1px solid $green;
   display: flex;
   flex-direction: column;
+  height: fit-content;
+  padding: 10px;
 }
-.active-alignment {
-  color: $tng_green;
+form > div:first-child {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 5px;
+}
+form div.ship-buttons {
+  display: flex;
+  flex-direction: column;
 }
 .selected {
   background-image: radial-gradient($orange 0.5px, #242424 0);

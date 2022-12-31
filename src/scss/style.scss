@@ -46,6 +46,9 @@ button.special {
   background: $green;
   color: $grey;
 }
+.active {
+  color: $tng_green;
+}
 @media screen and (min-width: 1020px) {
   .boards {
     flex-direction: row;

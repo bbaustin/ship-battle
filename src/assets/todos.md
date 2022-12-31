@@ -47,6 +47,7 @@
   + Tablet view?
   + Probably... circle stylings should be percentage-based, not px-based 
 
++ I reallly want ShipPlacement and Attack to have exact same position in desktop. Right now they're a tiny bit off, and IDK why. 
 + Make Constants from ANNOUNCEMENT keys. Some good way to do this, right? 
 
 
