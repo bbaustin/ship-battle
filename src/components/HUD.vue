@@ -87,6 +87,11 @@ section#HUD .active + section {
 .slot-holder #defense .cell.boat.last-attack.hit {
   background: radial-gradient($yellow 20%, $grey 0);
 }
+.slot-holder #defense .cell.boat.hit.sunk {
+  background-image: radial-gradient($red 0.5px, $grey 0);
+  background-size: 2px 2px;
+}
+
 .slot-holder #defense .cell.boat,
 .slot-holder #defense .cell.boat.hit.sunk,
 .slot-holder #defense .cell.boat.sunk.last-attack {

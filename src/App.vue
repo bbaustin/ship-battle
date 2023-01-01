@@ -103,6 +103,7 @@ export default {
   },
   created() {
     this.windowWidth = window.innerWidth;
+    window.addEventListener('resize', this.handleWindowResize);
   },
   data() {
     return {
@@ -141,6 +142,9 @@ export default {
           this.isPlayersTurn = !this.isPlayersTurn;
         }, 750);
       }
+    },
+    handleWindowResize(event) {
+      this.announcement = ANNOUNCEMENTS.WINDOW_RESIZE;
     },
   },
 };
