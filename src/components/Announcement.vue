@@ -9,7 +9,7 @@
 <script>
 import { ANNOUNCEMENTS } from '../assets/Constants.js';
 export default {
-  props: ['announcement'],
+  props: ['announcement', 'gameResetCode'],
   data() {
     return {
       announcementArray: [ANNOUNCEMENTS.WELCOME],
@@ -18,6 +18,10 @@ export default {
   watch: {
     announcement() {
       this.announcementArray.unshift(this.announcement);
+    },
+    gameResetCode() {
+      console.log('got it! announcement');
+      this.announcementArray = [];
     },
   },
 };

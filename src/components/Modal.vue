@@ -5,7 +5,7 @@
       <h1 v-else>Congratulations! We've won!</h1>
       <!-- TODO: Reset a bunch of stuff on button click -->
       <button
-        @click.prevent="this.resetGame"
+        @click.prevent="$emit('handle-game-reset')"
         class="special"
       >
         Play again?
@@ -16,24 +16,11 @@
 <script>
 import { store } from '../store.js';
 export default {
+  emits: ['handle-game-reset'],
   data() {
     return {
       store,
     };
-  },
-  methods: {
-    resetGame() {
-      // QUESTION: Will simply changing the gameStatus fix most of these?
-      // ANSWER: It appears not, using Vue DevTools, at least
-      // Reset boardShipPlacement
-      // Randomize boardShipPlacement
-      // Reset boardEnemy
-      // Randomize boardEnemy
-      // Reset boardPlayer
-      // Set gameStatus = "placeShips"
-      // Reset isPlayersTurn? Maybe
-      // Reset announcement
-    },
   },
 };
 </script>

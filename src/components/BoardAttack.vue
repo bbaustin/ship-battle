@@ -22,7 +22,7 @@ import ToggleCoordinatesButton from './ToggleCoordinatesButton.vue';
 export default {
   components: { ToggleCoordinatesButton },
   emits: ['emit-attack-announcement', 'switch-to-enemy', 'toggle-coordinates'],
-  props: ['isPlayersTurn'],
+  props: ['gameResetCode', 'isPlayersTurn'],
   data() {
     return {
       store,
@@ -59,6 +59,13 @@ export default {
         this.attackAnnouncement = HELPERS.generateAnnouncement(true, tileIndex, 'PLAYER_MISS', '');
       }
       this.$emit('switch-to-enemy');
+    },
+  },
+  watch: {
+    gameResetCode() {
+      console.log('got it! boardattack');
+      this.boardAttack = [...BLANK_BOARD];
+      HELPERS.placeShips(SHIP_SPECS, this.boardAttack);
     },
   },
   created() {

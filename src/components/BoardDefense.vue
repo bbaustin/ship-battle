@@ -28,7 +28,7 @@ import ToggleCoordinatesButton from './ToggleCoordinatesButton.vue';
 export default {
   components: { ToggleCoordinatesButton },
   emits: ['emit-defense-announcement', 'emit-enemy-intel', 'toggle-coordinates'],
-  props: ['boardShipPlacement'],
+  props: ['boardShipPlacement', 'gameResetCode'],
   updated() {
     this.boardDefense = this.boardShipPlacement;
   },
@@ -226,6 +226,22 @@ export default {
       if (this.enemyStrategy === 'random') return this.aiRandom();
       if (this.enemyStrategy === 'seek') return this.aiSeek();
       if (this.enemyStrategy === 'destroy') return this.aiDestroy();
+    },
+  },
+  watch: {
+    gameResetCode() {
+      console.log('got it! boarddefense');
+      this.boardDefense = [...BLANK_BOARD];
+      this.destroyDirection = undefined;
+      this.enemyAttacks = [];
+      this.enemyAttackPlan = [];
+      this.enemyAttackPlanMemory = {
+        initialSuccessfulAttackCoordinate: undefined,
+        initialSuccessfulAttackDirection: undefined,
+        backupAttackDirection: undefined,
+      };
+      this.enemyStrategy = 'random'; // random, seek, destroy
+      this.lastSuccessfulEnemyAttack = undefined;
     },
   },
 };

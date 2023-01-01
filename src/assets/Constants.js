@@ -61,6 +61,8 @@ export const ANNOUNCEMENTS = {
     "We've lost contact with our SHIP_NAME.",
     'Our SHIP_NAME appears to have been destroyed.',
   ],
+  NEW_GAME_PLAYER_WON: "Congratulations on winning your last game. Let's go again!",
+  NEW_GAME_ENEMY_WON: 'Better luck this time. Place your ships and prepare for battle!',
   PLAYER_ATTACK: ['We attacked COORDINATE.'],
   PLAYER_HIT: ["We've made a direct hit!", "We've damaged an enemy ship!", "A hit! Let's continue our attack!"],
   PLAYER_HIT_CONTINUED: ["We're locked on!", 'Keep going! Continue the attack!', "Surely their ship can't take much more of this!"],
