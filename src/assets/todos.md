@@ -40,14 +40,9 @@
 # next time...
 + PICK YOUR NEXT TASK FROM BELOW
 
-+ Finish styling
-  + Ship Placement form
-  + Margin-top; have h1 come back? 
-  + Change on screen resize?
-  + Tablet view?
-  + Probably... circle stylings should be percentage-based, not px-based 
++ Tablet view and screen resize... 
 
-+ I reallly want ShipPlacement and Attack to have exact same position in desktop. Right now they're a tiny bit off, and IDK why. 
+
 + Make Constants from ANNOUNCEMENT keys. Some good way to do this, right? 
 
 
@@ -233,8 +228,13 @@
   + I guess emitting to App.js, which would have an array of all boards that have a toggle? But... your way seems OK... Something to think about anyway. 
 + Change alignment dropdown to buttons
 + still a splitting bug with rotate. See image "Screenshot 2022-12-11 at 16.43.57" to recreate
-
-
++ I reallly want ShipPlacement and Attack to have exact same position in desktop. Right now they're a tiny bit off, and IDK why. 
++ Finish styling
+  + Ship Placement form
+  + Margin-top; have h1 come back? 
+  + Change on screen resize?
+  + Tablet view?
+  + Probably... circle stylings should be percentage-based, not px-based 
 
 # Removed code
 + Using select for rows/columns
@@ -411,5 +411,17 @@ export default {
   }
 }
 </style>
+
+```
+
++ window resize: problem is that it resets the data of all components (: 
+```
+    // In created or mounted in App
+    window.addEventListener('resize', this.handleWindowResize);
+
+    // In methods in App
+    handleWindowResize(event) {
+      this.windowWidth = event.target.innerWidth;
+    },
 
 ```

@@ -123,7 +123,6 @@ export default {
       store.gameStatus = 'play';
     },
     handleGameReset() {
-      console.log('handle game rest in app');
       this.announcement = store.gameStatus === 'playerWin' ? ANNOUNCEMENTS.NEW_GAME_PLAYER_WON : ANNOUNCEMENTS.NEW_GAME_ENEMY_WON;
       store.gameStatus = 'placeShips';
       store.sunkShips = {
@@ -148,12 +147,14 @@ export default {
 </script>
 <style lang="scss">
 @use './scss/modules/_colors' as *;
+main {
+  margin-top: 10px;
+}
 @media screen and (min-width: 1020px) {
   main {
     align-items: center;
     display: flex;
     flex-direction: column;
-    margin-top: 10px;
     min-width: 1000px;
   }
   main > section:first-child {
