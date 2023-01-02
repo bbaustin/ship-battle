@@ -65,7 +65,7 @@ section#HUD .active + section {
   display: block;
 }
 .slot-holder {
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1 / 1.05;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -80,18 +80,28 @@ section#HUD .active + section {
 .slot-holder #defense {
   width: 80%;
 }
+.slot-holder #defense .cell.miss {
+  background-image: radial-gradient($tng_green 0.5px, $grey 0);
+}
+.slot-holder #defense .cell.boat {
+  background: radial-gradient($blue 20%, $grey 0);
+}
 .slot-holder #defense .cell.boat.hit {
-  background: radial-gradient($red 20%, $grey 0);
+  background: radial-gradient($tng_red 20%, $grey 0);
   color: $grey;
 }
-.slot-holder #defense .cell.boat.last-attack.hit {
-  background: radial-gradient($yellow 20%, $grey 0);
-}
-.slot-holder #defense .cell.boat.hit.sunk {
-  background-image: radial-gradient($red 0.5px, $grey 0);
-  background-size: 2px 2px;
+.slot-holder #defense .cell.last-attack.miss,
+.slot-holder #defense .cell.boat.last-attack.miss {
+  background-image: radial-gradient($tng_yellow 0.5px, $grey 0);
 }
 
+.slot-holder #defense .cell.boat.last-attack.hit {
+  background: radial-gradient($tng_yellow 20%, $grey 0);
+}
+.slot-holder #defense .cell.boat.hit.sunk {
+  background-image: radial-gradient($tng_red 0.5px, $grey 0);
+  background-size: 2px 2px;
+}
 .slot-holder #defense .cell.boat,
 .slot-holder #defense .cell.boat.hit.sunk,
 .slot-holder #defense .cell.boat.sunk.last-attack {

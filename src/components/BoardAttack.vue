@@ -78,13 +78,15 @@ export default {
 .cell {
   cursor: crosshair;
 }
-.cell:hover {
-  filter: brightness(85%);
-  background-image: radial-gradient($yellow 0.5px, #242424 0);
-  background-size: 2px 2px;
-}
-.cell.toggled:hover {
-  background: $yellow;
-  color: $grey;
+@media screen and (min-width: 1020px) {
+  .cell:hover {
+    filter: brightness(85%);
+    background-image: radial-gradient($yellow 0.5px, #242424 0);
+    background-size: 2px 2px;
+  }
+  .cell.toggled:hover {
+    background: $yellow;
+    color: $grey;
+  }
 }
 </style>
